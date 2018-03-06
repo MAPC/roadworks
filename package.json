@@ -1,11 +1,14 @@
 {
-  "name": "my-app",
+  "name": "dpw-permits",
   "private": true,
   "dependencies": {
     "@rails/webpacker": "^3.3.0",
     "babel-preset-react": "^6.24.1",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "react-on-rails": "^10.1.3",
+    "react-redux": "^5.0.7",
+    "redux": "^3.7.2"
   }
 }

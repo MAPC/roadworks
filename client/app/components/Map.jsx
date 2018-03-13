@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import mapboxgl from 'mapbox-gl';
-
-mapboxgl.accessToken = 'pk.eyJ1IjoiaWhpbGwiLCJhIjoiY2plZzUwMTRzMW45NjJxb2R2Z2thOWF1YiJ9.szIAeMS4c9YTgNsJeG36gg';
-
-const geojsonFormatter = () => {
-
+let mapboxgl;
+if (__CLIENT__) {
+  // Mapbox GL requires the global window variable which does not exist in
+  // Server-side rendering. Only import on the client.
+  mapboxgl = require('mapbox-gl');
+  mapboxgl.accessToken = 'pk.eyJ1IjoiaWhpbGwiLCJhIjoiY2plZzUwMTRzMW45NjJxb2R2Z2thOWF1YiJ9.szIAeMS4c9YTgNsJeG36gg';
 }
 
 class Map extends React.Component {
@@ -57,10 +57,10 @@ Map.propTypes = {
             end: PropTypes.string,
             year: PropTypes.number,
           }),
-          geometry: {
+          geometry: PropTypes.shape({
             type: PropTypes.string,
             coordinates: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
-          },
+          }),
         })),
       }),
     }),

@@ -21,7 +21,7 @@ module.exports = {
     // This will contain the app entry points defined by
     // webpack.client.rails.hot.config and webpack.client.rails.build.config
     'app-bundle': [
-      './app/packs/viewerBundle',
+      './app/registration',
     ],
   },
   resolve: {
@@ -39,6 +39,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       TRACE_TURBOLINKS: devBuild,
+      __CLIENT__: true,
     }),
 
     // https://webpack.js.org/guides/code-splitting-libraries/#implicit-common-vendor-chunk

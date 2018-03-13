@@ -16,7 +16,7 @@ module.exports = {
   // the project dir
   context: __dirname,
   entry: [
-    './app/packs/viewerBundle',
+    './app/registration',
   ],
   output: {
     // Important to NOT use a hash if the server webpack config runs separately from the client one.
@@ -41,6 +41,7 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv),
       },
+      __CLIENT__: false,
     }),
   ],
   module: {
@@ -76,12 +77,6 @@ module.exports = {
           {
             loader: 'sass-loader'
           },
-          {
-            loader: 'sass-resources-loader',
-            options: {
-              resources: './app/assets/styles/app-variables.scss'
-            },
-          }
         ],
       },
     ],

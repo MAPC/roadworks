@@ -4,6 +4,7 @@
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
+const autoprefixer = require('autoprefixer');
 const { env } = require('process')
 const config = require('./webpack.client.base.config');
 const { resolve } = require('path');
@@ -56,7 +57,12 @@ module.exports = merge(config, {
                 localIdentName: '[name]__[local]__[hash:base64:5]',
               },
             },
-            'postcss-loader',
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: [ autoprefixer ],
+              },
+            },
           ],
         }),
       },
@@ -77,16 +83,10 @@ module.exports = merge(config, {
             {
               loader: 'postcss-loader',
               options: {
-                plugins: 'autoprefixer'
-              }
+                plugins: [ autoprefixer ],
+              },
             },
             'sass-loader',
-            {
-              loader: 'sass-resources-loader',
-              options: {
-                resources: './app/assets/styles/app-variables.scss'
-              },
-            }
           ],
         }),
       },

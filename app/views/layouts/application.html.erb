@@ -10,6 +10,9 @@
     <%= env_javascript_include_tag(static: 'application_static',
                   hot: 'application_non_webpack',
                   'data-turbolinks-track' => 'reload') %>
+    <%= stylesheet_link_tag 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' %>
+    <%= javascript_pack_tag 'vendor-bundle' %>
+    <%= javascript_pack_tag 'app-bundle' %>
   </head>
 
   <body>

@@ -9,6 +9,7 @@
 const { resolve } = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
+const autoprefixer = require('autoprefixer');
 const config = require('./webpack.client.base.config');
 const webpackConfigLoader = require('react-on-rails/webpackConfigLoader');
 const configPath = resolve('..', 'config');
@@ -76,10 +77,10 @@ module.exports = merge.strategy(
           {
             loader: 'postcss-loader',
             options: {
-              plugins: 'autoprefixer'
-            }
-          }
-        ]
+              plugins: [ autoprefixer ],
+            },
+          },
+        ],
       },
       {
         test: /\.scss$/,
@@ -96,18 +97,12 @@ module.exports = merge.strategy(
           {
             loader: 'postcss-loader',
             options: {
-              plugins: 'autoprefixer'
-            }
+              plugins: [ autoprefixer ],
+            },
           },
           {
             loader: 'sass-loader'
           },
-          {
-            loader: 'sass-resources-loader',
-            options: {
-              resources: './app/assets/styles/app-variables.scss'
-            },
-          }
         ],
       },
     ],

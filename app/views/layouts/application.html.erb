@@ -4,8 +4,12 @@
     <title>MyApp</title>
     <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' %>
+    <%= env_javascript_include_tag(hot: ['http://localhost:3000/app-bundle.js']) %>
+    <%= env_javascript_include_tag(static: 'application_static',
+                  hot: 'application_non_webpack',
+                  'data-turbolinks-track' => 'reload') %>
   </head>
 
   <body>

@@ -9,10 +9,11 @@ import './assets/styles/App.scss';
 // See documentation for https://github.com/reactjs/react-redux.
 // This is how you get props from the Rails view into the redux store.
 // This code here binds your smart component to the redux store.
-const App = (props) => (
-  <Provider store={configureStore(props)}>
-    <ViewerContainer />
-  </Provider>
-);
 
-export default App;
+export default (props) => {
+  return (
+    <Provider store={ReactOnRails.getStore('store')}>
+      <ViewerContainer />
+    </Provider>
+  );
+};

@@ -10,6 +10,13 @@ if (__CLIENT__) {
 }
 
 class Map extends React.Component {
+  constructor(props) {
+    super(props);
+    this.fitBounds = this.fitBounds.bind(this);
+    this.drawLayers = this.drawLayers.bind(this);
+    this.removeLayers = this.removeLayers.bind(this);
+  }
+
   componentDidMount() {
     this.control = new mapboxgl.NavigationControl();
 
@@ -24,12 +31,51 @@ class Map extends React.Component {
       this.props.layers.map((layer) => {
         console.log(layer);
         this.map.addLayer(layer);
-      })
+      });
+      if (this.props.activeCoordinates) {
+        this.fitBounds(this.props.activeCoordinates);
+      }
     })
   }
 
   componentWillUnmount() {
     this.map.remove();
+  }
+
+  fitBounds(coordinates) {
+    const newBounds = coordinates.reduce(
+      (bounds, coord) => bounds.extend(coord),
+      new mapboxgl.LngLatBounds(coordinates[0], coordinates[0])
+    );
+    this.map.fitBounds(newBounds, {
+      padding: 48,
+    });
+  }
+
+  removeLayers(layerIds) {
+    console.log(layerIds)
+    layerIds.forEach((id) => {
+      this.map.removeLayer(id);
+    });
+  }
+
+  drawLayers(layers) {
+    layers.map((layer) => {
+      this.map.addLayer(layer);
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.activeCoordinates &&
+        this.props.activeCoordinates != prevProps.activeCoordinates) {
+      this.fitBounds(this.props.activeCoordinates);
+    }
+    if (this.props.layers &&
+        this.props.layers != prevProps.layers) {
+      console.log(prevProps)
+      this.removeLayers(prevProps.layers.map(layer => layer.id));
+      this.drawLayers(this.props.layers);
+    }
   }
 
   render() {
@@ -67,6 +113,7 @@ Map.propTypes = {
     layout: PropTypes.object,
     paint: PropTypes.object,
   })),
+  activeCoordinates: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
 };
 
 export default Map;

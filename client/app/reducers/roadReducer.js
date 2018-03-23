@@ -1,5 +1,6 @@
-function planReducer(state = {
+function roadReducer(state = {
   cache: {},
+  cityIndex: [],
 }, action) {
   switch (action.type) {
     default:
@@ -7,4 +8,4 @@ function planReducer(state = {
   }
 }
 
-export default planReducer;
+export default roadReducer;

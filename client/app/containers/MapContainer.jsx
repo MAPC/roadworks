@@ -1,22 +1,18 @@
 import { connect } from 'react-redux';
 import Map from '../components/Map';
 
-const formatLayer = (id, color, segments) => {
-  const features = segments.map(segment => ({
+const formatLayer = (id, color, coordinates) => {
+  const features = [{
     type: 'Feature',
     properties: {
-      name: segment.name,
-      start: segment.start,
-      end: segment.end,
-      year: segment.year,
     },
     geometry: {
       type: 'LineString',
-      coordinates: segment.coordinates,
+      coordinates: coordinates,
     },
-  }));
+  }];
   return {
-    id,
+    id: new Date().toISOString(),
     type: 'line',
     source: {
       type: 'geojson',
@@ -37,22 +33,24 @@ const formatLayer = (id, color, segments) => {
 };
 
 const mapStateToProps = (state) => {
-  const plan = {
-    id: 'pavingplan',
-    color: '#f00',
-    segments: [{
-      name: 'Washington Street',
-      start: 'Temple Place',
-      end: 'Other Street',
-      year: 2018,
-      coordinates: [
-        [-71.061255, 42.354777],
-        [-71.062866, 42.355618]
-      ],
-    }],
-  };
+
+  const activeSegment = state.workingPlan.activeSegment != null ? state.workingPlan.segments[state.workingPlan.activeSegment] : null;
+  let activeCoordinates = null;
+  if (activeSegment) {
+    const activeSegmentRoad = state.road.cache[activeSegment.road];
+    activeCoordinates = activeSegmentRoad.nodes.map(id => JSON.parse(state.node.cache[id].geojson).coordinates);
+  }
+  const layers = state.workingPlan.segments.reduce((layers, segment, index) => {
+    const segmentRoad = state.road.cache[segment.road]
+    if (segmentRoad && segmentRoad.nodes.length) {
+      const coordinates = segmentRoad.nodes.map(id => JSON.parse(state.node.cache[id].geojson).coordinates);
+      return layers.concat([formatLayer(index, '#f00', coordinates)]);
+    }
+    return layers;
+  }, []);
   return {
-    layers: [formatLayer(plan.id, plan.color, plan.segments )],
+    layers,
+    activeCoordinates,
   };
 };
 

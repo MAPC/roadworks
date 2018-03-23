@@ -1,4 +1,4 @@
-function planReducer(state = {
+function segmentReducer(state = {
   cache: {},
 }, action) {
   switch (action.type) {
@@ -7,4 +7,4 @@ function planReducer(state = {
   }
 }
 
-export default planReducer;
+export default segmentReducer;

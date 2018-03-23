@@ -1,8 +1,7 @@
-# frozen_string_literal: true
-
-class ViewerController < ApplicationController
+class CityController < ApplicationController
   include ReactOnRails::Controller
-  layout "viewer"
+
+  layout "city"
 
   before_action :data
 
@@ -17,9 +16,16 @@ class ViewerController < ApplicationController
   end
 
   def data
-    # This is the props used by the React component.
+    roads = Road.where(mgis_town: params[:city].upcase)
+    cache = Hash.new
+    roads.each do |road|
+      cache[road.id] = road
+    end
     @app_props_server_render = {
-      plan: { test: 1 }
+      road: {
+        cache: cache,
+        cityIndex: cache.keys
+      }
     }
   end
 end

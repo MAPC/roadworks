@@ -22,6 +22,7 @@
 /yarn-error.log
 
 .byebug_history
+/public/app
 /public/packs
 /public/packs-test
 /node_modules

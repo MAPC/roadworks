@@ -1,15 +1,12 @@
 import { connect } from 'react-redux';
 import Map from '../components/Map';
 
-const formatLayer = (id, color, coordinates) => {
+const formatLayer = (id, color, geometry) => {
   const features = [{
     type: 'Feature',
     properties: {
     },
-    geometry: {
-      type: 'LineString',
-      coordinates: coordinates,
-    },
+    geometry,
   }];
   return {
     id: new Date().toISOString(),
@@ -43,8 +40,7 @@ const mapStateToProps = (state) => {
   const layers = state.workingPlan.segments.reduce((layers, segment, index) => {
     const segmentRoad = state.road.cache[segment.road]
     if (segmentRoad && segmentRoad.nodes.length) {
-      const coordinates = segmentRoad.nodes.map(id => JSON.parse(state.node.cache[id].geojson).coordinates);
-      return layers.concat([formatLayer(index, '#f00', coordinates)]);
+      return layers.concat([formatLayer(index, '#f00', JSON.parse(segmentRoad.geojson))]);
     }
     return layers;
   }, []);

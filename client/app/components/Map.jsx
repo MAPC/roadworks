@@ -29,7 +29,6 @@ class Map extends React.Component {
     this.map.addControl(this.control, 'top-right');
     this.map.on('load', () => {
       this.props.layers.map((layer) => {
-        console.log(layer);
         this.map.addLayer(layer);
       });
       if (this.props.activeCoordinates) {
@@ -53,7 +52,6 @@ class Map extends React.Component {
   }
 
   removeLayers(layerIds) {
-    console.log(layerIds)
     layerIds.forEach((id) => {
       this.map.removeLayer(id);
     });

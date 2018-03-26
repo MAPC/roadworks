@@ -16,7 +16,9 @@ class CityController < ApplicationController
   end
 
   def data
-    roads = Road.where(mgis_town: params[:city].upcase)
+    roads = Road
+        .select("roads.*, ST_AsGeoJSON(geometry) AS geojson")
+        .where(mgis_town: params[:city].upcase)
     cache = Hash.new
     roads.each do |road|
       cache[road.id] = road

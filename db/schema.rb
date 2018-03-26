@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180321191343) do
+ActiveRecord::Schema.define(version: 20180323143341) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -516,6 +516,7 @@ ActiveRecord::Schema.define(version: 20180321191343) do
     t.integer "city"
     t.integer "streetlist"
     t.integer "cross_streets", default: [], array: true
+    t.geometry "geometry", limit: {:srid=>4326, :type=>"multi_line_string"}
   end
 
   create_table "secondary_unit_lookup", primary_key: "name", id: :string, limit: 20, force: :cascade do |t|

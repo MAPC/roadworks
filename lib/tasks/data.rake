@@ -124,6 +124,39 @@ namespace :data do
     end
   end
 
+  task generate_road_geometry: :environment do
+    all_roads = Road.all
+    road_map_by_streetlist = Hash.new
+    # Generate road hash table
+    puts "Generating road hash table"
+    all_roads.each do |road|
+      road.geometry = nil
+      road_map_by_streetlist[road.streetlist] = road
+    end
+    # Collect MultiLineString geometries for all roads
+    puts "Collect geometries for all roads"
+    raw_segments = RawSegment.where("geom is not null").order("gid")
+    raw_segments.each do |segment|
+      if segment.gid % 1000 == 0
+        puts segment.gid
+      end
+      road = road_map_by_streetlist[segment.streetlist]
+      if road.geometry.nil?
+        road.geometry = segment.geometry
+      else
+        road.geometry = road.geometry.union(segment.geometry)
+      end
+    end
+    # Update all roads
+    puts "Updating all roads"
+    road_map_by_streetlist.values.each do |road|
+      if road.id % 1000 == 0
+        puts road.id
+      end
+      road.save
+    end
+  end
+
   task test_get_segment: :environment do
     road_name = "TREMONT STREET"
     city_name = "BOSTON"

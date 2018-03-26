@@ -1,10 +1,10 @@
 {
-  "name": "dpw-permits",
+  "name": "Roadworks",
   "author": "MAPC Digital Services Working Group",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MAPC/dpw-permits.git"
+    "url": "https://github.com/MAPC/roadworks.git"
   },
   "scripts": {
     "postinstall": "cd ./client && yarn install",

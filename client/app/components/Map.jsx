@@ -22,7 +22,7 @@ class Map extends React.Component {
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: 'mapbox://styles/mapbox/streets-v9',
+      style: 'mapbox://styles/mapbox/light-v9',
       center: [-71.0589, 42.3601],
       zoom: 12,
     });
@@ -77,11 +77,11 @@ class Map extends React.Component {
   }
 
   render() {
-    const style = {
-      width: '100%',
-      height: '500px',
-    };
-    return <div style={style} ref={el => this.mapContainer = el} />;
+    return (
+      <section className="component Map">
+        <div className="map-layer" ref={el => this.mapContainer = el} />
+      </section>
+    );
   }
 }
 

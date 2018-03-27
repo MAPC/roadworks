@@ -1,17 +1,33 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import MapContainer from '../containers/MapContainer';
-import PlanFormContainer from '../containers/PlanFormContainer';
+import CardsContainer from '../containers/CardsContainer';
+//import PlanFormContainer from '../containers/PlanFormContainer';
+
 
 class Viewer extends React.Component {
   render() {
     return (
-      <div>
-        <h1>Test</h1>
-        <MapContainer />
-        <PlanFormContainer />
-      </div>
+      <section className="component Viewer">
+        <header>
+          <div className="title">
+            <img src="/assets/ayer-seal.png" alt="Town of Ayer Seal" />
+            <h1>Town of Ayer</h1>
+          </div>
+
+          <nav>
+            <a href="">FAQ</a>
+            <a href="">Login</a>
+          </nav>
+        </header>
+
+        <div className="page-wrapper">
+          <MapContainer />
+
+          <CardsContainer />
+        </div>
+      </section>
     );
   }
 }

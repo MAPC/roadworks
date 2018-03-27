@@ -1,0 +1,55 @@
+.component.Viewer {
+
+  header {
+    @extend ._clear;
+
+    $border_height: 5px;
+
+    height: $elem_header-height - $border_height;
+    padding: 4px 14px;
+
+    background: $color_brand-primary;
+    border-bottom: $border_height solid $color_brand-secondary;
+
+    .title {
+      display: inline-block;
+
+      height: 100%;
+
+      h1 {
+        display: inline-block;
+        margin: 0; 
+        margin-left: 10px;
+
+        color: $color_font-light;
+        font-size: 26px;
+        text-align: left;
+
+        vertical-align: top;
+      }
+      
+      img {
+        height: 100%;
+        width: auto;
+      }
+    }
+
+    nav {
+      float: right;
+
+      padding-top: $elem_header-height / 6;
+
+      a {   
+        display: inline-block;
+
+        color: $color_font-light; 
+        font-size: 14px;
+
+        & + a { margin-left: 28px; }
+      }
+    }
+  }
+
+  .page-wrapper { height: calc(100vh - #{$elem_header-height}); }
+
+}

@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20180323143341) do
     t.integer "neighbors", default: [], array: true
   end
 
-  create_table "raw_segments", primary_key: "gid", id: :integer, default: -> { "nextval('streets_gid_seq'::regclass)" }, force: :cascade do |t|
+  create_table "raw_segments", primary_key: "gid", id: :integer, force: :cascade do |t|
     t.integer "classifica", limit: 2
     t.integer "admin_type", limit: 2
     t.string "street_nam", limit: 80

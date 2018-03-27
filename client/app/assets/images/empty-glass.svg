@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="2313.5 280.5 15.497 23">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #45ceef;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-3 {
+        clip-path: url(#clip-path);
+      }
+
+      .cls-4, .cls-5 {
+        fill: none;
+      }
+
+      .cls-4 {
+        stroke: #fff;
+        stroke-width: 3px;
+      }
+
+      .cls-5 {
+        stroke: #4e4e4e;
+      }
+    </style>
+    <clipPath id="clip-path">
+      <path id="Path_26" data-name="Path 26" class="cls-1" d="M14.027,24.641H1.5V5.5H14.086Z" transform="translate(-1.5 -5.5)"/>
+    </clipPath>
+  </defs>
+  <g id="full-glass" transform="translate(2313.5 280.5)">
+    <g id="Map_Road" data-name="Map Road" transform="translate(1.5 1.5)">
+      <path id="Path_24" data-name="Path 24" class="cls-2" d="M1.5,21.5c0-7.519,5-7.5,5-10s-5-2.533-5-10H14c0,7.467-5,7.5-5,10s5.034,2.481,5,10Z" transform="translate(-1.5 -1.5)"/>
+      <g id="Group_4" data-name="Group 4" class="cls-3" transform="translate(12.586 20) rotate(180)">
+        <path id="Path_25" data-name="Path 25" class="cls-1" d="M6.5,12.735c-1.413-1.95-5-2.846-5-11.235H14c0,8.389-4.64,8.422-4.64,11.235S7.91,14.684,6.5,12.735Z" transform="translate(-1.5 -4.829)"/>
+      </g>
+      <path id="Path_27" data-name="Path 27" class="cls-4" d="M1.5,21.5c0-7.519,5-7.5,5-10s-5-2.533-5-10H14c0,7.467-5,7.5-5,10s5.034,2.481,5,10Z" transform="translate(-1.5 -1.5)"/>
+      <path id="Path_30" data-name="Path 30" class="cls-5" d="M1.5,21.5c0-7.519,5-7.5,5-10s-5-2.533-5-10H14c0,7.467-5,7.5-5,10s5.034,2.481,5,10Z" transform="translate(-1.5 -1.5)"/>
+    </g>
+  </g>
+</svg>

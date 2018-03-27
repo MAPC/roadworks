@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="1521.017 522 19 13">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <path id="playlist_add" class="cls-1" d="M2.016,15V13h7v2Zm15-2h4v2h-4v4h-2V15h-4V13h4V9.5h2Zm-4-7V8h-11V6Zm0,3.5v2h-11v-2Z" transform="translate(1519.001 516)"/>
+</svg>

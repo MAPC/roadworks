@@ -5,3 +5,9 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+if Rails.env.development? || Rails.env.test?
+  sh "pg_restore -Fc -O -a -t nodes -t roads -t raw_segments -d #{Rails.configuration.database_configuration[Rails.env]['database']} lib/seeds/roadworks.dump" || true
+else
+  sh "pg_restore -Fc -O -a -t nodes -t roads -t raw_segments -h #{Rails.configuration.database_configuration[Rails.env]['host']} -U #{Rails.configuration.database_configuration[Rails.env]['username']} -w -d #{Rails.configuration.database_configuration[Rails.env]['database']} lib/seeds/roadworks.dump" || true
+end

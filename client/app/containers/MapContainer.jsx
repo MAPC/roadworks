@@ -1,15 +1,18 @@
 import { connect } from 'react-redux';
 import Map from '../components/Map';
 
-const formatLayer = (id, color, geometry) => {
+const formatLineLayer = (id, color, geometry, isDashed) => {
   const features = [{
     type: 'Feature',
     properties: {
     },
     geometry,
   }];
+  const dashedProps = isDashed ? {
+    'line-dasharray': [8, 8],
+  } : {};
   return {
-    id: new Date().toISOString(),
+    id: id,
     type: 'line',
     source: {
       type: 'geojson',
@@ -22,14 +25,41 @@ const formatLayer = (id, color, geometry) => {
         'line-join': 'round',
         'line-cap': 'round',
     },
-    paint: {
+    paint: Object.assign({}, {
         'line-color': color,
         'line-width': 8,
+    }, dashedProps),
+  };
+};
+
+const formatPointLayer = (id, color, coordinates) => {
+  const features = [{
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates,
+    },
+  }];
+  return {
+    id: id,
+    type: 'circle',
+    source: {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: features,
+      },
+    },
+    layout: {
+    },
+    paint: {
+      'circle-color': color,
+      'circle-radius': 10,
     },
   };
 };
 
-const createFeatureFromPartialPath = (path, nodeCache) => {
+const createGeometryFromPartialPath = (path, nodeCache) => {
   const coordinates = path.map(id => JSON.parse(nodeCache[id].geojson).coordinates);
   return {
     type: 'LineString',
@@ -49,10 +79,16 @@ const mapStateToProps = (state) => {
   const layers = state.workingPlan.segments.reduce((layers, segment, index) => {
     const segmentRoad = state.road.cache[segment.road];
     if (segment.partialPath.length) {
-      const feature = createFeatureFromPartialPath(segment.partialPath, nodeCache);
-      return layers.concat([formatLayer(index, '#f00', JSON.parse(segmentRoad.geojson))]);
+      const geometry = createGeometryFromPartialPath(segment.partialPath, nodeCache);
+      const test = layers.concat([
+        formatLineLayer(index.toString(), '#aaa', JSON.parse(segmentRoad.geojson)),
+        formatLineLayer(index.toString() + 's_line', '#f00', geometry),
+        formatPointLayer(index.toString() + 's_start', '#f00', geometry.coordinates[0]),
+        formatPointLayer(index.toString() + 's_end', '#f00', geometry.coordinates[geometry.coordinates.length - 1]),
+      ]);
+      return test;
     } else if (segmentRoad && segmentRoad.nodes.length) {
-      return layers.concat([formatLayer(index, '#f00', JSON.parse(segmentRoad.geojson))]);
+      return layers.concat([formatLineLayer(index.toString(), '#f00', JSON.parse(segmentRoad.geojson))]);
     }
     return layers;
   }, []);

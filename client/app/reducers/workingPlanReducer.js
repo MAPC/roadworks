@@ -5,7 +5,7 @@ function workingPlanReducer(state = {
     road: null,
     orig: null,
     dest: null,
-    crossStreetNodeMap: {},
+    crossStreetOptions: [],
     partialPath: [],
   }],
   activeSegment: null,
@@ -16,7 +16,9 @@ function workingPlanReducer(state = {
     case types.WORKING_PLAN.SEGMENT.ROAD.UPDATE:
       newSegment = Object.assign({}, state.segments[action.index], {
         road: action.road,
-        crossStreetNodeMap: action.crossStreetNodeMap,
+        orig: null,
+        dest: null,
+        crossStreetOptions: action.crossStreetOptions,
         partialPath: [],
       });
       newSegments[action.index] = newSegment;

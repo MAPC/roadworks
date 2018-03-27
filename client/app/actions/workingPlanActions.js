@@ -4,29 +4,23 @@ import {
   updateNodes,
 } from './nodeActions';
 
-const path = (origId, destId, nodeMap) => {
-  console.log(origId, destId, nodeMap)
-  const visited = [];
-  const parents = {};
-  let nodeStack = [origId];
-  let prevNode = null;
-  let currNode = null;
-  while (currNode != destId && nodeStack.length) {
-    currNode = nodeStack.pop();
-    if (prevNode) {
-      parents[currNode] = parents[prevNode].concat([prevNode]);
-    } else {
-      parents[currNode] = [];
+const path = (nodeMap, visited, origId, destId) => {
+  const base = [origId];
+  const newVisited = visited.concat(base)
+  if (origId == destId) {
+    return base;
+  } else {
+    const children = nodeMap[origId].neighbors.filter(id => !newVisited.includes(id) && nodeMap[id]);
+    for (let i = 0; i < children.length; i++) {
+      const childPath = path(nodeMap, newVisited, children[i], destId);
+      if (childPath) {
+        return base.concat(childPath);
+      }
     }
-    const children = nodeMap[currNode].neighbors.filter(id => !visited.includes(id) && nodeMap[id]);
-    nodeStack = nodeStack.concat(children);
-    visited.push(currNode);
-    prevNode = currNode;
-
+    return null;
   }
-  console.log(parents);
-  return parents[currNode] ? parents[currNode].concat([currNode]) : [];
-};
+
+}
 
 const generateRoadNodeMap = (road, nodeCache) => {
   const nodeMap = {};
@@ -36,12 +30,29 @@ const generateRoadNodeMap = (road, nodeCache) => {
   return nodeMap;
 };
 
-const generateCrossStreetNodeMap = (road, nodeCache) => {
-  const nodeMap = {};
-  road.nodes.forEach((nodeId) => {
-    nodeMap[nodeId] = nodeCache[nodeId].part_of.filter(id => id != road.id);
-  });
-  return nodeMap;
+const generateCrossStreetOptions = (road, nodeMap, roadMap) => {
+  const nodeIds = road.nodes;
+  const options = nodeIds.reduce((opts, id) => {
+    const node = nodeMap[id];
+    const roads = node.part_of.filter(id => id != road.id);
+    if (roads.length == 1) {
+      const crossRoad = roadMap[roads[0]];
+      const label = crossRoad
+          ? (crossRoad.name || 'UNNAMED ROAD')
+          : 'Town Line';
+      return opts.concat({ value: id, label });
+    } else if (roads.length > 1) {
+      const label = roads.slice(1).reduce(
+        (acc, id) => `${acc} and ${roadMap[id].name || 'UNNAMED ROAD'}`,
+      (roadMap[roads[0]].name || 'UNNAMED ROAD'));
+      return opts.concat({ value: id, label });
+    } else if (node.neighbors.length == 1) {
+      const label = 'End of Road';
+      return opts.concat({ value: id, label });
+    }
+    return opts;
+  }, []);
+  return options;
 };
 
 export function updateSegmentRoad(segmentIndex, roadId) {
@@ -57,12 +68,13 @@ export function updateSegmentRoad(segmentIndex, roadId) {
       dispatch(updateNodes(result.data));
     }
     const nodeCache = getState().node.cache;
-    const crossStreetNodeMap = generateCrossStreetNodeMap(road, nodeCache);
+    const roadCache = getState().road.cache;
+    const crossStreetOptions = generateCrossStreetOptions(road, nodeCache, roadCache);
     dispatch({
       type: types.WORKING_PLAN.SEGMENT.ROAD.UPDATE,
       index: segmentIndex,
       road: roadId,
-      crossStreetNodeMap,
+      crossStreetOptions,
     });
   };
 }
@@ -84,7 +96,7 @@ export function updateSegmentEndPoint(segmentIndex, nodeId, isOrigin) {
     if (orig && dest) {
       const road = state.road.cache[segment.road];
       const partialNodeCache = generateRoadNodeMap(road, state.node.cache);
-      partialPath = path(orig, dest, partialNodeCache);
+      partialPath = path(partialNodeCache, [], orig, dest) || [];
     } else {
       partialPath = [nodeId];
     }
@@ -97,42 +109,3 @@ export function updateSegmentEndPoint(segmentIndex, nodeId, isOrigin) {
     });
   };
 }
-
-// export function updateSegmentDest(segmentIndex, dest) {
-
-// }
-
-// export function updateSegment(segmentIndex, segment) {
-//   return async (dispatch, getState) => {
-//     const state = getState();
-//     const availableNodes = Object.keys(state.node.cache);
-//     const road = state.road.cache[segment.road];
-//     const neededNodes = road.nodes.filter(id => !availableNodes.includes(id));
-//     if (neededNodes.length) {
-//       const response = await api.getNodes(neededNodes);
-//       const result = await response.json();
-//       dispatch(updateNodes(result.data));
-//     }
-//     const nodeCache = getState().node.cache;
-//     const crossStreetNodeMap = generateCrossStreetNodeMap(road, nodeCache);
-
-
-
-
-
-//     let newSegment = segment;
-//     if (segment.road) {
-//       if ((!segment.origCrossStreet && segment.destCrossStreet) ||
-//           (segment.origCrossStreet && !segment.destCrossStreet)) {
-//         newSegment.nodes = path();
-//       } else if (segment.origCrossStreet && segment.destCrossStreet) {
-//         newSegment.nodes = path();
-//       }
-//     }
-//     dispatch({
-//       type: types.WORKING_PLAN.SEGMENT.UPDATE,
-//       index: segmentIndex,
-//       segment,
-//     });
-//   }
-// }

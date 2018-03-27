@@ -1,0 +1,22 @@
+.component.Cards {
+
+  position: absolute;
+
+  top: $global_pad;
+  left: $global_pad;
+
+  & > *:not(.plan-cards) {
+    width: 270px;
+
+    background: $color_bg-light;
+    border: 1px solid $color_brand-secondary;
+    box-shadow: $global_shadow;
+
+    & + * { margin-top: $global_pad; } 
+  }
+
+  .plan-cards {
+    & > .Card + .Card { margin-top: $global_pad; }
+  }
+
+}

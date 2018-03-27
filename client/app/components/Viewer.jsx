@@ -24,7 +24,6 @@ class Viewer extends React.Component {
 
         <div className="page-wrapper">
           <MapContainer />
-
           <CardsContainer />
         </div>
       </section>

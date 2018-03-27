@@ -70,7 +70,6 @@ class Map extends React.Component {
     }
     if (this.props.layers &&
         this.props.layers != prevProps.layers) {
-      console.log(prevProps)
       this.removeLayers(prevProps.layers.map(layer => layer.id));
       this.drawLayers(this.props.layers);
     }

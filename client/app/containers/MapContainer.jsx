@@ -29,6 +29,14 @@ const formatLayer = (id, color, geometry) => {
   };
 };
 
+const createFeatureFromPartialPath = (path, nodeCache) => {
+  const coordinates = path.map(id => JSON.parse(nodeCache[id].geojson).coordinates);
+  return {
+    type: 'LineString',
+    coordinates,
+  }
+};
+
 const mapStateToProps = (state) => {
 
   const activeSegment = state.workingPlan.activeSegment != null ? state.workingPlan.segments[state.workingPlan.activeSegment] : null;
@@ -37,9 +45,13 @@ const mapStateToProps = (state) => {
     const activeSegmentRoad = state.road.cache[activeSegment.road];
     activeCoordinates = activeSegmentRoad.nodes.map(id => JSON.parse(state.node.cache[id].geojson).coordinates);
   }
+  const nodeCache = state.node.cache;
   const layers = state.workingPlan.segments.reduce((layers, segment, index) => {
-    const segmentRoad = state.road.cache[segment.road]
-    if (segmentRoad && segmentRoad.nodes.length) {
+    const segmentRoad = state.road.cache[segment.road];
+    if (segment.partialPath.length) {
+      const feature = createFeatureFromPartialPath(segment.partialPath, nodeCache);
+      return layers.concat([formatLayer(index, '#f00', JSON.parse(segmentRoad.geojson))]);
+    } else if (segmentRoad && segmentRoad.nodes.length) {
       return layers.concat([formatLayer(index, '#f00', JSON.parse(segmentRoad.geojson))]);
     }
     return layers;

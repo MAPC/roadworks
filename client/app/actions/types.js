@@ -4,7 +4,12 @@ export default {
   },
   WORKING_PLAN: {
     SEGMENT: {
-      UPDATE: 'WORKING_PLAN_SEGMENT_UPDATE',
+      ROAD: {
+        UPDATE: 'WORKING_PLAN_SEGMENT_ROAD_UPDATE',
+      },
+      END_POINT: {
+        UPDATE: 'WORKING_PLAN_SEGMENT_END_POINT_UPDATE',
+      },
     },
   },
 };

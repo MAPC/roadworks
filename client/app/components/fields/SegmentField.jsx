@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import DropdownField from './DropdownField.jsx';
+import DropdownField from './DropdownField';
+import ToggleField from './ToggleField';
+
+import enums from './../../constants/enums';
 
 class SegmentField extends React.Component {
   constructor(props) {
@@ -16,11 +19,23 @@ class SegmentField extends React.Component {
           value={this.props.segment.road}
           onChange={this.props.onRoadChange}
         />
+        <ToggleField
+          value={this.props.segment.origType == enums.SEGMENT_END_POINT_TYPES.ADDRESS}
+          onChange={value => this.props.onOrigTypeChange(value
+              ? enums.SEGMENT_END_POINT_TYPES.NODE
+              : enums.SEGMENT_END_POINT_TYPES.ADDRESS)}
+        />
         <DropdownField
           options={this.props.crossStreetOptions}
           value={this.props.segment.orig}
           onChange={this.props.onOrigChange}
           disabled={!this.props.segment.road}
+        />
+        <ToggleField
+          value={this.props.segment.destType == enums.SEGMENT_END_POINT_TYPES.ADDRESS}
+          onChange={value => this.props.onDestTypeChange(value
+              ? enums.SEGMENT_END_POINT_TYPES.NODE
+              : enums.SEGMENT_END_POINT_TYPES.ADDRESS)}
         />
         <DropdownField
           options={this.props.crossStreetOptions}
@@ -44,7 +59,9 @@ SegmentField.propTypes = {
   })).isRequired,
   segment: PropTypes.object.isRequired,
   onRoadChange: PropTypes.func.isRequired,
+  onOrigTypeChange: PropTypes.func.isRequired,
   onOrigChange: PropTypes.func.isRequired,
+  onDestTypeChange: PropTypes.func.isRequired,
   onDestChange: PropTypes.func.isRequired,
 };
 

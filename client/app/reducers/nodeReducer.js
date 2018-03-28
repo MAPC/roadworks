@@ -5,7 +5,6 @@ function nodeReducer(state = {
 }, action) {
   let newCache = {};
   let cachePartial = {};
-
   switch (action.type) {
     case types.NODE.BATCH_UPDATE:
       action.nodes.forEach((node) => {

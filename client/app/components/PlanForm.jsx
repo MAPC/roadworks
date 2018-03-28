@@ -9,17 +9,13 @@ import SegmentFieldContainer from '../containers/SegmentFieldContainer';
 class PlanForm extends React.Component {
 
   render() {
-     
+
     const roads = this.props.segments.map((segment, i) => {
       return (
         <article className="road">
           <SegmentFieldContainer
-            segment={segment}
-            onRoadChange={(opt) => this.props.onSegmentRoadChange(segment.id, opt.value)}
-            onOrigChange={(opt) => this.props.onSegmentOrigChange(segment.id, opt.value)}
-            onDestChange={(opt) => this.props.onSegmentDestChange(segment.id, opt.value)}
+            id={segment.id}
           />
-
           <button className="x" onClick={() => this.props.removeSegment(segment)}>+</button>
         </article>
       );

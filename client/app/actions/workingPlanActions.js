@@ -94,6 +94,35 @@ export function updateSegmentRoad(segmentIndex, roadId) {
   };
 }
 
+export function updateSegmentEndPointType(segmentIndex, type, isOrigin) {
+  return (dispatch, getState) => {
+    const segment = getState().workingPlan.segments[segmentIndex];
+    let orig, dest, origType, destType, partialPath;
+    if (isOrigin) {
+      origType = type;
+      orig = null;
+      destType = segment.destType;
+      dest = segment.dest;
+      partialPath = [dest];
+    } else {
+      origType = segment.origType;
+      orig = segment.orig;
+      destType = type;
+      dest = null;
+      partialPath = [orig];
+    }
+    return dispatch({
+      type: types.WORKING_PLAN.SEGMENT.END_POINT_TYPE.UPDATE,
+      index: segmentIndex,
+      origType,
+      orig,
+      destType,
+      dest,
+      partialPath: [],
+    });
+  };
+}
+
 // Update an end point for a segment and generate the partial path
 export function updateSegmentEndPoint(segmentIndex, nodeId, isOrigin) {
   return (dispatch, getState) => {

@@ -54,6 +54,7 @@ class Map extends React.Component {
   removeLayers(layerIds) {
     layerIds.forEach((id) => {
       this.map.removeLayer(id);
+      this.map.removeSource(id);
     });
   }
 
@@ -70,7 +71,6 @@ class Map extends React.Component {
     }
     if (this.props.layers &&
         this.props.layers != prevProps.layers) {
-      console.log(prevProps)
       this.removeLayers(prevProps.layers.map(layer => layer.id));
       this.drawLayers(this.props.layers);
     }
@@ -87,7 +87,7 @@ class Map extends React.Component {
 
 Map.propTypes = {
   layers: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     type: PropTypes.string,
     source: PropTypes.shape({
       type: PropTypes.string,
@@ -103,7 +103,7 @@ Map.propTypes = {
           }),
           geometry: PropTypes.shape({
             type: PropTypes.string,
-            coordinates: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
+            coordinates: PropTypes.array,
           }),
         })),
       }),

@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 import PlanForm from '../components/PlanForm';
 
 import {
-  updateSegment,
+  updateSegmentRoad,
+  updateSegmentEndPoint,
 } from '../actions/workingPlanActions';
 
 const mapStateToProps = (state, props) => {
@@ -14,7 +15,9 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch, props) => {
   // parse
   return {
-    onSegmentChange: (id, value) => dispatch(updateSegment(id, value)),
+    onSegmentRoadChange: (id, value) => dispatch(updateSegmentRoad(id, value)),
+    onSegmentOrigChange: (id, value) => dispatch(updateSegmentEndPoint(id, value, true)),
+    onSegmentDestChange: (id, value) => dispatch(updateSegmentEndPoint(id, value, false)),
   };
 };
 

@@ -9,8 +9,10 @@ class PlanForm extends React.Component {
       <div>
         <h1>Plan Builder</h1>
         <SegmentFieldContainer
-          value={this.props.segments[0]}
-          onChange={(val) => this.props.onSegmentChange(0, val)}
+          segment={this.props.segments[0]}
+          onRoadChange={(opt) => this.props.onSegmentRoadChange(0, opt.value)}
+          onOrigChange={(opt) => this.props.onSegmentOrigChange(0, opt.value)}
+          onDestChange={(opt) => this.props.onSegmentDestChange(0, opt.value)}
         />
       </div>
     );

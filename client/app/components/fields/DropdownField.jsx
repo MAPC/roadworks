@@ -18,6 +18,7 @@ class DropdownField extends React.Component {
           options={this.props.options}
           value={this.props.value}
           onChange={this.props.onChange}
+          disabled={this.props.disabled}
           searchable
         />
       </div>
@@ -32,6 +33,7 @@ DropdownField.propTypes = {
   })).isRequired,
   value: PropTypes.number,
   onChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default DropdownField;

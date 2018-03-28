@@ -8,7 +8,9 @@ class Card extends React.Component {
       <article className="component Card">
         <div className="card-header">
           <h3>{this.props.title}</h3>
-          <button>-</button>
+          <button>
+            <span className="absolute-center">-</span>
+          </button>
         </div>
       </article>
     );

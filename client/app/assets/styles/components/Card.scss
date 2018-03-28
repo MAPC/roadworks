@@ -20,12 +20,11 @@
 
       $circle: 15px;
 
-      right: 0;
+      right: $global_pad;
       left: inherit;
 
       height: $circle;
       width: $circle;
-      padding-bottom: -$circle / 2;
 
       color: $color_brand-secondary;
       text-align: center;
@@ -33,6 +32,8 @@
       background: $color_bg-light;
       border-radius: 50%;
       border: 0;
+
+      span.absolute-center { top: 40%; }
     }
   }
 

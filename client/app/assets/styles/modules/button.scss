@@ -3,5 +3,9 @@ button {
     text-align: center;
 
     background: $color_brand-secondary;    
+    border: 0;
+    transition: background .15s;
+
+    &:hover { transition: background .15s; }
   }
 }

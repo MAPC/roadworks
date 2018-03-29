@@ -15,5 +15,5 @@ class Timeframe < ApplicationRecord
   has_many :segments
   validates :start, presence: true
   validates :end, presence: true
-  validates :plan, presence: true
+  validates :plan_id, presence: true
 end

@@ -7,15 +7,16 @@ class PlanController < ApiController
       createdTimeframes = []
       createdSegments = []
       params[:timeframes].each do |timeframe|
-        timeframe.plan = plan.id
+        timeframe.plan_id = plan.id
         createdTimeFrames.push(Timeframe.create(timeframe))
       end
       params[:segments].each do |segment|
-        segment.timeframe = createdTimeFrames[segment.timeframe].id
+        segment.timeframe_id = createdTimeFrames[segment.timeframe_id].id
         createdSegments.push(Segment.create(segment))
       end
-    rescue
-      respond_to do |format|
+    rescue => error
+      puts error
+      return respond_to do |format|
         format.json {
           render json: { success: false }, status: :bad_request
         }

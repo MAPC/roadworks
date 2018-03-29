@@ -18,5 +18,6 @@
 
 class Segment < ApplicationRecord
   belongs_to :timeframe
-  validates :timeframe, presence: true
+  belongs_to :road
+  validates :timeframe_id, presence: true
 end

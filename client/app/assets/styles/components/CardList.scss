@@ -6,38 +6,72 @@
     $trans_dur: .15s;
     $a_trans: opacity $trans_dur, top $trans_dur, color $trans_dur;
     $border_trans: border $trans_dur, padding $trans_dur;
-    $border_size: 14px;
+    $border_width: 14px;
+    $diamond_trans: transform $trans_dur, border-color $trans_dur;
     $pad_h: $global_pad + 2;
 
-    padding: 5px $pad_h;
+    padding: 5px 4px 5px $pad_h;
 
     font-size: 14px; 
     font-weight: 300;
 
-    border-left: $border_size solid;
+    border-left: $border_width solid;
     cursor: pointer;
+    overflow: hidden;
     transition: $border_trans;
 
-    & + li { border-top: 1px solid $color_bg-medium !important; }
+    span.diamond {
+      @extend ._vertical-center;
+
+      $size: 5px;
+
+      left: $global_pad - $size;
+      display: block;
+      
+      width: 0;
+      height: 0;
+
+      border: $size solid;
+      transform: rotate(45deg) translateY(-50%);
+      transform-origin: 50% 0 0;
+      transition: $diamond_trans;
+    }
 
     &.inactive {
-      padding-left: $pad_h + ($border_size / 2);
+      padding-left: $pad_h + ($border_width / 2);
 
       color: $color_font-medium; 
 
-      border-left-width: $border_size / 2;
+      border-left-width: $border_width / 2;
       border-color: $color_bg-medium !important;
       transition: $border_trans;
+
+      span.diamond {
+        border-color: $color_bg-medium !important;
+        transform: rotate(0deg) translateY(-50%);
+        transition: $diamond_trans;
+      }
+    }
+
+    &.borderless {
+      border-left: 0; 
+      padding-left: $pad_h + $border_width;
     }
 
     a {
-      float: right;
-      top: 6px;
+      @extend ._vertical-center;
+      top: 65%;
+      left: inherit;
+      right: $global_pad;
+      display: inline-block;
 
       color: $color_brand-primary; 
       font-size: 10px;
       font-weight: 400;
       
+      background: $color_bg-light;
+      box-shadow: 0 0 12px 7px rgba($color_bg-light, 1);
+      border: 0;
       opacity: 0;
       transition: $a_trans;
 
@@ -52,15 +86,50 @@
     &:hover {
       padding-left: $pad_h + 4;
 
-      border-left-width: $border_size;
+      border-left-width: $border_width;
       transition: $border_trans;
 
       a {
-        top: 4px;
+        top: 50%;
 
         opacity: 1; 
         transition: $a_trans;
       }
+
+      &.borderless { padding-left: $pad_h + $border_width + 4; }
+    }
+
+    & + li { border-top: 1px solid $color_bg-medium !important; }
+
+    .tags {
+      top: -1px;
+      float: right;
+      display: inline-block;
+
+      .tag {
+        display: inline-block;
+
+        padding: 2px 4px;
+
+        color: $color_font-light;
+        font-size: 9px;
+
+        background: $color_bg-dark;
+        border-radius: 3px;
+
+        img {
+          display: inline-block;
+          top: 1px;
+
+          height: 9px;
+          width: auto;
+          margin-right: 4px;
+        }
+
+        & + .tag { margin-left: 4px; }
+
+        &.light { background: $color_brand-primary; }
+      } 
     }
   }
 

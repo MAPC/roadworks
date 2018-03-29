@@ -15,7 +15,7 @@ class Cards extends React.Component {
     const cards = this.props.cards.map(card => {
       return (
         <CardContainer title={card.title}>
-          <CardList items={card.items} />
+          <CardList items={card.items} type={card.type} />
         </CardContainer>
       );
     });
@@ -24,7 +24,7 @@ class Cards extends React.Component {
       <section className="component Cards">
         <SearchBarContainer />
 
-        <div class="plan-cards inactive">
+        <div className="plan-cards inactive">
           {cards}
         </div>
 

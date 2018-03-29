@@ -6,6 +6,7 @@ const mapStateToProps = state => {
     cards: [
       {
         title: 'Town Plans',
+        type: 'plan',
         items: [
           {
             title: '2015-2020 Road Paving Plan',
@@ -26,15 +27,56 @@ const mapStateToProps = state => {
       },
       {
         title: 'Utility Company Capital Plans',
-        items: [],
+        type: 'plan',
+        items: [
+          {
+            title: '2019 Eversource Construction Plan',
+            active: true,
+            color: '#45CEEF',
+          },
+          {
+            title: '5 Year Road Paving Plan',
+            active: true,
+            color: '#97E890',
+          },
+        ],
       },
       {
         title: 'All Permits',
-        items: [],
+        type: 'permit',
+        items: [
+          {
+            title: 'Road Opening',
+            active: false,
+            color: '#45CEEF',
+          },
+          {
+            title: 'Trench Digging',
+            active: true,
+            color: '#F26262',
+          },
+        ],
       },
       {
         title: 'Upcoming Permits',
-        items: [],
+        type: 'permit',
+        items: [
+          {
+            title: 'Road Opening',
+            active: true,
+            color: '#45CEEF',
+            tags: [
+              {
+                type: 'user',
+                value: 'Eversource',
+              },
+              {
+                type: 'time',
+                value: '3/21 - 4/1',
+              },
+            ],
+          },
+        ],
       },
     ],
   };

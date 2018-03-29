@@ -1,7 +1,9 @@
 .component.Card {
-
   border: 1px solid $color_brand-secondary;
   background: $color_bg-light;
+  overflow: hidden;
+
+  &.collapsed { max-height: 29px; }
 
   .card-header {
     padding: 4px $global_pad;
@@ -20,7 +22,7 @@
 
       $circle: 15px;
 
-      right: $global_pad;
+      right: $global_pad / 2;
       left: inherit;
 
       height: $circle;
@@ -33,7 +35,7 @@
       border-radius: 50%;
       border: 0;
 
-      span.absolute-center { top: 40%; }
+      span.absolute-center { top: 38%; }
     }
   }
 

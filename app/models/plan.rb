@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: plans
+#
+#  id         :integer          not null, primary key
+#  name       :string
+#  type       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  city       :string
+#  published  :boolean
+#
+
 class Plan < ApplicationRecord
   @@valid_plan_types = ['PAVING', 'MORATORIUM']
   has_many :timeframes

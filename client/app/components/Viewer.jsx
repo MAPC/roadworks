@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Route } from 'react-router'
 
 import MapContainer from '../containers/MapContainer';
 import CardsContainer from '../containers/CardsContainer';
@@ -21,7 +22,6 @@ class Viewer extends React.Component {
             <a href="">Login</a>
           </nav>
         </header>
-
         <div className="page-wrapper">
           <MapContainer />
           <CardsContainer />

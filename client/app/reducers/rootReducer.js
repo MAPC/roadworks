@@ -1,4 +1,6 @@
 import { combineReducers } from 'redux';
+import { routerReducer } from 'react-router-redux';
+
 import nodeReducer from './nodeReducer';
 import planReducer from './planReducer';
 import roadReducer from './roadReducer';
@@ -11,6 +13,7 @@ const rootReducer = combineReducers({
   road: roadReducer,
   segment: segmentReducer,
   workingPlan: workingPlanReducer,
+  router: routerReducer,
 });
 
 export default rootReducer;

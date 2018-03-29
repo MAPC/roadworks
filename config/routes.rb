@@ -11,6 +11,12 @@ Rails.application.routes.draw do
       get '/' => 'node#index'
       get '/:id' => 'node#show'
     end
+    scope '/plan' do
+      post '/' => 'plan#create'
+      scope '/:id' do
+        get '/' => 'plan#show'
+      end
+    end
   end
   # Let React Router take care of everything not API related
   get '*path', to: 'application#index'

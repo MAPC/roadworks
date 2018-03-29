@@ -32,7 +32,17 @@ ActiveRecord::Schema.define(version: 20180404204345) do
     t.integer "neighbors", default: [], array: true
   end
 
-  create_table "raw_segments", primary_key: "gid", id: :serial, force: :cascade do |t|
+  create_table "plans", force: :cascade do |t|
+    t.string "name"
+    t.string "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "city"
+    t.boolean "published"
+    t.string "plan_type"
+  end
+
+  create_table "raw_segments", primary_key: "gid", id: :integer, default: nil, force: :cascade do |t|
     t.integer "classifica", limit: 2
     t.integer "admin_type", limit: 2
     t.string "street_nam", limit: 80

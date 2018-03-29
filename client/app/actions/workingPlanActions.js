@@ -152,6 +152,8 @@ export function updateSegmentEndPoint(segmentIndex, nodeId, isOrigin) {
       index: segmentIndex,
       orig,
       dest,
+      origType: segment.origType,
+      destType: segment.destType,
       partialPath,
     });
   };

@@ -26,9 +26,9 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     onRoadChange: (opt) => dispatch(updateSegmentRoad(props.id, opt.value)),
     onOrigTypeChange: (value) => dispatch(updateSegmentEndPointType(props.id, value, true)),
-    onOrigChange: (opt) => dispatch(updateSegmentEndPoint(props.id, opt.value, true)),
+    onOrigChange: (value) => dispatch(updateSegmentEndPoint(props.id, value, true)),
     onDestTypeChange: (value) => dispatch(updateSegmentEndPointType(props.id, value, false)),
-    onDestChange: (opt) => dispatch(updateSegmentEndPoint(props.id, opt.value, false)),
+    onDestChange: (value) => dispatch(updateSegmentEndPoint(props.id, value, false)),
   };
 };
 

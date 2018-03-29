@@ -3,6 +3,7 @@ import React from 'react';
 
 import DropdownField from './DropdownField';
 import ToggleField from './ToggleField';
+import TextField from './TextField';
 
 import enums from './../../constants/enums';
 
@@ -25,24 +26,38 @@ class SegmentField extends React.Component {
               ? enums.SEGMENT_END_POINT_TYPES.NODE
               : enums.SEGMENT_END_POINT_TYPES.ADDRESS)}
         />
-        <DropdownField
-          options={this.props.crossStreetOptions}
-          value={this.props.segment.orig}
-          onChange={this.props.onOrigChange}
-          disabled={!this.props.segment.road}
-        />
+        {this.props.segment.origType == enums.SEGMENT_END_POINT_TYPES.NODE ? (
+          <DropdownField
+            options={this.props.crossStreetOptions}
+            value={this.props.segment.orig}
+            onChange={(opt) => this.props.onOrigChange(opt.value)}
+            disabled={!this.props.segment.road}
+          />
+        ) : (
+          <TextField
+            value={this.props.segment.orig}
+            onChange={this.props.onOrigChange}
+          />
+        )}
         <ToggleField
           value={this.props.segment.destType == enums.SEGMENT_END_POINT_TYPES.ADDRESS}
           onChange={value => this.props.onDestTypeChange(value
               ? enums.SEGMENT_END_POINT_TYPES.NODE
               : enums.SEGMENT_END_POINT_TYPES.ADDRESS)}
         />
-        <DropdownField
-          options={this.props.crossStreetOptions}
-          value={this.props.segment.dest}
-          onChange={this.props.onDestChange}
-          disabled={!this.props.segment.road}
-        />
+        {this.props.segment.destType == enums.SEGMENT_END_POINT_TYPES.NODE ? (
+          <DropdownField
+            options={this.props.crossStreetOptions}
+            value={this.props.segment.dest}
+            onChange={(opt) => this.props.onDestChange(opt.value)}
+            disabled={!this.props.segment.road}
+          />
+        ) : (
+          <TextField
+            value={this.props.segment.dest}
+            onChange={this.props.onDestChange}
+          />
+        )}
       </div>
     );
   }

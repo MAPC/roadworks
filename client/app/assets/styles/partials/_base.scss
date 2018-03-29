@@ -1,4 +1,7 @@
-body { font-family: $font_family-primary; }
+body { 
+  color: $color_font-dark;
+  font-family: $font_family-primary; 
+}
 
 input { outline: none; }
 

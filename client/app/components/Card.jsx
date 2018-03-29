@@ -12,6 +12,8 @@ class Card extends React.Component {
             <span className="absolute-center">-</span>
           </button>
         </div>
+
+        {this.props.children}
       </article>
     );
   }

@@ -22,10 +22,9 @@ class Cards extends React.Component {
 
     return (
       <section className="component Cards">
-
         <SearchBarContainer />
 
-        <div class="plan-cards">
+        <div class="plan-cards inactive">
           {cards}
         </div>
 
@@ -33,7 +32,6 @@ class Cards extends React.Component {
           <img src="/assets/add-to-list.svg" />
           Add Plan to Map
         </button>
-
       </section>
     );
   }

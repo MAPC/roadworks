@@ -6,7 +6,23 @@ const mapStateToProps = state => {
     cards: [
       {
         title: 'Town Plans',
-        items: [],
+        items: [
+          {
+            title: '2015-2020 Road Paving Plan',
+            active: true,
+            color: '#EF4579',
+          },
+          {
+            title: 'Sewer Repair Plan',
+            active: true,
+            color: '#F0E92D',
+          },
+          {
+            title: 'Water Repair Plan',
+            active: false,
+            color: '#F26262',
+          },
+        ],
       },
       {
         title: 'Utility Company Capital Plans',

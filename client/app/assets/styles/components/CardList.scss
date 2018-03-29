@@ -1,0 +1,67 @@
+.component.CardList {
+
+  margin: 0;
+
+  li {
+    $trans_dur: .15s;
+    $a_trans: opacity $trans_dur, top $trans_dur, color $trans_dur;
+    $border_trans: border $trans_dur, padding $trans_dur;
+    $border_size: 14px;
+    $pad_h: $global_pad + 2;
+
+    padding: 5px $pad_h;
+
+    font-size: 14px; 
+    font-weight: 300;
+
+    border-left: $border_size solid;
+    cursor: pointer;
+    transition: $border_trans;
+
+    & + li { border-top: 1px solid $color_bg-medium !important; }
+
+    &.inactive {
+      padding-left: $pad_h + ($border_size / 2);
+
+      color: $color_font-medium; 
+
+      border-left-width: $border_size / 2;
+      border-color: $color_bg-medium !important;
+      transition: $border_trans;
+    }
+
+    a {
+      float: right;
+      top: 6px;
+
+      color: $color_brand-primary; 
+      font-size: 10px;
+      font-weight: 400;
+      
+      opacity: 0;
+      transition: $a_trans;
+
+      &:hover {
+        color: $color_brand-primary--dark;
+        text-decoration: underline;
+        
+        transition: $a_trans; 
+      }
+    }
+
+    &:hover {
+      padding-left: $pad_h + 4;
+
+      border-left-width: $border_size;
+      transition: $border_trans;
+
+      a {
+        top: 4px;
+
+        opacity: 1; 
+        transition: $a_trans;
+      }
+    }
+  }
+
+}

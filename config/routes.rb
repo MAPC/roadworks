@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       get '/:id' => 'node#show'
     end
     scope '/plan' do
+      get '/' => 'plan#index'
       post '/' => 'plan#create'
       scope '/:id' do
         get '/' => 'plan#show'

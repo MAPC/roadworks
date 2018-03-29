@@ -39,13 +39,32 @@ class PlanController < ApiController
   def show
     plan = Plan.find(params[:id])
     timeframes = Timeframe.find(plan: plan.id)
-    segments = Segment.find(timeframes.map { |t| t.id })
+    segments = Segment.find(timeframe: timeframes.map { |timeframe| timeframe.id })
     respond_to do |format|
       format.json {
         render json: {
           success: true,
           data: {
             plan: plan,
+            timeframes: timeframes,
+            segments: segments,
+          }
+        }
+      }
+    end
+  end
+
+  # GET /api/plan?city=AYER
+  def show
+    plans = Plan.find(city: params[:city], published: true)
+    timeframes = Timeframe.find(plan: plans.map { |plan| plan.id })
+    segments = Segment.find(timeframe: timeframes.map { |timeframe| timeframe.id })
+    respond_to do |format|
+      format.json {
+        render json: {
+          success: true,
+          data: {
+            plans: plans,
             timeframes: timeframes,
             segments: segments,
           }

@@ -12,7 +12,7 @@ import './assets/styles/app.scss';
 
 export default (props) => {
   return (
-    <Provider store={ReactOnRails.getStore('store')}>
+    <Provider store={configureStore(props)}>
       <ViewerContainer />
     </Provider>
   );

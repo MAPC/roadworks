@@ -43,7 +43,7 @@ class Cards extends React.Component {
 
     return (
       <section className="component Cards">
-        <div className="plan-cards inactive">
+        <div className={`plan-cards ${this.props.location.pathname === '/ayer/plan/create' ? 'inactive' : ''}`}>
           {cards}
         </div>
 

@@ -14,6 +14,17 @@
   }
 
   .plan-cards {
+    max-height: 85vh;
+
+    overflow: hidden;
+    transition: height .15s;
+
+    &.inactive {
+      height: 0vh; 
+
+      transition: height .15s;
+    }
+
     & > .Card + .Card { margin-top: $global_pad; }
   }
 

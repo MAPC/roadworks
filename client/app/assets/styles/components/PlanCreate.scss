@@ -1,5 +1,16 @@
 .component.PlanCreate {
+  width: $elem_Card-width * 2;
 
+  h3 {
+    margin: 0;
+    padding: ($global_pad / 2.5) $global_pad;
 
+    color: $color_font-light;
+    font-weight: 400;
+    font-size: 16px;
+
+    background: $color_brand-primary;
+    border-bottom: 5px solid $color_brand-secondary;
+  }
 
 }

@@ -9,6 +9,22 @@ import SegmentFieldContainer from '../containers/SegmentFieldContainer';
 class PlanForm extends React.Component {
 
   render() {
+     
+    const roads = this.props.segments.map((segment, i) => {
+      return (
+        <article className="road">
+          <SegmentFieldContainer
+            segment={segment}
+            onRoadChange={(opt) => this.props.onSegmentRoadChange(segment.id, opt.value)}
+            onOrigChange={(opt) => this.props.onSegmentOrigChange(segment.id, opt.value)}
+            onDestChange={(opt) => this.props.onSegmentDestChange(segment.id, opt.value)}
+          />
+
+          <button className="x" onClick={() => this.props.removeSegment(segment)}>+</button>
+        </article>
+      );
+    });
+
     return (
       <div className="component PlanForm">
         <div className="key-info">
@@ -55,24 +71,23 @@ class PlanForm extends React.Component {
                 </div>
               </div>
 
-              <div className="column">
+              <div className="column minor">
+                <label for="roads">Roads</label>
                 <div className="roads">
-                  <article className="road">
-                    
-                  </article>
+                  {roads}
                 </div>
               </div>
             </div>
+
+            <button className="styled light" data-action="add-road" onClick={this.props.addSegment}>
+              Add Road
+            </button>
           </article>
         </div>
-        
-          
-        <SegmentFieldContainer
-          segment={this.props.segments[0]}
-          onRoadChange={(opt) => this.props.onSegmentRoadChange(0, opt.value)}
-          onOrigChange={(opt) => this.props.onSegmentOrigChange(0, opt.value)}
-          onDestChange={(opt) => this.props.onSegmentDestChange(0, opt.value)}
-        />
+
+        <button className="styled light"  data-action="add-timeframe" onClick={this.props.addTimeframe}>
+          Add Timeframe
+        </button>
       </div>
     );
   }

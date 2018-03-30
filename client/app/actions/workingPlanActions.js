@@ -127,3 +127,11 @@ export function updateSegmentEndPoint(segmentIndex, nodeId, isOrigin) {
     });
   };
 }
+
+export function removeSegment(segment) {
+
+}
+
+export function addSegment(segment) {
+
+}

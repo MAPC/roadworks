@@ -4,7 +4,8 @@ import { Route } from 'react-router'
 
 import MapContainer from '../containers/MapContainer';
 import CardsContainer from '../containers/CardsContainer';
-//import PlanFormContainer from '../containers/PlanFormContainer';
+import SearchBarContainer from '../containers/SearchBarContainer';
+import PlanCreateContainer from '../containers/PlanCreateContainer';
 
 
 class Viewer extends React.Component {
@@ -24,7 +25,13 @@ class Viewer extends React.Component {
         </header>
         <div className="page-wrapper">
           <MapContainer />
-          <CardsContainer />
+
+          <div className="left-panel">
+            <SearchBarContainer />
+
+            <Route path="/ayer" component={CardsContainer} />
+            <Route path="/ayer/plan/create" component={PlanCreateContainer} />
+          </div>
         </div>
       </section>
     );

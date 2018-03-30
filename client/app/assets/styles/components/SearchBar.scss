@@ -1,9 +1,16 @@
 .component.SearchBar {
+  width: $elem_Card-width;
+  margin-bottom: $global_pad;
+
+  background: $color_bg-light;
+  border: 1px solid $color_brand-secondary;
+  box-shadow: $global_shadow;
 
   input {
     width: 100%; 
     padding: 5px;
     padding-left: 42px;
+    margin: 0;
 
     font-size: 14px;
 

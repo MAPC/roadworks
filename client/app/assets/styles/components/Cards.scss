@@ -1,9 +1,5 @@
 .component.Cards {
 
-  position: absolute;
-  top: $global_pad;
-  left: $global_pad;
-
   & > * {
     &:not(.plan-cards), 
     &.plan-cards > .Card {
@@ -19,26 +15,6 @@
 
   .plan-cards {
     & > .Card + .Card { margin-top: $global_pad; }
-  }
-
-  button[data-action="toggle-plan-form"] {
-    padding: 6px;
-
-    color: $color_font-light;
-    font-size: 14px;
-
-    background: $color_brand-secondary; 
-    border: 0;
-
-    &:hover { background: $color_brand-secondary--active; }
-
-    img {
-      top: 2px;
-
-      height: 12px;
-      width: auto;
-      margin-right: 10px;
-    }
   }
 
 }

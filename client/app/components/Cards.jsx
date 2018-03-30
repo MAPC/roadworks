@@ -1,15 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import CardList from './CardList';
 import CardContainer from '../containers/CardContainer';
-import SearchBarContainer from '../containers/SearchBarContainer';
 
 
 class Cards extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const cards = this.props.cards.map(card => {
@@ -20,18 +17,39 @@ class Cards extends React.Component {
       );
     });
 
+    const { to, linkContent } = (location => {
+      if (this.props.location.pathname === location) {
+        return {
+          to: "/ayer",
+          linkContent: (
+            <div>
+              <span className="x">+</span> Cancel
+            </div>
+          ),
+        };
+      }
+      else {
+        return {
+          to: location,
+          linkContent: (
+            <div>
+              <img src="/assets/add-to-list.svg" />
+              Add Plan to Map
+            </div>
+          ),
+        };
+      }
+    })("/ayer/plan/create");
+
     return (
       <section className="component Cards">
-        <SearchBarContainer />
-
         <div className="plan-cards inactive">
           {cards}
         </div>
 
-        <button className="styled" data-action="toggle-plan-form">
-          <img src="/assets/add-to-list.svg" />
-          Add Plan to Map
-        </button>
+        <Link to={to} className="button styled" data-action="toggle-plan-form">
+          {linkContent}
+        </Link>
       </section>
     );
   }

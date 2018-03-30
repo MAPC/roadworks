@@ -9,8 +9,6 @@ import SegmentFieldContainer from '../containers/SegmentFieldContainer';
 class PlanForm extends React.Component {
 
   render() {
-
-
     return (
       <div className="component PlanForm">
         <div className="key-info">
@@ -47,9 +45,22 @@ class PlanForm extends React.Component {
                     <YearField name="start-date-year" />
                   </div>
                 </div>
+
+                <div className="field minor">
+                  <label for="end-date">End Date</label>
+                  <div className="multi-select">
+                    <MonthField name="end-date-month" />
+                    <YearField name="end-date-year" />
+                  </div>
+                </div>
               </div>
 
               <div className="column">
+                <div className="roads">
+                  <article className="road">
+                    
+                  </article>
+                </div>
               </div>
             </div>
           </article>

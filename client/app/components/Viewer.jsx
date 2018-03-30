@@ -9,6 +9,11 @@ import PlanCreateContainer from '../containers/PlanCreateContainer';
 
 
 class Viewer extends React.Component {
+
+  componentDidMount() {
+    this.props.fetchRoads();
+  }
+
   render() {
     return (
       <section className="component Viewer">

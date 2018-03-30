@@ -69,7 +69,6 @@ export function updateSegmentRoad(segmentIndex, roadId) {
   return async (dispatch, getState) => {
     const state = getState();
     const availableNodes = Object.keys(state.node.cache);
-    console.log(roadId)
     const road = state.road.cache[roadId];
     const neededNodes = road.nodes.filter(id => !availableNodes.includes(id));
     // If there are nodes that the client does not yet have, they must be

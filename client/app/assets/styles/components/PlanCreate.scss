@@ -1,6 +1,37 @@
 .component.PlanCreate {
   width: $elem_Card-width * 2;
 
+  margin: $global_pad 0;
+  z-index: 0;
+
+  $bar_width: ($global_pad / 2) + 2;
+
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    z-index: 0;
+
+    height: $global_pad * 2;
+    width: $bar_width; 
+
+    border: 3px solid;
+  }
+
+  &:before {
+    top: -$global_pad * 2;
+    left: ($elem_Card-width - $bar_width)/ 2;
+
+    border-color: $color_brand-secondary; 
+  }
+
+  &:after {
+    bottom: -$global_pad * 2;
+    right: ($elem_Card-width - $bar_width) / 6;
+
+    border-color: $color_brand-primary;
+  }
+
   h3 {
     margin: 0;
     padding: ($global_pad / 2.5) $global_pad;
@@ -11,6 +42,15 @@
 
     background: $color_brand-primary;
     border-bottom: 5px solid $color_brand-secondary;
+  }
+
+  *[data-action="add-to-map"] {
+    float: right; 
+    z-index: 4;
+
+    margin-top: $global_pad;
+
+    background: $color_brand-primary;
   }
 
 }

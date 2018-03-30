@@ -1,9 +1,45 @@
 .component.PlanForm {
 
   width: 100%;
+  padding: $global_pad;
 
   background: $color_bg-light;
   border: 1px solid $color_brand-secondary;
   border-top: 0;
+  z-index: 4;
 
+  .key-info {
+    display: flex; 
+
+    .field {
+      &:first-of-type { 
+        flex: 1 0 auto; 
+
+        padding-right: $global_pad;
+      }
+      &:last-of-type { flex: 1 0 fit-content; }
+
+      label {
+        display: block; 
+      } 
+
+      input { width: 100%; }
+    }
+  }
+  
+  .timeframe {
+    .timeframe-header {
+      margin: $global_pad auto;
+
+      button { float: right; }    
+    } 
+
+    h4 {
+      display: inline-block; 
+
+      margin: 0;
+
+      span { color: $color_brand-primary; } 
+    }
+  }
 }

@@ -66,6 +66,7 @@
 
     *[data-action="toggle-plan-form"] {
       display: block;
+      z-index: 1;
 
       width: $elem_Card-width;
       padding: 6px;

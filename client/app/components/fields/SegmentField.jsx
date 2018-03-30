@@ -6,27 +6,6 @@ import DropdownField from './DropdownField.jsx';
 class SegmentField extends React.Component {
   constructor(props) {
     super(props);
-    this.onRoadChange = this.onRoadChange.bind(this);
-    this.onOrigCrossStreetChange = this.onOrigCrossStreetChange.bind(this);
-    this.onDestCrossStreetChange = this.onDestCrossStreetChange.bind(this);
-  }
-
-  onRoadChange(newRoad) {
-    this.props.onChange(Object.assign({}, this.props.value, {
-      road: newRoad.value,
-    }));
-  }
-
-  onOrigCrossStreetChange(newRoad) {
-    this.props.onChange(Object.assign({}, this.props.value, {
-      origCrossStreet: newRoad.value,
-    }));
-  }
-
-  onDestCrossStreetChange(newRoad) {
-    this.props.onChange(Object.assign({}, this.props.value, {
-      destCrossStreet: newRoad.value,
-    }));
   }
 
   render() {
@@ -34,18 +13,20 @@ class SegmentField extends React.Component {
       <div className="segmentfield">
         <DropdownField
           options={this.props.roadOptions}
-          value={this.props.value.road}
-          onChange={this.onRoadChange}
+          value={this.props.segment.road}
+          onChange={this.props.onRoadChange}
         />
         <DropdownField
           options={this.props.crossStreetOptions}
-          value={this.props.value.origCrossStreet}
-          onChange={this.onOrigCrossStreetChange}
+          value={this.props.segment.orig}
+          onChange={this.props.onOrigChange}
+          disabled={!this.props.segment.road}
         />
         <DropdownField
           options={this.props.crossStreetOptions}
-          value={this.props.value.destCrossStreet}
-          onChange={this.onDestCrossStreetChange}
+          value={this.props.segment.dest}
+          onChange={this.props.onDestChange}
+          disabled={!this.props.segment.road}
         />
       </div>
     );
@@ -61,8 +42,10 @@ SegmentField.propTypes = {
     label: PropTypes.string,
     value: PropTypes.number,
   })).isRequired,
-  value: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired,
+  segment: PropTypes.object.isRequired,
+  onRoadChange: PropTypes.func.isRequired,
+  onOrigChange: PropTypes.func.isRequired,
+  onDestChange: PropTypes.func.isRequired,
 };
 
 export default SegmentField;

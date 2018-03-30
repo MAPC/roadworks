@@ -1,15 +1,19 @@
 import { connect } from 'react-redux';
 import Map from '../components/Map';
 
-const formatLayer = (id, color, geometry) => {
+// Format a line layer for display in Mapbox
+const formatLineLayer = (id, color, geometry, isDashed) => {
   const features = [{
     type: 'Feature',
     properties: {
     },
     geometry,
   }];
+  const dashedProps = isDashed ? {
+    'line-dasharray': [8, 8],
+  } : {};
   return {
-    id: new Date().toISOString(),
+    id: id,
     type: 'line',
     source: {
       type: 'geojson',
@@ -22,25 +26,107 @@ const formatLayer = (id, color, geometry) => {
         'line-join': 'round',
         'line-cap': 'round',
     },
-    paint: {
+    paint: Object.assign({}, {
         'line-color': color,
         'line-width': 8,
+    }, dashedProps),
+  };
+};
+
+// Format a point layer for display in Mapbox
+const formatPointLayer = (id, color, coordinates) => {
+  const features = [{
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates,
+    },
+  }];
+  return {
+    id: id,
+    type: 'circle',
+    source: {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: features,
+      },
+    },
+    layout: {
+    },
+    paint: {
+      'circle-color': color,
+      'circle-radius': 10,
     },
   };
 };
 
-const mapStateToProps = (state) => {
+// Use the GeoJSON in the nodes geometries to assemble a LineString
+const createGeometryFromPartialPath = (path, nodeCache) => {
+  const coordinates = path
+      .map(id => JSON.parse(nodeCache[id].geojson).coordinates);
+  return {
+    type: 'LineString',
+    coordinates,
+  }
+};
 
-  const activeSegment = state.workingPlan.activeSegment != null ? state.workingPlan.segments[state.workingPlan.activeSegment] : null;
+const mapStateToProps = (state) => {
+  // Find the active segment that will be zoomed to
+  const activeSegment = state.workingPlan.activeSegment != null
+      ? state.workingPlan.segments[state.workingPlan.activeSegment]
+      : null;
+  // ActiveCoordinates reflect the points that must be fit within the map's
+  // viewing bounds
   let activeCoordinates = null;
   if (activeSegment) {
     const activeSegmentRoad = state.road.cache[activeSegment.road];
-    activeCoordinates = activeSegmentRoad.nodes.map(id => JSON.parse(state.node.cache[id].geojson).coordinates);
+    activeCoordinates = activeSegmentRoad.nodes
+        .map(id => JSON.parse(state.node.cache[id].geojson).coordinates);
   }
+  const nodeCache = state.node.cache;
+  // Calculate all of the properly formatted layers for display on the map
   const layers = state.workingPlan.segments.reduce((layers, segment, index) => {
-    const segmentRoad = state.road.cache[segment.road]
-    if (segmentRoad && segmentRoad.nodes.length) {
-      return layers.concat([formatLayer(index, '#f00', JSON.parse(segmentRoad.geojson))]);
+    // Fetch the base road for the current segment
+    const segmentRoad = state.road.cache[segment.road];
+    if (segment.partialPath.length) {
+      // If the segment is not the whole road, plot the calculated path between
+      // the orig and dest nodes
+      const geometry = createGeometryFromPartialPath(
+        segment.partialPath,
+        nodeCache
+      );
+      return layers.concat([
+        formatLineLayer(
+          index.toString(),
+          '#aaa',
+          JSON.parse(segmentRoad.geojson)
+        ),
+        formatLineLayer(
+          index.toString() + 's_line',
+          '#f00',
+          geometry
+        ),
+        formatPointLayer(
+          index.toString() + 's_start',
+          '#f00',
+          geometry.coordinates[0]
+        ),
+        formatPointLayer(
+          index.toString() + 's_end',
+          '#f00',
+          geometry.coordinates[geometry.coordinates.length - 1]
+        ),
+      ]);
+    } else if (segmentRoad && segmentRoad.nodes.length) {
+      // Plot the whole road, if no partialPath has been calculated
+      return layers.concat([
+        formatLineLayer(
+          index.toString(),
+          '#f00',
+          JSON.parse(segmentRoad.geojson)
+        ),
+      ]);
     }
     return layers;
   }, []);

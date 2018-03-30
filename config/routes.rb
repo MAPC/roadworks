@@ -14,9 +14,7 @@ Rails.application.routes.draw do
     scope '/plan' do
       get '/' => 'plan#index'
       post '/' => 'plan#create'
-      scope '/:id' do
-        get '/' => 'plan#show'
-      end
+      get '/:id' => 'plan#show'
     end
   end
   # Let React Router take care of everything not API related

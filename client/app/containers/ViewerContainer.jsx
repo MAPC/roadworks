@@ -1,11 +1,15 @@
 import { connect } from 'react-redux';
 import Viewer from '../components/Viewer';
 
-const mapStateToProps = (state, props) => ({
-});
+import { fetchRoads } from '../actions/roadActions';
+
+const mapStateToProps = (state, props) => state;
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
+    fetchRoads() {
+      dispatch(fetchRoads('ayer')) 
+    }
   };
 };
 

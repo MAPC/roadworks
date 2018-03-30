@@ -1,16 +1,44 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+import { Route } from 'react-router'
 
 import MapContainer from '../containers/MapContainer';
-import PlanFormContainer from '../containers/PlanFormContainer';
+import CardsContainer from '../containers/CardsContainer';
+import SearchBarContainer from '../containers/SearchBarContainer';
+import PlanCreateContainer from '../containers/PlanCreateContainer';
+
 
 class Viewer extends React.Component {
+
+  componentDidMount() {
+    this.props.fetchRoads();
+  }
+
   render() {
     return (
-      <div>
-        <MapContainer />
-        <PlanFormContainer />
-      </div>
+      <section className="component Viewer">
+        <header>
+          <div className="title">
+            <img src="/assets/ayer-seal.png" alt="Town of Ayer Seal" />
+            <h1>Town of Ayer</h1>
+          </div>
+
+          <nav>
+            <a href="">FAQ</a>
+            <a href="">Login</a>
+          </nav>
+        </header>
+        <div className="page-wrapper">
+          <MapContainer />
+
+          <div className="left-panel">
+            <SearchBarContainer />
+
+            <Route path="/ayer" component={CardsContainer} />
+            <Route path="/ayer/plan/create" component={PlanCreateContainer} />
+          </div>
+        </div>
+      </section>
     );
   }
 }

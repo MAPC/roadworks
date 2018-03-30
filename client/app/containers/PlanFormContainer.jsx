@@ -4,6 +4,8 @@ import PlanForm from '../components/PlanForm';
 import {
   updateSegmentRoad,
   updateSegmentEndPoint,
+  removeSegment,
+  addSegment,
 } from '../actions/workingPlanActions';
 
 const mapStateToProps = (state, props) => {
@@ -18,6 +20,9 @@ const mapDispatchToProps = (dispatch, props) => {
     onSegmentRoadChange: (id, value) => dispatch(updateSegmentRoad(id, value)),
     onSegmentOrigChange: (id, value) => dispatch(updateSegmentEndPoint(id, value, true)),
     onSegmentDestChange: (id, value) => dispatch(updateSegmentEndPoint(id, value, false)),
+
+    removeSegment: (segment) => dispatch(removeSegment(segment)),
+    addSegment: (segment) => dispatch(addSegment(segment)),
   };
 };
 

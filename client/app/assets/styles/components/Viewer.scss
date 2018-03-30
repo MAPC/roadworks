@@ -1,0 +1,91 @@
+.component.Viewer {
+
+  header {
+    @extend ._clear;
+
+    $border_height: 5px;
+
+    z-index: 2;
+
+    height: $elem_header-height - $border_height;
+    padding: 3px $global_pad;
+
+    background: $color_brand-primary;
+    border-bottom: $border_height solid $color_brand-secondary;
+    box-shadow: $global_shadow;
+
+    .title {
+      display: inline-block;
+
+      height: 100%;
+
+      h1 {
+        display: inline-block;
+        top: -1px;
+
+        margin: 0; 
+        margin-left: 10px;
+
+        color: $color_font-light;
+        font-size: 26px;
+        text-align: left;
+
+        vertical-align: top;
+      }
+      
+      img {
+        height: 100%;
+        width: auto;
+      }
+    }
+
+    nav {
+      $font_size: 14px;
+
+      float: right;
+
+      padding-top: ($elem_header-height - $font_size) / 6;
+
+      a {   
+        display: inline-block;
+
+        color: $color_font-light; 
+        font-size: $font_size;
+
+        & + a { margin-left: $font_size * 2; }
+      }
+    }
+  }
+
+  .page-wrapper { height: calc(100vh - #{$elem_header-height}); }
+
+  .left-panel {
+    position: absolute;
+    top: $global_pad;
+    left: $global_pad;
+
+    *[data-action="toggle-plan-form"] {
+      display: block;
+
+      width: $elem_Card-width;
+      padding: 6px;
+
+      color: $color_font-light;
+      font-size: 14px;
+
+      background: $color_brand-secondary; 
+      border: 0;
+
+      &:hover { background: $color_brand-secondary--active; }
+
+      img {
+        top: 2px;
+
+        height: 12px;
+        width: auto;
+        margin-right: 10px;
+      }
+    }
+  }
+
+}

@@ -1,3 +1,6 @@
-body {
-  color: blue;
-}
+@import 'partials/all';
+
+@import 'modules/button';
+
+@import 'components/all';
+@import 'routes/all';

@@ -21,41 +21,41 @@ class SegmentField extends React.Component {
           onChange={this.props.onRoadChange}
         />
         <ToggleField
-          value={this.props.segment.origType == enums.SEGMENT_END_POINT_TYPES.ADDRESS}
-          onChange={value => this.props.onOrigTypeChange(value
-              ? enums.SEGMENT_END_POINT_TYPES.NODE
-              : enums.SEGMENT_END_POINT_TYPES.ADDRESS)}
+          value={this.props.segment.is_orig_type_address}
+          onChange={this.props.onOrigTypeChange}
         />
-        {this.props.segment.origType == enums.SEGMENT_END_POINT_TYPES.NODE ? (
+        {this.props.segment.is_orig_type_address ? (
+          <TextField
+            value={this.props.segment.custom_nodes[this.props.segment.orig]
+                ? this.props.segment.custom_nodes[this.props.segment.orig].address
+                : ''}
+            onChange={this.props.onOrigChange}
+          />
+        ) : (
           <DropdownField
             options={this.props.crossStreetOptions}
             value={this.props.segment.orig}
             onChange={(opt) => this.props.onOrigChange(opt.value)}
             disabled={!this.props.segment.road}
           />
-        ) : (
-          <TextField
-            value={this.props.segment.orig}
-            onChange={this.props.onOrigChange}
-          />
         )}
         <ToggleField
-          value={this.props.segment.destType == enums.SEGMENT_END_POINT_TYPES.ADDRESS}
-          onChange={value => this.props.onDestTypeChange(value
-              ? enums.SEGMENT_END_POINT_TYPES.NODE
-              : enums.SEGMENT_END_POINT_TYPES.ADDRESS)}
+          value={this.props.segment.is_dest_type_address}
+          onChange={this.props.onDestTypeChange}
         />
-        {this.props.segment.destType == enums.SEGMENT_END_POINT_TYPES.NODE ? (
+        {this.props.segment.is_dest_type_address ? (
+          <TextField
+            value={this.props.segment.custom_nodes[this.props.segment.dest]
+                ? this.props.segment.custom_nodes[this.props.segment.dest].address
+                : ''}
+            onChange={this.props.onDestChange}
+          />
+        ) : (
           <DropdownField
             options={this.props.crossStreetOptions}
             value={this.props.segment.dest}
             onChange={(opt) => this.props.onDestChange(opt.value)}
             disabled={!this.props.segment.road}
-          />
-        ) : (
-          <TextField
-            value={this.props.segment.dest}
-            onChange={this.props.onDestChange}
           />
         )}
       </div>

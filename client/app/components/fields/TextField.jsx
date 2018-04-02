@@ -11,7 +11,7 @@ class TextField extends React.Component {
       <div>
         <input
           value={this.props.value}
-          onChange={(e) => this.props.onChange(e.value)}
+          onChange={(e) => this.props.onChange(e.target.value)}
         />
       </div>
     );

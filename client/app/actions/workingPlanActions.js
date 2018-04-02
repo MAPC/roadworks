@@ -1,30 +1,43 @@
 import api from './api';
 import types from './types';
+import utils from './utils';
 import {
   updateNodes,
 } from './nodeActions';
 
 // Recursively generate a path between two nodes
-const path = (nodeMap, visited, origId, destId) => {
+const path = (nodeMap, visited, origIds, destIds) => {
+  const origId = origIds[0];
+  const destId = destIds[0];
   const base = [origId];
   const newVisited = visited.concat(base)
   if (origId == destId) {
     return base;
   } else {
     const children = nodeMap[origId].neighbors.filter(id => !newVisited.includes(id) && nodeMap[id]);
-    for (let i = 0; i < children.length; i++) {
-      const childPath = path(nodeMap, newVisited, children[i], destId);
+    let finalPath;
+    children.some((child) => {
+      const childPath = path(nodeMap, newVisited, [child], [destId]);
       if (childPath) {
-        return base.concat(childPath);
+        finalPath = base.concat(childPath);
+        return true;
       }
+      return false;
+    });
+    if (origIds.length > 1 &&
+        origIds.every((id) => finalPath.slice(0, finalPath.length).includes(id))) {
+      finalPath = finalPath.slice(origIds.length - 1);
     }
-    return null;
+    if (destIds.length > 1 &&
+        destIds.every((id) => finalPath.slice(0, finalPath.length).includes(id))) {
+      finalPath = finalPath.slice(0, finalPath.length - (destIds.length - 1));
+    }
+    return finalPath;
   }
-
-}
+};
 
 // Generate a partial node map using the nodes from a particular road
-const generateRoadNodeMap = (road, nodeCache) => {
+const partialNodeCacheForRoad = (road, nodeCache) => {
   const nodeMap = {};
   road.nodes.forEach((nodeId) => {
     nodeMap[nodeId] = nodeCache[nodeId];
@@ -97,64 +110,135 @@ export function updateSegmentRoad(segmentIndex, roadId) {
 export function updateSegmentEndPointType(segmentIndex, type, isOrigin) {
   return (dispatch, getState) => {
     const segment = getState().workingPlan.segments[segmentIndex];
-    let orig, dest, origType, destType, partialPath;
+    let orig, dest, is_orig_type_address, is_dest_type_address, nodes, custom_nodes;
     if (isOrigin) {
-      origType = type;
+      is_orig_type_address = type;
       orig = null;
-      destType = segment.destType;
+      is_dest_type_address = segment.is_dest_type_address;
       dest = segment.dest;
-      partialPath = [dest];
+      nodes = [dest];
+      custom_nodes = Object.assign({}, segment.custom_nodes, { [-1]: null });
     } else {
-      origType = segment.origType;
+      is_orig_type_address = segment.is_orig_type_address;
       orig = segment.orig;
-      destType = type;
+      is_dest_type_address = type;
       dest = null;
-      partialPath = [orig];
+      nodes = [orig];
+      custom_nodes = Object.assign({}, segment.custom_nodes, { [-2]: null });
     }
     return dispatch({
       type: types.WORKING_PLAN.SEGMENT.END_POINT_TYPE.UPDATE,
       index: segmentIndex,
-      origType,
+      is_orig_type_address,
       orig,
-      destType,
+      is_dest_type_address,
       dest,
-      partialPath: [],
+      nodes: [],
+      custom_nodes,
     });
   };
 }
 
+function createCustomNode(partialNodeCache, location, address) {
+  const distance = (node) => utils.distanceBetweenLocations(
+    location,
+    node.geojson.coordinates
+  );
+
+  const nodeId1 = parseInt(Object.keys(partialNodeCache).reduce((acc, id) => {
+    if (!acc) { return id; }
+    return distance(partialNodeCache[id]) < distance(partialNodeCache[acc])
+        ? id
+        : acc;
+  }, null));
+
+  const lineVertex1 = partialNodeCache[nodeId1].geojson.coordinates;
+  let snappedLocation;
+  let nodeId2;
+  partialNodeCache[nodeId1].neighbors.forEach((id) => {
+    // If neighbor is on this road
+    if (partialNodeCache[id]) {
+      const lineVertex2 = partialNodeCache[id].geojson.coordinates;
+      const newPoint = utils.closestPointOnSegment(lineVertex1,lineVertex2, location);
+      if (!nodeId2 || utils.distanceBetweenLocations(location, newPoint) < utils.distanceBetweenLocations(location, snappedLocation)) {
+        snappedLocation = newPoint;
+        nodeId2 = id;
+      }
+    }
+  });
+
+  return {
+    geojson: { type: 'Point', coordinates: snappedLocation },
+    neighbors: [nodeId1, nodeId2],
+    address,
+  };
+}
+
 // Update an end point for a segment and generate the partial path
-export function updateSegmentEndPoint(segmentIndex, nodeId, isOrigin) {
-  return (dispatch, getState) => {
+export function updateSegmentEndPoint(segmentIndex, value, isOrigin) {
+  return async (dispatch, getState) => {
     const state = getState();
     const segment = state.workingPlan.segments[segmentIndex];
-    let orig = null;
-    let dest = null;
-    let partialPath = [];
-    if (isOrigin) {
-      orig = nodeId;
-      dest = segment.dest;
-    } else {
-      orig = segment.orig;
-      dest = nodeId;
-    }
-    if (orig && dest) {
-      // If we have both an origin and destination, we can find the partial path
-      const road = state.road.cache[segment.road];
-      const partialNodeCache = generateRoadNodeMap(road, state.node.cache);
-      partialPath = path(partialNodeCache, [], orig, dest) || [];
-    } else {
-      // If not, we can still plot a dot at the starting/ending location
-      partialPath = [nodeId];
-    }
-    dispatch({
+    const partialNodeCache = partialNodeCacheForRoad(
+      state.road.cache[segment.road],
+      state.node.cache
+    );
+
+    const newEndpoints = await (async (nodeCache, segment, road, value, isOrigin) => {
+      if ((isOrigin && !segment.is_orig_type_address) ||
+          (!isOrigin && !segment.is_dest_type_address)) {
+        return {
+          orig: (isOrigin ? value : segment.orig),
+          dest: (isOrigin ? segment.dest : value),
+          custom_nodes: segment.custom_nodes || {},
+        };
+      }
+      const nodeId = isOrigin ? -1 : -2;
+      const location = await api.geocodeToLngLat(`${value} ${road.name}, ${road.mgis_town}, MA`);
+      const customNode = createCustomNode(
+        partialNodeCache,
+        location,
+        value
+      );
+      return {
+        orig: isOrigin ? -1 : segment.orig,
+        dest: isOrigin ? segment.dest : -2,
+        custom_nodes: Object.assign({}, segment.custom_nodes, {
+          [nodeId]: Object.assign({}, { id: nodeId }, customNode),
+        }),
+      };
+    })(partialNodeCache, segment, state.road.cache[segment.road], value, isOrigin);
+
+    const newNodes = ((nodeCache, newEndpoints) => {
+      if (!newEndpoints.orig || !newEndpoints.dest) {
+        return [newEndpoints.orig || newEndpoints.dest];
+      }
+      const start = segment.is_orig_type_address
+          ? newEndpoints.custom_nodes[newEndpoints.orig].neighbors
+          : [newEndpoints.orig];
+      const end = segment.is_dest_type_address
+          ? newEndpoints.custom_nodes[newEndpoints.dest].neighbors
+          : [newEndpoints.dest];
+      const nodePath = path(
+        nodeCache,
+        [],
+        start,
+        end
+      );
+      return (segment.is_orig_type_address ? [newEndpoints.orig] : [])
+          .concat(nodePath)
+          .concat(segment.is_dest_type_address ? [newEndpoints.dest] : []);
+    })(partialNodeCache, newEndpoints);
+
+    return dispatch({
       type: types.WORKING_PLAN.SEGMENT.END_POINT.UPDATE,
       index: segmentIndex,
-      orig,
-      dest,
-      origType: segment.origType,
-      destType: segment.destType,
-      partialPath,
+      is_orig_type_address: segment.is_orig_type_address,
+      is_dest_type_address: segment.is_dest_type_address,
+      nodes: newNodes,
+      orig: newEndpoints.orig,
+      dest: newEndpoints.dest,
+      custom_nodes: newEndpoints.custom_nodes,
     });
   };
 }

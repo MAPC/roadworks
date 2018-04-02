@@ -3,19 +3,18 @@
  * by the user.
  */
 
-import enums from './../constants/enums';
 import types from './../actions/types';
 
 function workingPlanReducer(state = {
   segments: [{
     road: null,
-    origType: enums.SEGMENT_END_POINT_TYPES.NODE,
+    is_orig_type_address: false,
     orig: null,
-    destType: enums.SEGMENT_END_POINT_TYPES.NODE,
+    is_dest_type_address: false,
     dest: null,
     crossStreetOptions: [],
-    partialPath: [],
-    customNodes: {},
+    nodes: [],
+    custom_nodes: {},
   }],
   activeSegment: null,
 }, action) {
@@ -26,13 +25,13 @@ function workingPlanReducer(state = {
     case types.WORKING_PLAN.SEGMENT.ROAD.UPDATE:
       newSegment = Object.assign({}, state.segments[action.index], {
         road: action.road,
-        origType: enums.SEGMENT_END_POINT_TYPES.NODE,
+        is_orig_type_address: false,
         orig: null,
-        destType: enums.SEGMENT_END_POINT_TYPES.NODE,
+        is_dest_type_address: false,
         dest: null,
         crossStreetOptions: action.crossStreetOptions,
-        partialPath: [],
-        customNodes: {},
+        nodes: [],
+        custom_nodes: {},
       });
       return Object.assign({}, state, {
         segments: Object.assign([...state.segments], {
@@ -44,16 +43,16 @@ function workingPlanReducer(state = {
     case types.WORKING_PLAN.SEGMENT.END_POINT.UPDATE:
       newCustomNodes = Object.assign(
         {},
-        state.segments[action.index].customNodes,
-        action.customNodes
+        state.segments[action.index].custom_nodes,
+        action.custom_nodes
       );
       newSegment = Object.assign({}, state.segments[action.index], {
-        origType: action.origType,
+        is_orig_type_address: action.is_orig_type_address,
         orig: action.orig,
-        destType: action.destType,
+        is_dest_type_address: action.is_dest_type_address,
         dest: action.dest,
-        partialPath: action.partialPath,
-        customNodes: newCustomNodes,
+        nodes: action.nodes,
+        custom_nodes: newCustomNodes,
       });
       return Object.assign({}, state, {
         segments: Object.assign([...state.segments], {
@@ -63,12 +62,12 @@ function workingPlanReducer(state = {
       });
     case types.WORKING_PLAN.SEGMENT.END_POINT_TYPE.UPDATE:
       newSegment = Object.assign({}, state.segments[action.index], {
-        origType: action.origType,
+        is_orig_type_address: action.is_orig_type_address,
         orig: action.orig,
-        destType: action.destType,
+        is_dest_type_address: action.is_dest_type_address,
         dest: action.dest,
-        partialPath: action.partialPath,
-        customNodes: {},
+        nodes: action.nodes,
+        custom_nodes: action.custom_nodes,
       });
       return Object.assign({}, state, {
         segments: Object.assign([...state.segments], {

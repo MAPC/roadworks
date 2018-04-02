@@ -62,9 +62,9 @@ const formatPointLayer = (id, color, coordinates) => {
 };
 
 // Use the GeoJSON in the nodes geometries to assemble a LineString
-const createGeometryFromPartialPath = (path, nodeCache) => {
+const createGeometryFromNodes = (path, nodeCache) => {
   const coordinates = path
-      .map(id => JSON.parse(nodeCache[id].geojson).coordinates);
+      .map(id => nodeCache[id].geojson.coordinates);
   return {
     type: 'LineString',
     coordinates,
@@ -82,19 +82,19 @@ const mapStateToProps = (state) => {
   if (activeSegment) {
     const activeSegmentRoad = state.road.cache[activeSegment.road];
     activeCoordinates = activeSegmentRoad.nodes
-        .map(id => JSON.parse(state.node.cache[id].geojson).coordinates);
+        .map(id => state.node.cache[id].geojson.coordinates);
   }
   const nodeCache = state.node.cache;
   // Calculate all of the properly formatted layers for display on the map
   const layers = state.workingPlan.segments.reduce((layers, segment, index) => {
     // Fetch the base road for the current segment
     const segmentRoad = state.road.cache[segment.road];
-    if (segment.partialPath.length) {
+    if (segment.nodes.length) {
       // If the segment is not the whole road, plot the calculated path between
       // the orig and dest nodes
-      const geometry = createGeometryFromPartialPath(
-        segment.partialPath,
-        nodeCache
+      const geometry = createGeometryFromNodes(
+        segment.nodes,
+        Object.assign({}, nodeCache, segment.custom_nodes)
       );
       return layers.concat([
         formatLineLayer(
@@ -119,7 +119,7 @@ const mapStateToProps = (state) => {
         ),
       ]);
     } else if (segmentRoad && segmentRoad.nodes.length) {
-      // Plot the whole road, if no partialPath has been calculated
+      // Plot the whole road, if no partial path has been calculated
       return layers.concat([
         formatLineLayer(
           index.toString(),

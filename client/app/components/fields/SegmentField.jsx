@@ -30,6 +30,7 @@ class SegmentField extends React.Component {
                 ? this.props.segment.custom_nodes[this.props.segment.orig].address
                 : ''}
             onChange={this.props.onOrigChange}
+            debounce={500}
           />
         ) : (
           <DropdownField
@@ -49,6 +50,7 @@ class SegmentField extends React.Component {
                 ? this.props.segment.custom_nodes[this.props.segment.dest].address
                 : ''}
             onChange={this.props.onDestChange}
+            debounce={500}
           />
         ) : (
           <DropdownField

@@ -3,4 +3,4 @@
 rails: rails s -b 0.0.0.0 -p 3000
 
 # Run the hot reload server for client development
-hot-assets: yarn run hot-assets
+hot-assets: npm run hot-assets

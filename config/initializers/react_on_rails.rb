@@ -19,7 +19,7 @@ ReactOnRails.configure do |config|
   #
   # ReactOnRails::TestHelper.configure_rspec_to_compile_assets(config)
   #
-  # with rspec then this controls what yarn command is run
+  # with rspec then this controls what npm command is run
   # to automatically refresh your webpack assets on every test run.
   #
   config.build_test_command = "RAILS_ENV=test bin/webpack"

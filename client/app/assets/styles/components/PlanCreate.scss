@@ -27,7 +27,7 @@
 
   &:after {
     bottom: -$global_pad * 2;
-    right: ($elem_Card-width - $bar_width) / 6;
+    right: ($elem_Card-width / 4) - $bar_width;
 
     border-color: $color_brand-primary;
   }
@@ -48,9 +48,21 @@
     float: right; 
     z-index: 4;
 
+    width: $elem_Card-width / 2;
     margin-top: $global_pad;
 
     background: $color_brand-primary;
+
+    &:hover { background: $color_brand-primary--dark; }
+
+    .plus {
+      display: inline-block;
+
+      margin-right: 8px;
+
+      font-size: 22px;
+      line-height: 14px;
+    }
   }
 
 }

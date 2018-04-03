@@ -1,5 +1,6 @@
 import React from 'react';
 
+import SelectField from './SelectField';
 
 class MonthField extends React.Component {
 
@@ -22,10 +23,10 @@ class MonthField extends React.Component {
     const options = months.map(month => <option value={month}>{month}</option>);
 
     return (
-      <select name={this.props.name}>
+      <SelectField name={this.props.name}>
         <option selected disabled>-- Month --</option>
         {options}
-      </select>
+      </SelectField>
     );
   }
 

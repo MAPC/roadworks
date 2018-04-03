@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import MonthField from './fields/MonthField';
 import YearField from './fields/YearField';
+import MonthField from './fields/MonthField';
+import SelectField from './fields/SelectField';
 import SegmentFieldContainer from '../containers/SegmentFieldContainer';
 
 
@@ -31,10 +32,11 @@ class PlanForm extends React.Component {
 
           <div className="field">
             <label for="plan-type">Plan Type</label>
-            <select name="plan-type">
+            <SelectField name="plan-type">
               <option disabled selected>-- Select Plan Type --</option>
+              <option value="paving">Paving</option>
               <option value="moratorium">Moratorium</option>
-            </select>
+            </SelectField>
           </div>
         </div>
 

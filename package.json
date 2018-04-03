@@ -19,5 +19,14 @@
     "build:dev:server": "(cd client && yarn run --silent build:dev:server)",
     "hot-assets": "(cd client && yarn run hot-assets)"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@rails/webpacker": "^3.4.3",
+    "babel-preset-react": "^6.24.1",
+    "prop-types": "^15.6.1",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^3.1.1"
+  }
 }

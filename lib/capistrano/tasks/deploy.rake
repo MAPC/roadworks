@@ -9,6 +9,7 @@ namespace :deploy do
     on roles(:web) do
       within release_path do
         execute("cd #{release_path} && yarn install")
+        execute("cd #{release_path}/client && yarn install")
       end
     end
   end

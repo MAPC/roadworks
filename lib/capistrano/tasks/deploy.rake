@@ -4,12 +4,12 @@ namespace :deploy do
     # Rake::Task["backup_manifest"].clear_actions
   end
 
-  desc 'Run rake yarn:install'
-  task :yarn_install do
+  desc 'Run rake npm:install'
+  task :npm_install do
     on roles(:web) do
       within release_path do
-        execute("cd #{release_path} && yarn install")
-        execute("cd #{release_path}/client && yarn install")
+        execute("cd #{release_path} && npm install")
+        execute("cd #{release_path}/client && npm install")
       end
     end
   end

@@ -79,7 +79,7 @@ const mapStateToProps = (state) => {
   // ActiveCoordinates reflect the points that must be fit within the map's
   // viewing bounds
   let activeCoordinates = null;
-  if (activeSegment) {
+  if (activeSegment && state.road.cache[activeSegment.road]) {
     const activeSegmentRoad = state.road.cache[activeSegment.road];
     activeCoordinates = activeSegmentRoad.nodes
         .map(id => state.node.cache[id].geojson.coordinates);

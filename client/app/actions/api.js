@@ -19,6 +19,7 @@ export default {
         'Content-Type': 'application/json',
       }),
       credentials: 'same-origin',
+      method: 'GET',
     });
   },
   geocodeToLngLat: async (address) => {

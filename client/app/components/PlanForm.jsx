@@ -14,7 +14,7 @@ class PlanForm extends React.Component {
       return (
         <article className="road">
           <SegmentFieldContainer
-            id={segment.id}
+            id={i}
           />
           <button className="x" onClick={() => this.props.removeSegment(segment)}>+</button>
         </article>

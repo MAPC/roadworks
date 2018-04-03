@@ -13,7 +13,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
   # Let React Router take care of everything not API related
   get '*path', to: 'city#index'
 end

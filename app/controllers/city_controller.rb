@@ -1,5 +1,4 @@
 class CityController < ApplicationController
-  include ReactOnRails::Controller
 
   layout "city"
 

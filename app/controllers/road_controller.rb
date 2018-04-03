@@ -1,5 +1,4 @@
 class RoadController < ApplicationController
-  include ReactOnRails::Controller
   # GET /road?city=ayer
   def index
     @roads = Road

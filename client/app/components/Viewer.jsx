@@ -15,12 +15,21 @@ class Viewer extends React.Component {
   }
 
   render() {
+    const townLower = this.props.match.params.city.toLowerCase();
+
+    const townCapitalized = (text => {
+      const words = text.split('-');
+
+      return words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    })(this.props.match.params.city);
+
+
     return (
       <section className="component Viewer">
         <header>
           <div className="title">
-            <img src="/assets/ayer-seal.png" alt="Town of Ayer Seal" />
-            <h1>Town of Ayer</h1>
+            <img src={`/assets/${townLower}-seal.png`} alt={`Town of ${townCapitalized} Seal`} />
+            <h1>Town of {townCapitalized}</h1>
           </div>
 
           <nav>
@@ -34,8 +43,8 @@ class Viewer extends React.Component {
           <div className="left-panel">
             <SearchBarContainer />
 
-            <Route path="/ayer" component={CardsContainer} />
-            <Route path="/ayer/plan/create" component={PlanCreateContainer} />
+            <Route path="/:city" component={CardsContainer} />
+            <Route path="/:city/plan/create" component={PlanCreateContainer} />
           </div>
         </div>
       </section>

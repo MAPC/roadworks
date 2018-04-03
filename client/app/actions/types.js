@@ -13,6 +13,9 @@ export default {
       END_POINT: {
         UPDATE: 'WORKING_PLAN_SEGMENT_END_POINT_UPDATE',
       },
+      END_POINT_TYPE: {
+        UPDATE: 'WORKING_PLAN_SEGMENT_END_POINT_TYPE_UPDATE',
+      },
     },
   },
 };

@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import constants from './../constants/constants';
+
 let mapboxgl;
 if (__CLIENT__) {
   // Mapbox GL requires the global window variable which does not exist in
   // Server-side rendering. Only import on the client.
   mapboxgl = require('mapbox-gl');
-  mapboxgl.accessToken = 'pk.eyJ1IjoiaWhpbGwiLCJhIjoiY2plZzUwMTRzMW45NjJxb2R2Z2thOWF1YiJ9.szIAeMS4c9YTgNsJeG36gg';
+  mapboxgl.accessToken = constants.MAPBOX_PUBLIC_API_KEY;
 }
 
 class Map extends React.Component {

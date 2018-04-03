@@ -17,9 +17,6 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch, props) => {
   // parse
   return {
-    onSegmentRoadChange: (id, value) => dispatch(updateSegmentRoad(id, value)),
-    onSegmentOrigChange: (id, value) => dispatch(updateSegmentEndPoint(id, value, true)),
-    onSegmentDestChange: (id, value) => dispatch(updateSegmentEndPoint(id, value, false)),
 
     removeSegment: (segment) => dispatch(removeSegment(segment)),
     addSegment: (segment) => dispatch(addSegment(segment)),

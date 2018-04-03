@@ -8,40 +8,71 @@ import types from './../actions/types';
 function workingPlanReducer(state = {
   segments: [{
     road: null,
+    is_orig_type_address: false,
     orig: null,
+    is_dest_type_address: false,
     dest: null,
     crossStreetOptions: [],
-    partialPath: [],
+    nodes: [],
+    custom_nodes: {},
   }],
   activeSegment: null,
 }, action) {
   let newSegment = {};
-  const newSegments = Array.from(state.segments);
+  let newCustomNodes = {};
   switch (action.type) {
     // Update the base road for a segment and set the cross street options
     case types.WORKING_PLAN.SEGMENT.ROAD.UPDATE:
       newSegment = Object.assign({}, state.segments[action.index], {
         road: action.road,
+        is_orig_type_address: false,
         orig: null,
+        is_dest_type_address: false,
         dest: null,
         crossStreetOptions: action.crossStreetOptions,
-        partialPath: [],
+        nodes: [],
+        custom_nodes: {},
       });
-      newSegments[action.index] = newSegment;
       return Object.assign({}, state, {
-        segments: Array.from(newSegments),
+        segments: Object.assign([...state.segments], {
+          [action.index]: newSegment,
+        }),
         activeSegment: action.index,
       });
     // Set the origin or destination of a segment and set the partial path
     case types.WORKING_PLAN.SEGMENT.END_POINT.UPDATE:
+      newCustomNodes = Object.assign(
+        {},
+        state.segments[action.index].custom_nodes,
+        action.custom_nodes
+      );
       newSegment = Object.assign({}, state.segments[action.index], {
+        is_orig_type_address: action.is_orig_type_address,
         orig: action.orig,
+        is_dest_type_address: action.is_dest_type_address,
         dest: action.dest,
-        partialPath: action.partialPath,
+        nodes: action.nodes,
+        custom_nodes: newCustomNodes,
       });
-      newSegments[action.index] = newSegment;
       return Object.assign({}, state, {
-        segments: Array.from(newSegments),
+        segments: Object.assign([...state.segments], {
+          [action.index]: newSegment,
+        }),
+        activeSegment: action.index,
+      });
+    case types.WORKING_PLAN.SEGMENT.END_POINT_TYPE.UPDATE:
+      newSegment = Object.assign({}, state.segments[action.index], {
+        is_orig_type_address: action.is_orig_type_address,
+        orig: action.orig,
+        is_dest_type_address: action.is_dest_type_address,
+        dest: action.dest,
+        nodes: action.nodes,
+        custom_nodes: action.custom_nodes,
+      });
+      return Object.assign({}, state, {
+        segments: Object.assign([...state.segments], {
+          [action.index]: newSegment,
+        }),
         activeSegment: action.index,
       });
     default:

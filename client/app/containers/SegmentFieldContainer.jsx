@@ -1,6 +1,12 @@
 import { connect } from 'react-redux';
 import SegmentField from '../components/fields/SegmentField';
 
+import {
+  updateSegmentRoad,
+  updateSegmentEndPoint,
+  updateSegmentEndPointType,
+} from '../actions/workingPlanActions';
+
 const mapStateToProps = (state, props) => {
   const segment = state.workingPlan.segments[props.id];
   return {
@@ -8,15 +14,21 @@ const mapStateToProps = (state, props) => {
       value: id,
       label: state.road.cache[id].name,
     })),
-    crossStreetOptions: props.segment.road
-        ? props.segment.crossStreetOptions
+    crossStreetOptions: segment.road
+        ? segment.crossStreetOptions
         : [],
+    segment,
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   // parse
   return {
+    onRoadChange: (opt) => dispatch(updateSegmentRoad(props.id, opt.value)),
+    onOrigTypeChange: (value) => dispatch(updateSegmentEndPointType(props.id, !value, true)),
+    onOrigChange: (value) => dispatch(updateSegmentEndPoint(props.id, value, true)),
+    onDestTypeChange: (value) => dispatch(updateSegmentEndPointType(props.id, !value, false)),
+    onDestChange: (value) => dispatch(updateSegmentEndPoint(props.id, value, false)),
   };
 };
 

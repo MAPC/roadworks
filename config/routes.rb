@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  get '/:city' => 'city#index'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  # resources :road
   scope '/api' do
     scope '/road' do
       get '/' => 'road#index'
@@ -16,4 +13,7 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # Let React Router take care of everything not API related
+  get '*path', to: 'city#index'
 end

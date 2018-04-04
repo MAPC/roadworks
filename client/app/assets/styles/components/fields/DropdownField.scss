@@ -1,10 +1,17 @@
 .component.DropdownField {
 
   .Select-placeholder {
+    @extend ._vertical-center; 
+    top: 45%;
+
     width: 100%;
+    color: $color_font-dark;
+    font-weight: 100;
 
     font-size: 12px;
     line-height: inherit;
+
+    overflow: visible;
   }
 
   .Select-multi-value-wrapper {

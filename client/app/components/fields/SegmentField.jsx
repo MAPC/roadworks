@@ -19,6 +19,7 @@ class SegmentField extends React.Component {
           options={this.props.roadOptions}
           value={this.props.segment.road}
           onChange={this.props.onRoadChange}
+          placeholder="-- Select Road --"
         />
         <ToggleField
           value={this.props.segment.is_orig_type_address}
@@ -38,6 +39,7 @@ class SegmentField extends React.Component {
             value={this.props.segment.orig}
             onChange={(opt) => this.props.onOrigChange(opt.value)}
             disabled={!this.props.segment.road}
+            placeholder="-- Select Endpoint --"
           />
         )}
         <ToggleField
@@ -58,6 +60,7 @@ class SegmentField extends React.Component {
             value={this.props.segment.dest}
             onChange={(opt) => this.props.onDestChange(opt.value)}
             disabled={!this.props.segment.road}
+            placeholder="-- Select Endpoint --"
           />
         )}
       </div>

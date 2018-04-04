@@ -19,6 +19,7 @@ class DropdownField extends React.Component {
           value={this.props.value}
           onChange={this.props.onChange}
           disabled={this.props.disabled}
+          placeholder={this.props.placeholder}
           searchable
         />
       </div>

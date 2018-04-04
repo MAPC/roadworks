@@ -47,7 +47,12 @@ class Map extends React.Component {
       new mapboxgl.LngLatBounds(coordinates[0], coordinates[0])
     );
     this.map.fitBounds(newBounds, {
-      padding: 48,
+      padding: {
+        top: 64,
+        left: 600,
+        right: 64,
+        bottom: 64,
+      }
     });
   }
 

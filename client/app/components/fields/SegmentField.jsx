@@ -14,7 +14,7 @@ class SegmentField extends React.Component {
 
   render() {
     return (
-      <div className="segmentfield">
+      <div className="component SegmentField">
         <DropdownField
           options={this.props.roadOptions}
           value={this.props.segment.road}

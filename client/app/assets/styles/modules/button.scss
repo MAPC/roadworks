@@ -1,5 +1,9 @@
 button, .button {
   &.styled {
+    padding: 6px 12px;
+
+    color: $color_font-light;
+    font-size: 14px;
     text-align: center;
 
     background: $color_brand-secondary;    
@@ -7,5 +11,24 @@ button, .button {
     transition: background .15s;
 
     &:hover { transition: background .15s; }
+
+    &.light {
+      color: $color_font-dark;
+
+      background: $color_bg-medium; 
+
+      &:hover { background: $color_bg-medium--active; }
+    }
+  }
+
+  &.minor {
+    color: $color_font-medium;
+    font-weight: 300;
+    font-size: 12px;
+
+    background: none;
+    border: none;
+
+    text-decoration: underline; 
   }
 }

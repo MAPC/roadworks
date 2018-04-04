@@ -21,6 +21,7 @@
 
     &.inactive {
       height: 0vh; 
+      display: none;
 
       transition: height .15s;
     }

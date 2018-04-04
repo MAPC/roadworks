@@ -21,3 +21,12 @@
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
+
+._arrow {
+  width: 0;
+  height: 0;
+
+  border-top: $elem_arrow-size solid $color_brand-primary;
+  border-left: ($elem_arrow-size * .8) solid transparent !important;
+  border-right: ($elem_arrow-size * .8) solid transparent !important;
+}

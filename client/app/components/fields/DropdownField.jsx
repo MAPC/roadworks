@@ -13,7 +13,7 @@ class DropdownField extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="component DropdownField">
         <Select
           options={this.props.options}
           value={this.props.value}

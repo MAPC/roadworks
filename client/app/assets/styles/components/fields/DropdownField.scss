@@ -1,0 +1,56 @@
+.component.DropdownField {
+
+  .Select-placeholder {
+    width: 100%;
+
+    font-size: 12px;
+    line-height: inherit;
+  }
+
+  .Select-multi-value-wrapper {
+    display: inline-block;
+
+    width: 100%; 
+  }
+
+  .Select-input {
+    height: auto; 
+  }
+
+  .Select-value {
+    padding-right: 10px !important;
+
+    font-size: 12px; 
+    line-height: inherit;
+
+    span {
+      @extend ._vertical-center; 
+
+      left: 10px;
+    }
+  }
+
+  .Select-arrow { 
+    @extend ._arrow;
+    top: -2px;
+    right: -5px;
+  }
+
+  .Select-control {
+    max-width: 50%;
+    height: auto;
+
+    color: $color_font-dark;
+
+    background: $color_bg-light; 
+    border-color: $color_bg-medium;
+    border-radius: 0;
+
+    input {
+      padding: 0;
+
+      border: 0; 
+    }
+  }
+
+}

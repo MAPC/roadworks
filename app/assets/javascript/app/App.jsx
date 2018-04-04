@@ -3,7 +3,6 @@ import { Provider } from 'react-redux';
 import { Route } from 'react-router'
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory'
-
 import configureStore from './store/appStore';
 import ViewerContainer from './containers/ViewerContainer';
 

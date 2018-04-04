@@ -23,6 +23,7 @@
 
 .byebug_history
 /public/app
+/public/assets/packs/
 /public/packs
 /public/packs-test
 /node_modules

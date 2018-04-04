@@ -1,5 +1,4 @@
 class NodeController < ApplicationController
-  include ReactOnRails::Controller
   # GET /node?id=1,2,3
   def index
     @nodes = Node.select("id, ST_AsGeoJSON(geometry) as geojson, part_of, neighbors").find(params[:id])

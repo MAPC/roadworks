@@ -44,7 +44,7 @@ class PlanForm extends React.Component {
             <div className="timeframe-header">
               <h4>From <span>May 2018</span> to <span>September 2018</span></h4>
 
-              <button class="minor" data-action="delete-timeframe">
+              <button className="minor" data-action="delete-timeframe">
                 Delete Timeframe
               </button>
             </div>

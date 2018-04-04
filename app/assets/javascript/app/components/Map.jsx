@@ -1,15 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import mapboxgl from 'mapbox-gl';
 
 import constants from './../constants/constants';
 
-let mapboxgl;
-if (__CLIENT__) {
-  // Mapbox GL requires the global window variable which does not exist in
-  // Server-side rendering. Only import on the client.
-  mapboxgl = require('mapbox-gl');
-  mapboxgl.accessToken = constants.MAPBOX_PUBLIC_API_KEY;
-}
+import 'mapbox-gl/dist/mapbox-gl.css';
+
+mapboxgl.accessToken = constants.MAPBOX_PUBLIC_API_KEY;
 
 class Map extends React.Component {
   constructor(props) {
@@ -30,6 +27,7 @@ class Map extends React.Component {
     });
     this.map.addControl(this.control, 'top-right');
     this.map.on('load', () => {
+      this.map.resize();
       this.props.layers.map((layer) => {
         this.map.addLayer(layer);
       });

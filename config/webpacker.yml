@@ -1,9 +1,9 @@
 # Note: You must restart bin/webpack-dev-server for changes to take effect
 
 default: &default
-  source_path: client
-  source_entry_path: app
-  public_output_path: app
+  source_path: app/assets/javascript
+  source_entry_path: packs
+  public_output_path: assets/packs
   cache_path: tmp/cache/webpacker
 
   # Additional paths webpack should lookup modules
@@ -30,7 +30,7 @@ default: &default
 
 development:
   <<: *default
-  compile: true
+  compile: false
 
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:

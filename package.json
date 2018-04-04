@@ -39,6 +39,7 @@
     "redux-devtools-extension": "^2.13.2",
     "redux-thunk": "^2.2.0",
     "style-loader": "^0.20.3",
+    "webpack": "3.11.0",
     "webpack-merge": "^4.1.2"
   },
   "devDependencies": {

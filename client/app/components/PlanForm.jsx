@@ -10,7 +10,6 @@ import SegmentFieldContainer from '../containers/SegmentFieldContainer';
 class PlanForm extends React.Component {
 
   render() {
-
     const roads = this.props.segments.map((segment, i) => {
       return (
         <article className="road">

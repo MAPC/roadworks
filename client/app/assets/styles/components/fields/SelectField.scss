@@ -1,23 +1,14 @@
 .component.SelectField {
-  $size_arrow: 6px;
-
   display: inline-block;
 
   &:after {
     @extend ._vertical-center;
+    @extend ._arrow;
 
-    right: $size_arrow;
+    right: $elem_arrow-size;
     left: inherit;
     content: '';
     z-index: 3;
-    display: block;
-
-    width: 0;
-    height: 0;
-
-    border-top: $size_arrow solid $color_brand-primary;
-    border-left: ($size_arrow * .8) solid transparent;
-    border-right: ($size_arrow * .8) solid transparent;
   }
 
   select {
@@ -34,7 +25,7 @@
     border-radius: 0;
     outline: none;
     transition: border-color .15s;
-    padding-right: $size_arrow * 4;
+    padding-right: $elem_arrow-size * 4;
 
     &:active {
       border-color: $color_bg-dark; 

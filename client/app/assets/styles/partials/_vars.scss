@@ -5,7 +5,8 @@ $color_brand-secondary--dark: #DB7F49;
 $color_brand-secondary--active: mix(black, $color_brand-secondary, 5);
 
 $color_bg-light: #FFFFFF;
-$color_bg-medium: #C9C9C9;
+$color_bg-medium: mix(#C9C9C9, #EBEBEB, 50);
+$color_bg-medium--active: mix(black, $color_bg-medium, 10);
 $color_bg-dark: #818184;
 
 $color_font-light: #FFFFFF;
@@ -16,6 +17,7 @@ $font_family-primary: 'europa', Helvetica, sans-serif;
 
 $elem_header-height: 50px;
 $elem_Card-width: 270px;
+$elem_arrow-size: 6px;
 
 $global_pad: 14px;
 $global_shadow: 1px 1px 4px rgba($color_bg-medium, 1);

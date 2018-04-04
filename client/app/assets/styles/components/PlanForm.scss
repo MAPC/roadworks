@@ -40,11 +40,22 @@
     border: 1px solid $color_bg-medium;
   }
 
+  button.light { font-size: 12px; }
+
   .timeframe {
+    @extend ._clear;
+
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+
+    border-bottom: 1px solid $color_bg-medium;
+
     .timeframe-header {
-      margin: $global_pad auto;
+      margin: 18px auto 10px;
 
       button { float: right; }    
+
+      .minor { top: 3px; }
     } 
 
     h4 {
@@ -52,7 +63,36 @@
 
       margin: 0;
 
+      font-size: 14px;
+
       span { color: $color_brand-primary; } 
+    }
+
+    button[data-action="add-road"] { float: right; }
+  }
+
+
+  .timeframe-columns {
+    display: flex; 
+
+    .column {
+      &:first-of-type { flex: 1 0 40%; } 
+      &:last-of-type { flex: 1 0 60%; }
+    }
+
+    .field { margin-bottom: 10px; }
+
+    label {
+      display: block;
+
+      margin-bottom: 4px; 
+
+      font-size: 12px; 
+      font-weight: 600;
+    }
+
+    .multi-select {
+      .SelectField + .SelectField { margin-left: 10px; }
     }
   }
 }

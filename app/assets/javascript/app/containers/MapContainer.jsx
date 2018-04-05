@@ -4,7 +4,7 @@ import Map from '../components/Map';
 import constants from './../constants/constants';
 
 // Format a line layer for display in Mapbox
-const formatLineLayer = (id, color, geometry, isDashed) => {
+const formatLineLayer = (id, version, color, geometry, isDashed) => {
   const features = [{
     type: 'Feature',
     properties: {
@@ -15,7 +15,8 @@ const formatLineLayer = (id, color, geometry, isDashed) => {
     'line-dasharray': [8, 8],
   } : {};
   return {
-    id: id,
+    id,
+    version,
     type: 'line',
     source: {
       type: 'geojson',
@@ -36,7 +37,7 @@ const formatLineLayer = (id, color, geometry, isDashed) => {
 };
 
 // Format a point layer for display in Mapbox
-const formatPointLayer = (id, color, coordinates) => {
+const formatPointLayer = (id, version, color, coordinates) => {
   const features = [{
     type: 'Feature',
     geometry: {
@@ -45,7 +46,8 @@ const formatPointLayer = (id, color, coordinates) => {
     },
   }];
   return {
-    id: id,
+    id,
+    version,
     type: 'circle',
     source: {
       type: 'geojson',
@@ -66,6 +68,7 @@ const formatPointLayer = (id, color, coordinates) => {
 const formatCityLayers = (outline, mask) => {
   return [{
     id: 'city-mask',
+    version: 1,
     type: 'fill',
     source: {
       type: 'geojson',
@@ -82,6 +85,7 @@ const formatCityLayers = (outline, mask) => {
     },
   }, {
     id: 'city-outline',
+    version: 1,
     type: 'line',
     source: {
       type: 'geojson',
@@ -149,21 +153,25 @@ const mapStateToProps = (state, props) => {
       return layers.concat([
         formatLineLayer(
           index.toString(),
+          segment.version,
           '#aaa',
           JSON.parse(segmentRoad.geojson)
         ),
         formatLineLayer(
           index.toString() + 's_line',
+          segment.version,
           '#f00',
           geometry
         ),
         formatPointLayer(
           index.toString() + 's_start',
+          segment.version,
           '#f00',
           geometry.coordinates[0]
         ),
         formatPointLayer(
           index.toString() + 's_end',
+          segment.version,
           '#f00',
           geometry.coordinates[geometry.coordinates.length - 1]
         ),
@@ -173,6 +181,7 @@ const mapStateToProps = (state, props) => {
       return layers.concat([
         formatLineLayer(
           index.toString(),
+          segment.version,
           '#f00',
           JSON.parse(segmentRoad.geojson)
         ),

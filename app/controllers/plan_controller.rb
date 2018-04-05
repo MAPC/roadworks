@@ -1,4 +1,4 @@
-class PlanController < ApplicationController
+class PlanController < ApiController
 
   # POST api/v1/plan
   def create

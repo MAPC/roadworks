@@ -1,4 +1,4 @@
-class NodeController < ApplicationController
+class NodeController < ApiController
   # GET /node?id=1,2,3
   def index
     @nodes = Node.select("id, ST_AsGeoJSON(geometry) as geojson, part_of, neighbors").find(params[:id])

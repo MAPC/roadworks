@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 import Map from '../components/Map';
 
+import constants from './../constants/constants';
+
 // Format a line layer for display in Mapbox
 const formatLineLayer = (id, color, geometry, isDashed) => {
   const features = [{
@@ -61,6 +63,44 @@ const formatPointLayer = (id, color, coordinates) => {
   };
 };
 
+const formatCityLayers = (outline, mask) => {
+  return [{
+    id: 'city-mask',
+    type: 'fill',
+    source: {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        geometry: mask,
+      },
+    },
+    layout: {
+    },
+    paint: {
+      'fill-color': '#000',
+      'fill-opacity': 0.1,
+    },
+  }, {
+    id: 'city-outline',
+    type: 'line',
+    source: {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        geometry: outline,
+      },
+    },
+    layout: {
+      'line-join': 'round',
+      'line-cap': 'round',
+    },
+    paint: {
+      'line-color': '#f5a87c',
+      'line-width': 4,
+    },
+  }];
+};
+
 // Use the GeoJSON in the nodes geometries to assemble a LineString
 const createGeometryFromNodes = (path, nodeCache) => {
   const coordinates = path
@@ -71,7 +111,15 @@ const createGeometryFromNodes = (path, nodeCache) => {
   }
 };
 
-const mapStateToProps = (state) => {
+const flatten = (arr, depth) => {
+  return arr.reduce((acc, arr) => {
+    return acc.concat(Array.isArray(arr) && depth > 1 ? flatten(arr, depth - 1) : arr);
+  }, [])
+};
+
+const mapStateToProps = (state, props) => {
+  const cityName = props.match.params.city.toUpperCase();
+  const city = state.city.cache[cityName];
   // Find the active segment that will be zoomed to
   const activeSegment = state.workingPlan.activeSegment != null
       ? state.workingPlan.segments[state.workingPlan.activeSegment]
@@ -83,10 +131,12 @@ const mapStateToProps = (state) => {
     const activeSegmentRoad = state.road.cache[activeSegment.road];
     activeCoordinates = activeSegmentRoad.nodes
         .map(id => state.node.cache[id].geojson.coordinates);
+  } else if (city && city.mask) {
+    activeCoordinates = flatten(city.geojson.coordinates, 2);
   }
   const nodeCache = state.node.cache;
   // Calculate all of the properly formatted layers for display on the map
-  const layers = state.workingPlan.segments.reduce((layers, segment, index) => {
+  const segmentLayers = state.workingPlan.segments.reduce((layers, segment, index) => {
     // Fetch the base road for the current segment
     const segmentRoad = state.road.cache[segment.road];
     if (segment.nodes.length) {
@@ -130,9 +180,13 @@ const mapStateToProps = (state) => {
     }
     return layers;
   }, []);
+
+  const cityLayers = city ? formatCityLayers(city.geojson, city.mask) : [];
   return {
-    layers,
+    layers: segmentLayers.concat(cityLayers),
     activeCoordinates,
+    centroid: city ? city.centroid.coordinates : constants.MAP.DEFAULT_CENTROID,
+    bounds: city ? flatten(city.bounds.coordinates, 1) : null,
   };
 };
 

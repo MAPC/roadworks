@@ -1,8 +1,5 @@
 # require 'pry-byebug'
 
-def adj_nodes_from_line(line)
-end
-
 namespace :data do
   desc "Reorganize MassGIS data for e-permitting analysis"
 
@@ -27,8 +24,8 @@ namespace :data do
         next_road_id += 1
         road.streetlist = segment.streetlist
         road.name = segment.street_name
-        road.city = segment.city
-        road.mgis_town = segment.mgis_town
+        road.city_code = segment.city
+        road.city_name = segment.mgis_town
       end
       unless road.name
         road.name = segment.street_name
@@ -77,13 +74,13 @@ namespace :data do
     end
 
     # Save all roads
-    road_columns = [:id, :name, :nodes, :mgis_town, :city, :streetlist]
+    road_columns = [:id, :name, :nodes, :city_name, :city_code, :streetlist]
     all_roads = road_map_by_streetlist.values
     puts "Saving #{all_roads.length()} roads"
     all_roads.in_groups_of(10000, false) do |roads|
       as_arrays = Array.new(roads.length())
       roads.each.with_index do |road, index|
-        as_arrays[index] = [road.id, road.name, road.nodes, road.mgis_town, road.city, road.streetlist]
+        as_arrays[index] = [road.id, road.name, road.nodes, road.city_name, road.city_code, road.streetlist]
       end
       Road.import(road_columns, as_arrays, validate: false)
     end
@@ -160,7 +157,7 @@ namespace :data do
   task test_get_segment: :environment do
     road_name = "TREMONT STREET"
     city_name = "BOSTON"
-    temple_place = Road.where(name: road_name, mgis_town: city_name).first
+    temple_place = Road.where(name: road_name, city_name: city_name).first
     nodes = Node.find(temple_place.nodes)
     cross_street_ids = Array.new
     cross_street_to_node = Hash.new
@@ -235,5 +232,16 @@ namespace :data do
     # generate geometry
     # save as slice
     # assign slice to plan
+  end
+
+  task create_cities_from_boundaries: :environment do
+    boundaries = MunicipalBoundary.all()
+    boundaries.each do |boundary|
+      city = City.new
+      city.geometry = boundary.geom
+      city.name = boundary.town
+      city.city_code = boundary.town_id
+      city.save()
+    end
   end
 end

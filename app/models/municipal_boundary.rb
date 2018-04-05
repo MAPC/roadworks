@@ -1,0 +1,2 @@
+class MunicipalBoundary < ApplicationRecord
+end

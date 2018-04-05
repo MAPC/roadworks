@@ -1,4 +1,7 @@
 export default {
+  CITY: {
+    UPDATE: 'CITY_UPDATE',
+  },
   NODE: {
     BATCH_UPDATE: 'NODE_BATCH_UPDATE',
   },

@@ -11,7 +11,11 @@ mapboxgl.accessToken = constants.MAPBOX_PUBLIC_API_KEY;
 class Map extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      loaded: false,
+    };
     this.fitBounds = this.fitBounds.bind(this);
+    this.setMaxBounds = this.setMaxBounds.bind(this);
     this.drawLayers = this.drawLayers.bind(this);
     this.removeLayers = this.removeLayers.bind(this);
   }
@@ -22,11 +26,13 @@ class Map extends React.Component {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/light-v9',
-      center: [-71.0589, 42.3601],
+      center: this.props.centroid,
+      maxBounds: constants.MAP.MAX_BOUNDS,
       zoom: 12,
     });
     this.map.addControl(this.control, 'top-right');
     this.map.on('load', () => {
+      this.setState({ loaded: true });
       this.map.resize();
       this.props.layers.map((layer) => {
         this.map.addLayer(layer);
@@ -56,6 +62,14 @@ class Map extends React.Component {
     });
   }
 
+  setMaxBounds(coordinates) {
+    const newBounds = coordinates.reduce(
+      (bounds, coord) => bounds.extend(coord),
+      new mapboxgl.LngLatBounds(coordinates[0], coordinates[0])
+    );
+    this.map.setMaxBounds(newBounds);
+  }
+
   removeLayers(layerIds) {
     layerIds.forEach((id) => {
       this.map.removeLayer(id);
@@ -74,8 +88,13 @@ class Map extends React.Component {
         this.props.activeCoordinates != prevProps.activeCoordinates) {
       this.fitBounds(this.props.activeCoordinates);
     }
+    if (this.props.bounds &&
+        this.props.bounds != prevProps.bounds) {
+      this.setMaxBounds(this.props.bounds);
+    }
     if (this.props.layers &&
-        this.props.layers != prevProps.layers) {
+        this.props.layers != prevProps.layers &&
+        this.state.loaded) {
       this.removeLayers(prevProps.layers.map(layer => layer.id));
       this.drawLayers(this.props.layers);
     }
@@ -92,7 +111,7 @@ class Map extends React.Component {
 
 Map.propTypes = {
   layers: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.string,
     type: PropTypes.string,
     source: PropTypes.shape({
       type: PropTypes.string,

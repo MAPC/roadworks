@@ -1,5 +1,7 @@
 .component.DropdownField {
 
+  width: 50%;
+
   .Select-placeholder {
     @extend ._vertical-center; 
     top: 45%;
@@ -34,17 +36,23 @@
       @extend ._vertical-center; 
 
       left: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
+  }
+
+  .Select-clear-zone {
+    right: -8px;
   }
 
   .Select-arrow { 
     @extend ._arrow;
-    top: -2px;
+
     right: -5px;
   }
 
   .Select-control {
-    max-width: 50%;
     height: auto;
 
     color: $color_font-dark;
@@ -59,5 +67,7 @@
       border: 0; 
     }
   }
+
+  .Select-menu-outer { font-size: 12px;}
 
 }

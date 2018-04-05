@@ -6,6 +6,7 @@ import ToggleField from './ToggleField';
 import TextField from './TextField';
 
 import enums from './../../constants/enums';
+import capitalize from '../../util/capitalize';
 
 class SegmentField extends React.Component {
   constructor(props) {

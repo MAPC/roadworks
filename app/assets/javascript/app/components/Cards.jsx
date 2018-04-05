@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import CardList from './CardList';
 import CardContainer from '../containers/CardContainer';
 
+import fmt from '../util/fmt';
+
 
 class Cards extends React.Component {
 
@@ -17,10 +19,13 @@ class Cards extends React.Component {
       );
     });
 
-    const { to, linkContent } = (location => {
-      if (this.props.location.pathname === location) {
+    const { to, linkContent } = ((toTemplate, fromTemplate, props) => {
+      const from = fmt(fromTemplate, props.match.params.city);
+      const to = fmt(toTemplate, props.match.params.city);
+
+      if (props.location.pathname === to) {
         return {
-          to: "/ayer",
+          to: from,
           linkContent: (
             <div>
               <span className="x">+</span> Cancel
@@ -30,7 +35,7 @@ class Cards extends React.Component {
       }
       else {
         return {
-          to: location,
+          to,
           linkContent: (
             <div>
               <img src="/assets/add-to-list.svg" />
@@ -39,11 +44,11 @@ class Cards extends React.Component {
           ),
         };
       }
-    })("/ayer/plan/create");
+    })('/{}/plan/create', '/{}', this.props);
 
     return (
       <section className="component Cards">
-        <div className={`plan-cards ${this.props.location.pathname === '/ayer/plan/create' ? 'inactive' : ''}`}>
+        <div className={`plan-cards ${this.props.location.pathname === fmt('/{}/plan/create', this.props.match.params.city) ? 'inactive' : ''}`}>
           {cards}
         </div>
 

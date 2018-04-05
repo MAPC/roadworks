@@ -7,6 +7,8 @@ import CardsContainer from '../containers/CardsContainer';
 import SearchBarContainer from '../containers/SearchBarContainer';
 import PlanCreateContainer from '../containers/PlanCreateContainer';
 
+import capitalize from '../util/capitalize';
+
 
 class Viewer extends React.Component {
 
@@ -16,13 +18,7 @@ class Viewer extends React.Component {
 
   render() {
     const townLower = this.props.match.params.city.toLowerCase();
-
-    const townCapitalized = (text => {
-      const words = text.split('-');
-
-      return words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    })(this.props.match.params.city);
-
+    const townCapitalized = capitalize(this.props.match.params.city);
 
     return (
       <section className="component Viewer">

@@ -6,16 +6,16 @@ import 'react-select/dist/react-select.css';
 import 'react-virtualized/styles.css';
 import 'react-virtualized-select/styles.css';
 
+
 class DropdownField extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
+    const options = this.props.options.filter(option => option.label !== null);
+
     return (
       <div className="component DropdownField">
         <Select
-          options={this.props.options}
+          options={options}
           value={this.props.value}
           onChange={this.props.onChange}
           disabled={this.props.disabled}
@@ -25,6 +25,7 @@ class DropdownField extends React.Component {
       </div>
     );
   }
+
 }
 
 DropdownField.propTypes = {

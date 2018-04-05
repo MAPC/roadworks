@@ -7,15 +7,21 @@ import {
   updateSegmentEndPointType,
 } from '../actions/workingPlanActions';
 
+import capitalize from '../util/capitalize';
+
+
 const mapStateToProps = (state, props) => {
   const segment = state.workingPlan.segments[props.id];
+
+  console.log(segment.crossStreetOptions);
+
   return {
     roadOptions: Object.keys(state.road.cache).map(id => ({
       value: id,
-      label: state.road.cache[id].name,
+      label: capitalize(state.road.cache[id].name),
     })),
     crossStreetOptions: segment.road
-        ? segment.crossStreetOptions
+        ? segment.crossStreetOptions.map(x => { x.label = capitalize(x.label); return x })
         : [],
     segment,
   };

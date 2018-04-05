@@ -108,6 +108,9 @@ export function updateSegmentRoad(segmentIndex, roadId) {
 }
 
 export function updateSegmentEndPointType(segmentIndex, type, isOrigin) {
+
+  console.log(arguments);
+
   return (dispatch, getState) => {
     const segment = getState().workingPlan.segments[segmentIndex];
     let orig, dest, is_orig_type_address, is_dest_type_address, nodes, custom_nodes;

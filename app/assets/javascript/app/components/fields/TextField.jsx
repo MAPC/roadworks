@@ -29,6 +29,7 @@ class TextField extends React.Component {
         <input
           value={this.props.debounce ? this.state.value : this.props.value}
           onChange={this.onChange}
+          placeholder={this.props.placeholder}
         />
       </div>
     );

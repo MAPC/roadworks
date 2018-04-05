@@ -51,7 +51,8 @@ class SegmentField extends React.Component {
           <TextField
             value={this.props.segment.custom_nodes[this.props.segment.dest]
                 ? this.props.segment.custom_nodes[this.props.segment.dest].address
-                : ''}
+                : null}
+            placeholder="Address Number ..."
             onChange={this.props.onDestChange}
             debounce={500}
           />

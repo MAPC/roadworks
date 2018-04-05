@@ -8,8 +8,8 @@ const mapStateToProps = (state, props) => state;
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchRoads: () => dispatch(fetchRoads('ayer')),
-    fetchCity: () => dispatch(fetchCity('ayer')),
+    fetchRoads: () => dispatch(fetchRoads(props.match.params.city)),
+    fetchCity: () => dispatch(fetchCity(props.match.params.city)),
   };
 };
 

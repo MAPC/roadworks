@@ -13,6 +13,7 @@ import capitalize from '../util/capitalize';
 class Viewer extends React.Component {
 
   componentDidMount() {
+    this.props.fetchCity();
     this.props.fetchRoads();
   }
 
@@ -34,7 +35,7 @@ class Viewer extends React.Component {
           </nav>
         </header>
         <div className="page-wrapper">
-          <MapContainer />
+          <Route path="/:city" component={MapContainer} />
 
           <div className="left-panel">
             <SearchBarContainer />

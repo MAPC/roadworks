@@ -1,3 +1,7 @@
 export default {
   MAPBOX_PUBLIC_API_KEY: 'pk.eyJ1IjoiaWhpbGwiLCJhIjoiY2plZzUwMTRzMW45NjJxb2R2Z2thOWF1YiJ9.szIAeMS4c9YTgNsJeG36gg',
+  MAP: {
+    MAX_BOUNDS: [[-74.5, 41], [-69, 43]],
+    DEFAULT_CENTROID: [-71.0589, 42.3601],
+  },
 };

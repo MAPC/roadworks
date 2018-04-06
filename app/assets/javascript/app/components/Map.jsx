@@ -11,18 +11,21 @@ mapboxgl.accessToken = constants.MAPBOX_PUBLIC_API_KEY;
 class Map extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      loaded: false,
+    };
     this.fitBounds = this.fitBounds.bind(this);
-    this.drawLayers = this.drawLayers.bind(this);
-    this.removeLayers = this.removeLayers.bind(this);
+    this.setMaxBounds = this.setMaxBounds.bind(this);
+    this.redrawLayers = this.redrawLayers.bind(this);
   }
 
   componentDidMount() {
     this.control = new mapboxgl.NavigationControl();
-
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/light-v9',
-      center: [-71.0589, 42.3601],
+      center: this.props.centroid,
+      maxBounds: constants.MAP.MAX_BOUNDS,
       zoom: 12,
     });
     this.map.addControl(this.control, 'top-right');
@@ -34,6 +37,7 @@ class Map extends React.Component {
       if (this.props.activeCoordinates) {
         this.fitBounds(this.props.activeCoordinates);
       }
+      this.setState({ loaded: true });
     })
   }
 
@@ -56,17 +60,39 @@ class Map extends React.Component {
     });
   }
 
-  removeLayers(layerIds) {
-    layerIds.forEach((id) => {
-      this.map.removeLayer(id);
-      this.map.removeSource(id);
-    });
+  setMaxBounds(coordinates) {
+    const newBounds = coordinates.reduce(
+      (bounds, coord) => bounds.extend(coord),
+      new mapboxgl.LngLatBounds(coordinates[0], coordinates[0])
+    );
+    this.map.setMaxBounds(newBounds);
   }
 
-  drawLayers(layers) {
-    layers.map((layer) => {
-      this.map.addLayer(layer);
+  redrawLayers(layers, prevLayers) {
+    const layerMap = {};
+    const prevLayerMap = {};
+    layers.forEach((layer) => {
+      layerMap[layer.id] = layer;
+      prevLayerMap[layer.id] = prevLayerMap[layer.id] || null;
     });
+    prevLayers.forEach((layer) => {
+      layerMap[layer.id] = layerMap[layer.id] || null;
+      prevLayerMap[layer.id] = layer;
+    });
+    Object.keys(layerMap).forEach((key) => {
+      const layersChanged = prevLayerMap[key] && layerMap[key] &&
+          layerMap[key].version !== prevLayerMap[key].version;
+      if ((prevLayerMap[key] && !layerMap[key]) || layersChanged) {
+        this.map.removeLayer(key);
+        this.map.removeSource(key);
+        console.log('removed', key);
+      }
+      if ((!prevLayerMap[key] && layerMap[key]) || layersChanged) {
+        this.map.addLayer(layerMap[key]);
+        console.log('added', key);
+      }
+    });
+
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -74,10 +100,12 @@ class Map extends React.Component {
         this.props.activeCoordinates != prevProps.activeCoordinates) {
       this.fitBounds(this.props.activeCoordinates);
     }
-    if (this.props.layers &&
-        this.props.layers != prevProps.layers) {
-      this.removeLayers(prevProps.layers.map(layer => layer.id));
-      this.drawLayers(this.props.layers);
+    if (this.props.bounds &&
+        this.props.bounds != prevProps.bounds) {
+      this.setMaxBounds(this.props.bounds);
+    }
+    if (this.state.loaded) {
+      this.redrawLayers(this.props.layers, prevProps.layers);
     }
   }
 
@@ -92,7 +120,7 @@ class Map extends React.Component {
 
 Map.propTypes = {
   layers: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.string,
     type: PropTypes.string,
     source: PropTypes.shape({
       type: PropTypes.string,

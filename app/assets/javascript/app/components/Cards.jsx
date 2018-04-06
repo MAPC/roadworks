@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Switch, Route, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import CardList from './CardList';
@@ -19,42 +19,38 @@ class Cards extends React.Component {
       );
     });
 
-    const { to, linkContent } = ((toTemplate, fromTemplate, props) => {
-      const from = fmt(fromTemplate, props.match.params.city);
-      const to = fmt(toTemplate, props.match.params.city);
-
-      if (props.location.pathname === to) {
-        return {
-          to: from,
-          linkContent: (
-            <div>
-              <span className="x">+</span> Cancel
-            </div>
-          ),
-        };
-      }
-      else {
-        return {
-          to,
-          linkContent: (
-            <div>
-              <img src="/assets/add-to-list.svg" />
-              Add Plan to Map
-            </div>
-          ),
-        };
-      }
-    })('/{}/plan/create', '/{}', this.props);
-
     return (
       <section className="component Cards">
-        <div className={`plan-cards ${this.props.location.pathname === fmt('/{}/plan/create', this.props.match.params.city) ? 'inactive' : ''}`}>
-          {cards}
-        </div>
-
-        <Link to={to} className="button styled" data-action="toggle-plan-form">
-          {linkContent}
-        </Link>
+        <Route path="/:city/plan/create" children={({ match }) => (
+          <div className={`plan-cards ${match ? 'inactive' : ''}`}>
+            {cards}
+          </div>
+        )}/>
+        <Switch>
+          <Route path="/:city/plan/create" render={(props) => (
+            <Link
+              to={`/${props.match.params.city}`}
+              className="button styled"
+              data-action="toggle-plan-form"
+            >
+              <div>
+                <span className="x">+</span> Cancel
+              </div>
+            </Link>
+          )}/>
+          <Route exact path="/:city" render={(props) => (
+            <Link
+              to={`/${props.match.params.city}/plan/create`}
+              className="button styled"
+              data-action="toggle-plan-form"
+            >
+              <div>
+                <img src="/assets/add-to-list.svg" />
+                Add Plan to Map
+              </div>
+            </Link>
+          )}/>
+        </Switch>
       </section>
     );
   }

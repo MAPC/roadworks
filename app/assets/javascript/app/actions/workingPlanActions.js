@@ -197,7 +197,7 @@ export function updateSegmentEndPoint(segmentIndex, value, isOrigin) {
         };
       }
       const nodeId = isOrigin ? -1 : -2;
-      const location = await api.geocodeToLngLat(`${value} ${road.name}, ${road.mgis_town}, MA`);
+      const location = await api.geocodeToLngLat(`${value} ${road.name}, ${road.city_name}, MA`);
       const customNode = createCustomNode(
         partialNodeCache,
         location,

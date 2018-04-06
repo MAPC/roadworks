@@ -13,8 +13,17 @@ export default {
       method: 'GET',
     });
   },
-  getRoads: (town) => {
-    return fetch(`/api/road?city=${town}`, {
+  getCity: (city) => {
+    return fetch(`/api/city/${city}`, {
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
+      credentials: 'same-origin',
+      method: 'GET',
+    });
+  },
+  getRoads: (city) => {
+    return fetch(`/api/road?city=${city}`, {
       headers: new Headers({
         'Content-Type': 'application/json',
       }),

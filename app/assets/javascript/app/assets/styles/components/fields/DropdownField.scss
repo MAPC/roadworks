@@ -4,6 +4,12 @@
 
   width: 50%;
 
+  .Select.is-disabled {
+    .Select-placeholder {
+      color: $color_font-medium;
+    }
+  }
+
   .Select-placeholder {
     @extend ._vertical-center; 
     top: 45%;
@@ -55,7 +61,7 @@
   }
 
   .Select-control {
-    height: auto;
+    height: 26px;
 
     color: $color_font-dark;
 

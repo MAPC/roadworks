@@ -68,7 +68,11 @@
       span { color: $color_brand-primary; } 
     }
 
-    button[data-action="add-road"] { float: right; }
+    button[data-action="add-road"] { 
+      float: right; 
+
+      margin-top: $global_pad * 3;
+    }
   }
 
 

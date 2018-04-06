@@ -11,6 +11,7 @@ $color_bg-dark: #818184;
 
 $color_font-light: #FFFFFF;
 $color_font-medium: #C9C9C9;
+$color_font-medium--active: mix(black, $color_font-medium, 10);
 $color_font-dark: #413E56;
 
 $font_family-primary: 'europa', Helvetica, sans-serif;

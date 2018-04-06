@@ -25,13 +25,12 @@ class TextField extends React.Component {
 
   render() {
     return (
-      <div>
-        <input
-          value={this.props.debounce ? this.state.value : this.props.value}
-          onChange={this.onChange}
-          placeholder={this.props.placeholder}
-        />
-      </div>
+      <input
+        className="component TextField"
+        value={this.props.debounce ? this.state.value : this.props.value}
+        onChange={this.onChange}
+        placeholder={this.props.placeholder}
+      />
     );
   }
 }

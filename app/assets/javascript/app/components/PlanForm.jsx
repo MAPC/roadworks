@@ -16,7 +16,6 @@ class PlanForm extends React.Component {
           <SegmentFieldContainer
             id={i}
           />
-          <button className="x" onClick={() => this.props.removeSegment(segment)}>+</button>
         </article>
       );
     });
@@ -77,12 +76,14 @@ class PlanForm extends React.Component {
             </div>
 
             <button className="styled light" data-action="add-road" onClick={this.props.addSegment}>
+              <img src="/assets/road-2.svg" />
               Add Road
             </button>
           </article>
         </div>
 
         <button className="styled light"  data-action="add-timeframe" onClick={this.props.addTimeframe}>
+          <img src="/assets/calendar-dark.svg" />
           Add Timeframe
         </button>
       </div>

@@ -17,17 +17,25 @@ class ToggleField extends React.Component {
   }
 
   render() {
+    const classNames = (() => {
+      let classNames = 'component ToggleField';
+      classNames += (this.props.classes ? ' ' + this.props.classes : '');
+      classNames += (this.props.value ? ' active' : '');
+
+      return classNames;
+    })();
+
     return (
       <div 
-        className={`component ToggleField ${this.props.value ? 'active' : ''}`}
+        className={classNames}
         onClick={this.toggle}
       >
         <div className="labels">
           <div className="label">
-            Address
+            {this.props.labels.on}
           </div>
           <div className="label">
-            Cross Street
+            {this.props.labels.off}
           </div>
         </div>
       </div>

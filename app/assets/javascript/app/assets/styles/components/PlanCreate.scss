@@ -1,10 +1,12 @@
 .component.PlanCreate {
-  width: $elem_Card-width * 2;
+  $bar_width: ($global_pad / 2) + 2;
 
-  margin: $global_pad 0;
   z-index: 0;
 
-  $bar_width: ($global_pad / 2) + 2;
+  width: $elem_Card-width * 2;
+  margin: $global_pad 0;
+
+  box-shadow: $global_shadow;
 
   &:before, &:after {
     content: '';
@@ -52,6 +54,7 @@
     margin-top: $global_pad;
 
     background: $color_brand-primary;
+    box-shadow: $global_shadow;
 
     &:hover { background: $color_brand-primary--dark; }
 

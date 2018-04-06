@@ -16,13 +16,11 @@ class Map extends React.Component {
     };
     this.fitBounds = this.fitBounds.bind(this);
     this.setMaxBounds = this.setMaxBounds.bind(this);
-    this.drawLayers = this.drawLayers.bind(this);
-    this.removeLayers = this.removeLayers.bind(this);
+    this.redrawLayers = this.redrawLayers.bind(this);
   }
 
   componentDidMount() {
     this.control = new mapboxgl.NavigationControl();
-
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/light-v9',
@@ -32,7 +30,6 @@ class Map extends React.Component {
     });
     this.map.addControl(this.control, 'top-right');
     this.map.on('load', () => {
-      this.setState({ loaded: true });
       this.map.resize();
       this.props.layers.map((layer) => {
         this.map.addLayer(layer);
@@ -40,6 +37,7 @@ class Map extends React.Component {
       if (this.props.activeCoordinates) {
         this.fitBounds(this.props.activeCoordinates);
       }
+      this.setState({ loaded: true });
     })
   }
 
@@ -70,17 +68,31 @@ class Map extends React.Component {
     this.map.setMaxBounds(newBounds);
   }
 
-  removeLayers(layerIds) {
-    layerIds.forEach((id) => {
-      this.map.removeLayer(id);
-      this.map.removeSource(id);
+  redrawLayers(layers, prevLayers) {
+    const layerMap = {};
+    const prevLayerMap = {};
+    layers.forEach((layer) => {
+      layerMap[layer.id] = layer;
+      prevLayerMap[layer.id] = prevLayerMap[layer.id] || null;
     });
-  }
+    prevLayers.forEach((layer) => {
+      layerMap[layer.id] = layerMap[layer.id] || null;
+      prevLayerMap[layer.id] = layer;
+    });
+    Object.keys(layerMap).forEach((key) => {
+      const layersChanged = prevLayerMap[key] && layerMap[key] &&
+          layerMap[key].version !== prevLayerMap[key].version;
+      if ((prevLayerMap[key] && !layerMap[key]) || layersChanged) {
+        this.map.removeLayer(key);
+        this.map.removeSource(key);
+        console.log('removed', key);
+      }
+      if ((!prevLayerMap[key] && layerMap[key]) || layersChanged) {
+        this.map.addLayer(layerMap[key]);
+        console.log('added', key);
+      }
+    });
 
-  drawLayers(layers) {
-    layers.map((layer) => {
-      this.map.addLayer(layer);
-    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -92,11 +104,8 @@ class Map extends React.Component {
         this.props.bounds != prevProps.bounds) {
       this.setMaxBounds(this.props.bounds);
     }
-    if (this.props.layers &&
-        this.props.layers != prevProps.layers &&
-        this.state.loaded) {
-      this.removeLayers(prevProps.layers.map(layer => layer.id));
-      this.drawLayers(this.props.layers);
+    if (this.state.loaded) {
+      this.redrawLayers(this.props.layers, prevProps.layers);
     }
   }
 

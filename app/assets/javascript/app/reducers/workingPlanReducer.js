@@ -7,6 +7,7 @@ import types from './../actions/types';
 
 function workingPlanReducer(state = {
   segments: [{
+    version: 0,
     road: null,
     is_orig_type_address: false,
     orig: null,
@@ -24,6 +25,7 @@ function workingPlanReducer(state = {
     // Update the base road for a segment and set the cross street options
     case types.WORKING_PLAN.SEGMENT.ROAD.UPDATE:
       newSegment = Object.assign({}, state.segments[action.index], {
+        version: state.segments[action.index].version + 1,
         road: action.road,
         is_orig_type_address: false,
         orig: null,
@@ -47,6 +49,7 @@ function workingPlanReducer(state = {
         action.custom_nodes
       );
       newSegment = Object.assign({}, state.segments[action.index], {
+        version: state.segments[action.index].version + 1,
         is_orig_type_address: action.is_orig_type_address,
         orig: action.orig,
         is_dest_type_address: action.is_dest_type_address,
@@ -62,6 +65,7 @@ function workingPlanReducer(state = {
       });
     case types.WORKING_PLAN.SEGMENT.END_POINT_TYPE.UPDATE:
       newSegment = Object.assign({}, state.segments[action.index], {
+        version: state.segments[action.index].version + 1,
         is_orig_type_address: action.is_orig_type_address,
         orig: action.orig,
         is_dest_type_address: action.is_dest_type_address,

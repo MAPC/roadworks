@@ -7,7 +7,7 @@ module Api
               "ST_AsGeoJSON(ST_difference(#{bounds}, geometry)) as mask, "\
               "ST_AsGeoJSON(ST_Centroid(geometry)) as centroid, "\
               "ST_AsGeoJSON(ST_Expand(ST_Envelope(geometry), 0.1, 0.05)) as bounds")
-          .where(name: params[:name].upcase).first
+          .where(name: params[:id].upcase).first
       respond_to do |format|
         format.json { render json: { success: true, data: @city.as_json } }
       end

@@ -32,7 +32,7 @@ export default {
     });
   },
   geocodeToLngLat: async (address) => {
-    const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?access_token=${constants.MAPBOX_PUBLIC_API_KEY}`, {
+    const response = await fetch(`http://pelias.mapc.org/v1/search?text=${address}`, {
       headers: new Headers({
         'Content-Type': 'application/json',
       }),

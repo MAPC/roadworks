@@ -4,11 +4,11 @@
 #
 #  id         :integer          not null, primary key
 #  name       :string
-#  type       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  city       :string
-#  published  :boolean
+#  published  :boolean          default(FALSE), not null
+#  plan_type  :string           not null
 #
 
 class Plan < ApplicationRecord

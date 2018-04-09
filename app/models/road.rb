@@ -7,8 +7,8 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  nodes         :integer          default([]), is an Array
-#  mgis_town     :string
-#  city          :integer
+#  city_name     :string
+#  city_code     :integer
 #  streetlist    :integer
 #  cross_streets :integer          default([]), is an Array
 #  geometry      :geometry({:srid= multilinestring, 4326

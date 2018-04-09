@@ -22,7 +22,7 @@ class PlanController < ApiController
         createdSegments.push(Segment.create(
           timeframe_id: createdTimeframes[segment[:timeframe_id]].id,
           road_id: segment[:road_id],
-          is_whole_road: segment[:is_whole_road],
+          is_segment: segment[:is_segment],
           is_orig_type_address: segment[:is_orig_type_address],
           orig: segment[:orig],
           is_dest_type_address: segment[:is_dest_type_address],

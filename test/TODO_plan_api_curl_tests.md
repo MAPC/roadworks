@@ -13,7 +13,7 @@ curl -X 'POST' http://localhost:3000/api/plan -H "Content-Type: application/json
   "segments": [{
     "timeframe_id": 0,
     "road_id": 22,
-    "is_whole_road": true,
+    "is_segment": true,
     "is_orig_type_address": false,
     "orig": 4,
     "is_dest_type_address": false,

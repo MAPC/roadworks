@@ -5,10 +5,10 @@
 #  id                   :integer          not null, primary key
 #  timeframe_id         :integer
 #  road_id              :integer
-#  is_whole_road        :boolean
-#  is_orig_type_address :boolean
+#  is_segment           :boolean          default(FALSE), not null
+#  is_orig_type_address :boolean          default(FALSE), not null
 #  orig                 :integer
-#  is_dest_type_address :boolean
+#  is_dest_type_address :boolean          default(FALSE), not null
 #  dest                 :integer
 #  nodes                :integer          default([]), is an Array
 #  custom_nodes         :json

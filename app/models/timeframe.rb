@@ -11,10 +11,9 @@
 #
 
 class Timeframe < ApplicationRecord
-  belongs_to :plan
-  has_many :segments
+  belongs_to :plan, inverse_of: :timeframes, optional: true
+  has_many :segments, inverse_of: :timeframe
   validates :start, presence: true
   validates :end, presence: true
-  validates :plan_id, presence: true
   accepts_nested_attributes_for :segments
 end

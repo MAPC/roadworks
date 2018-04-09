@@ -17,7 +17,6 @@
 #
 
 class Segment < ApplicationRecord
-  belongs_to :timeframe
+  belongs_to :timeframe, inverse_of: :segments, optional: true
   belongs_to :road
-  validates :timeframe_id, presence: true
 end

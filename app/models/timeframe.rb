@@ -16,4 +16,5 @@ class Timeframe < ApplicationRecord
   validates :start, presence: true
   validates :end, presence: true
   validates :plan_id, presence: true
+  accepts_nested_attributes_for :segments
 end

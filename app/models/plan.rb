@@ -19,4 +19,6 @@ class Plan < ApplicationRecord
   validates :city, presence: true, length: { minimum: 1 }
   validates :published, presence: true
   alias_attribute :type, :plan_type
+  accepts_nested_attributes_for :timeframes
+
 end

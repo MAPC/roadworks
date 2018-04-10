@@ -9,7 +9,28 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { query: null };
+    this.state = { 
+      query: '',
+    };
+
+    this.timer = null;
+    this.debounce = 500;
+    this.setQuery = this.setQuery.bind(this);
+  }
+
+
+  setQuery(e) {
+    const query = e.target.value;
+
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+
+    this.timer = setTimeout(() => {
+      this.props.fetchResults(query);
+    }, this.debounce);
+
+    this.setState({ query });
   }
 
 
@@ -42,14 +63,14 @@ class SearchBar extends React.Component {
 
     const resultsClasses = [
       'component CardList',
-      (results.length > 0) ? 'active' : '',
+      (this.state.query !== '' && results.length > 0) ? 'active' : '',
     ].join(' ').trim();
 
     return (
       <div className="component SearchBar">
         <div className="search-input">
           <img src="/assets/search.svg" />
-          <input placeholder="Search Roads with Work ..." value={this.state.query} />
+          <input placeholder="Search Roads with Work ..." onChange={this.setQuery} value={this.state.query} />
         </div>
 
         <ul className={resultsClasses}>

@@ -1,5 +1,7 @@
 .component.SearchBar {
   .search-input {
+    z-index: 1;
+
     width: $elem_Card-width;
     margin-bottom: $global_pad;
 
@@ -9,9 +11,9 @@
 
     input {
       width: 100%; 
+      margin: 0;
       padding: 5px;
       padding-left: 42px;
-      margin: 0;
 
       font-size: 14px;
 
@@ -37,21 +39,31 @@
   }
 
   ul.CardList {
+    position: absolute;
+    top: 0;
+    left: $elem_Card-width + $global_pad;
+    display: none;
+
+    width: $elem_Card-width;
+
     border: 1px solid $color_brand-secondary;
 
     &:before {
       @include bars($color_brand-secondary, ($global_pad / 2) + 2);
+      top: -2px;
+      left: -$global_pad;
+
+      transform: rotate(90deg);
     }
 
-    &.active {
-      display: block;    
-    }
+    &.active { display: block; }
 
     li {
       display: flex;
 
-      padding-top: 10px;
-      padding-bottom: 10px;
+      min-height: 45px;
+      padding-top: 8px;
+      padding-bottom: 7px;
 
       h3 { margin: 0; }
 
@@ -64,7 +76,11 @@
       .result-tags {
         flex: 1 0 35%;
 
-        span { display: block; } 
+        span.tag { 
+          display: block; 
+
+          margin: 4px auto;
+        } 
       }
     }
   }

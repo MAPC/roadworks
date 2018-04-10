@@ -2,8 +2,8 @@
 
   margin: 0;
 
-  li {
-    $trans_dur: .15s;
+  & > li {
+    $trans_dur: $elem_CardList-trans--dur;
     $a_trans: opacity $trans_dur, top $trans_dur, color $trans_dur;
     $border_trans: border $trans_dur, padding $trans_dur;
     $border_width: 14px;
@@ -15,27 +15,11 @@
     font-size: 14px; 
     font-weight: 300;
 
+    background: $color_bg-light;
     border-left: $border_width solid;
     cursor: pointer;
     overflow: hidden;
     transition: $border_trans;
-
-    span.diamond {
-      @extend ._vertical-center;
-
-      $size: 5px;
-
-      left: $global_pad - $size;
-      display: block;
-      
-      width: 0;
-      height: 0;
-
-      border: $size solid;
-      transform: rotate(45deg) translateY(-50%);
-      transform-origin: 50% 0 0;
-      transition: $diamond_trans;
-    }
 
     &.inactive {
       padding-left: $pad_h + ($border_width / 2);
@@ -100,37 +84,6 @@
     }
 
     & + li { border-top: 1px solid $color_bg-medium !important; }
-
-    .tags {
-      top: -1px;
-      float: right;
-      display: inline-block;
-
-      .tag {
-        display: inline-block;
-
-        padding: 2px 4px;
-
-        color: $color_font-light;
-        font-size: 9px;
-
-        background: $color_bg-dark;
-        border-radius: 3px;
-
-        img {
-          display: inline-block;
-          top: 1px;
-
-          height: 9px;
-          width: auto;
-          margin-right: 4px;
-        }
-
-        & + .tag { margin-left: 4px; }
-
-        &.light { background: $color_brand-primary; }
-      } 
-    }
   }
 
 }

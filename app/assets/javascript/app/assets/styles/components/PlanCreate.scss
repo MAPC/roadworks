@@ -3,35 +3,23 @@
 
   z-index: 0;
 
-  width: $elem_Card-width * 2;
+  width: ($elem_Card-width * 2) + $global_pad;
   margin: $global_pad 0;
 
   box-shadow: $global_shadow;
 
-  &:before, &:after {
-    content: '';
-    position: absolute;
-    display: block;
-    z-index: 0;
-
-    height: $global_pad * 2;
-    width: $bar_width; 
-
-    border: 3px solid;
-  }
-
   &:before {
+    @include bars($color_brand-secondary, $bar_width);
+
     top: -$global_pad * 2;
     left: ($elem_Card-width - $bar_width)/ 2;
-
-    border-color: $color_brand-secondary; 
   }
 
   &:after {
+    @include bars($color_brand-primary, $bar_width);
+
     bottom: -$global_pad * 2;
     right: ($elem_Card-width / 4) - $bar_width;
-
-    border-color: $color_brand-primary;
   }
 
   h3 {

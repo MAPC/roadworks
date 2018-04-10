@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Tags from './Tags';
+
 
 class CardList extends React.Component {
   
@@ -29,24 +31,6 @@ class CardList extends React.Component {
         }
       })();
 
-      const tags = (() => {
-        if (Array.isArray(item.tags) && item.tags.length > 0) {
-          const _tags = item.tags.map(tag => {
-            const imgSrc = '/assets/' + ((tag.type === 'user') ? 'users.svg' : 'calendar.svg');
-            const _classes = ['tag', (tag.type === 'user') ? 'light' : null].join(' ').trim();
-
-            return (
-              <span className={_classes}>
-                <img src={imgSrc} />
-                {tag.value}
-              </span>
-            );
-          });
-
-          return (<div className="tags">{_tags}</div>);
-        }
-      })();
-
       const editLink = (() => {
         if (this.props.type !== 'permit') {
           return <a href="">Edit</a>;
@@ -57,7 +41,7 @@ class CardList extends React.Component {
         <li key={item.title} className={classes} style={styles}>
           {diamond}
           {item.title}
-          {tags}
+          <Tags items={item.tags} />
           {editLink}
         </li>
       );

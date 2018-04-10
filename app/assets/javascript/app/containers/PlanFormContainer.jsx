@@ -17,7 +17,6 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch, props) => {
   // parse
   return {
-
     removeSegment: (segment) => dispatch(removeSegment(segment)),
     addSegment: (segment) => dispatch(addSegment(segment)),
   };

@@ -1,24 +1,6 @@
 .component.SegmentField {
 
-  .x {
-    float: right;
-    top: -6px;
-
-    padding: 0;
-
-    color: $color_font-medium;
-    font-size: 26px;
-
-    background: none;
-    border: 0;
-    transform: rotate(45deg);
-    transition: color .15s;
-
-    &:hover {
-      color: $color_font-medium--active; 
-      transition: color .15s;
-    }
-  }
+  .x { float: right; }
 
   .road-selector {
     .ToggleField {
@@ -31,16 +13,14 @@
   .endpoints {
     margin-top: $global_pad / 2;
     padding-left: $global_pad;
+
     border-left: 7px solid $color_bg-medium; 
   }
 
   .endpoint {
     display: flex;
 
-    .ToggleField { 
-      margin-right: 7px; 
-    } 
-
+    .ToggleField { margin-right: 7px; } 
     .TextField { height: 26px; }
   }
 

@@ -11,14 +11,16 @@ $color_bg-dark: #818184;
 
 $color_font-light: #FFFFFF;
 $color_font-medium: #C9C9C9;
-$color_font-medium--active: mix(black, $color_font-medium, 10);
+$color_font-medium--active: mix(black, $color_font-medium, 12);
 $color_font-dark: #413E56;
 
 $font_family-primary: 'europa', Helvetica, sans-serif;
 
-$elem_header-height: 50px;
-$elem_Card-width: 270px;
 $elem_arrow-size: 6px;
+$elem_Card-width: 270px;
+$elem_CardList-trans--dur: .15s;
+$elem_diamond-trans: transform $elem_CardList-trans--dur, border-color $elem_CardList-trans--dur;
+$elem_header-height: 50px;
 
 $global_pad: 14px;
 $global_shadow: 1px 1px 4px rgba($color_bg-medium, 1);

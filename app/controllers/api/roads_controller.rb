@@ -1,5 +1,5 @@
 module Api
-  class RoadController < ApiController
+  class RoadsController < ApiController
     # GET /road?city=ayer
     def index
       @roads = Road

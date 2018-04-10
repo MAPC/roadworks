@@ -1,5 +1,5 @@
 module Api
-  class CityController < ApiController
+  class CitiesController < ApiController
     def show
       bounds = "ST_GeomFromText('MULTIPOLYGON(((-74.5 41,-74.5 43,-69 43,-69 41,-74.5 41)))', 4326)"
       @city = City

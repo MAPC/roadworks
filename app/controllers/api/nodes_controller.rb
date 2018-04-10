@@ -1,5 +1,5 @@
 module Api
-  class NodeController < ApiController
+  class NodesController < ApiController
     # GET /node/1
     def show
       @nodes = Node.select("id, ST_AsGeoJSON(geometry) as geojson, part_of, neighbors").find(params[:id])

@@ -5,7 +5,7 @@ export default {
     const asString = nodeIds.length
         ? nodeIds.slice(1).reduce((s, id) => s + `&id[]=${id}`, `id[]=${nodeIds[0]}`)
         : '';
-    return fetch(`/api/node?${asString}`, {
+    return fetch(`/api/nodes?${asString}`, {
       headers: new Headers({
         'Content-Type': 'application/json',
       }),
@@ -14,7 +14,7 @@ export default {
     });
   },
   getCity: (city) => {
-    return fetch(`/api/city/${city}`, {
+    return fetch(`/api/cities/${city}`, {
       headers: new Headers({
         'Content-Type': 'application/json',
       }),
@@ -23,7 +23,7 @@ export default {
     });
   },
   getRoads: (city) => {
-    return fetch(`/api/road?city=${city}`, {
+    return fetch(`/api/roads?city=${city}`, {
       headers: new Headers({
         'Content-Type': 'application/json',
       }),

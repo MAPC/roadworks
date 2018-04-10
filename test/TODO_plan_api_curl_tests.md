@@ -1,7 +1,7 @@
-curl -X 'POST' http://localhost:3000/api/plan -H "Content-Type: application/json" -d '{
+curl -X 'POST' http://localhost:3000/api/plans -H "Content-Type: application/json" -d '{
   "plan": {
     "name": "Test Plan",
-    "type": "PAVING",
+    "plan_type": "PAVING",
     "city": "AYER",
     "published": true,
     "timeframes": [{
@@ -21,6 +21,6 @@ curl -X 'POST' http://localhost:3000/api/plan -H "Content-Type: application/json
   }
 }' > tmp.html
 
-curl -X 'GET' http://localhost:3000/api/plan/6 -H "Content-Type: application/json" > tmp.html
+curl -X 'GET' http://localhost:3000/api/plans/6 -H "Content-Type: application/json" > tmp.html
 
-curl -X 'GET' http://localhost:3000/api/plan?city=AYER -H "Content-Type: application/json" > tmp.html
+curl -X 'GET' http://localhost:3000/api/plans?city=AYER -H "Content-Type: application/json" > tmp.html

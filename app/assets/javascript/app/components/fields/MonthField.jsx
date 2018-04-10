@@ -20,7 +20,9 @@ class MonthField extends React.Component {
       'December',
     ];
 
-    const options = months.map(month => <option value={month}>{month}</option>);
+    const options = months.map(month => (
+      <option key={month} value={month}>{month}</option>
+    ));
 
     return (
       <SelectField name={this.props.name}>

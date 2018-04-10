@@ -8,9 +8,9 @@ class YearField extends React.Component {
     const startYear = this.props.startYear || (new Date()).getFullYear();
     const range = this.props.range || 25;
 
-    const yearOptions = (new Array(range))
-                        .fill(null)
-                        .map((_, i) => <option value={startYear + i}>{startYear + i}</option>);
+    const yearOptions = (new Array(range)).fill(null).map((_, i) => (
+      <option key={startYear + i} value={startYear + i}>{startYear + i}</option>
+    ));
 
     return (
       <SelectField name={this.props.name}>

@@ -99,7 +99,7 @@ export function updateSegmentRoad(segmentIndex, roadId) {
       roadCache
     );
     dispatch({
-      type: types.WORKING_PLAN.SEGMENT.ROAD.UPDATE,
+      type: types.WORKING_PLAN.TIMEFRAME.SEGMENT.ROAD.UPDATE,
       index: segmentIndex,
       road: roadId,
       crossStreetOptions,
@@ -130,7 +130,7 @@ export function updateSegmentEndPointType(segmentIndex, type, isOrigin) {
       custom_nodes = Object.assign({}, segment.custom_nodes, { [-2]: null });
     }
     return dispatch({
-      type: types.WORKING_PLAN.SEGMENT.END_POINT_TYPE.UPDATE,
+      type: types.WORKING_PLAN.TIMEFRAME.SEGMENT.END_POINT_TYPE.UPDATE,
       index: segmentIndex,
       is_orig_type_address,
       orig,
@@ -234,7 +234,7 @@ export function updateSegmentEndPoint(segmentIndex, value, isOrigin) {
     })(partialNodeCache, newEndpoints);
 
     return dispatch({
-      type: types.WORKING_PLAN.SEGMENT.END_POINT.UPDATE,
+      type: types.WORKING_PLAN.TIMEFRAME.SEGMENT.END_POINT.UPDATE,
       index: segmentIndex,
       is_orig_type_address: segment.is_orig_type_address,
       is_dest_type_address: segment.is_dest_type_address,
@@ -246,10 +246,29 @@ export function updateSegmentEndPoint(segmentIndex, value, isOrigin) {
   };
 }
 
-export function removeSegment(segment) {
-
+export function planRemoveTimeframe(index) {
+  return {
+    type: types.WORKING_PLAN.TIMEFRAME.REMOVE,
+    index,
+  };
 }
 
-export function addSegment(segment) {
+export function planAddTimeframe(index) {
+  return {
+    type: types.WORKING_PLAN.TIMEFRAME.ADD,
+  };
+}
 
+export function planNameChange(name) {
+  return {
+    type: types.WORKING_PLAN.NAME.CHANGE,
+    name,
+  };
+}
+
+export function planTypeChange(type) {
+  return {
+    type: types.WORKING_PLAN.TYPE.CHANGE,
+    type,
+  };
 }

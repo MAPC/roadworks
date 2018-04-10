@@ -23,7 +23,7 @@ function workingPlanReducer(state = {
   let newCustomNodes = {};
   switch (action.type) {
     // Update the base road for a segment and set the cross street options
-    case types.WORKING_PLAN.SEGMENT.ROAD.UPDATE:
+    case types.WORKING_PLAN.TIMEFRAME.SEGMENT.ROAD.UPDATE:
       newSegment = Object.assign({}, state.segments[action.index], {
         version: state.segments[action.index].version + 1,
         road: action.road,
@@ -42,7 +42,7 @@ function workingPlanReducer(state = {
         activeSegment: action.index,
       });
     // Set the origin or destination of a segment and set the partial path
-    case types.WORKING_PLAN.SEGMENT.END_POINT.UPDATE:
+    case types.WORKING_PLAN.TIMEFRAME.SEGMENT.END_POINT.UPDATE:
       newCustomNodes = Object.assign(
         {},
         state.segments[action.index].custom_nodes,
@@ -63,7 +63,7 @@ function workingPlanReducer(state = {
         }),
         activeSegment: action.index,
       });
-    case types.WORKING_PLAN.SEGMENT.END_POINT_TYPE.UPDATE:
+    case types.WORKING_PLAN.TIMEFRAME.SEGMENT.END_POINT_TYPE.UPDATE:
       newSegment = Object.assign({}, state.segments[action.index], {
         version: state.segments[action.index].version + 1,
         is_orig_type_address: action.is_orig_type_address,

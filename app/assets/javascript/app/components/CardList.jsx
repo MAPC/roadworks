@@ -5,7 +5,7 @@ import Tags from './Tags';
 
 
 class CardList extends React.Component {
-  
+
   render() {
     const listContent = this.props.items.map(item => {
 

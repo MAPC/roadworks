@@ -77,7 +77,7 @@
 
     &.active { display: block; }
 
-    li {
+    & > li {
       display: flex;
 
       min-height: 45px;
@@ -95,7 +95,7 @@
       .result-tags {
         flex: 1 0 35%;
 
-        span.tag { 
+        .tag {
           display: block; 
 
           margin: 4px auto;

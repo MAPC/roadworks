@@ -46,11 +46,7 @@ class SearchBar extends React.Component {
       const classes = result.type === 'permit' ? 'borderless' : '';
       const styles = { borderColor: result.color };
 
-      const diamond = (() => {
-        if (result.type === 'permit') {
-          return <span className="diamond" style={styles}></span>;
-        }
-      })();
+      const diamond = (result.type === 'permit') ? (<span className="diamond" style={styles}></span>) : null;
 
       return (
         <li key={`${result.title}${result.typeDetail}`} className={classes} style={styles}>

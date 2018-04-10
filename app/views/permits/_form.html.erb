@@ -1,0 +1,52 @@
+<%= form_with(model: permit, local: true) do |form| %>
+  <% if permit.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(permit.errors.count, "error") %> prohibited this permit from being saved:</h2>
+
+      <ul>
+      <% permit.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :type %>
+    <%= form.number_field :type, id: :permit_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :applicant_first_name %>
+    <%= form.text_field :applicant_first_name, id: :permit_applicant_first_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :applicant_last_name %>
+    <%= form.text_field :applicant_last_name, id: :permit_applicant_last_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :start_date %>
+    <%= form.date_select :start_date, id: :permit_start_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :end_date %>
+    <%= form.date_select :end_date, id: :permit_end_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :address %>
+    <%= form.text_field :address, id: :permit_address %>
+  </div>
+
+  <div class="field">
+    <%= form.label :payload %>
+    <%= form.text_field :payload, id: :permit_payload %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

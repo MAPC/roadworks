@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :permits
   namespace :api do
     resources :cities, only: [:show]
     resources :roads, only: [:index, :show]

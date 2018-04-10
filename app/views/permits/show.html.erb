@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @permit.type %>
+</p>
+
+<p>
+  <strong>Applicant first name:</strong>
+  <%= @permit.applicant_first_name %>
+</p>
+
+<p>
+  <strong>Applicant last name:</strong>
+  <%= @permit.applicant_last_name %>
+</p>
+
+<p>
+  <strong>Start date:</strong>
+  <%= @permit.start_date %>
+</p>
+
+<p>
+  <strong>End date:</strong>
+  <%= @permit.end_date %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @permit.address %>
+</p>
+
+<p>
+  <strong>Payload:</strong>
+  <%= @permit.payload %>
+</p>
+
+<%= link_to 'Edit', edit_permit_path(@permit) %> |
+<%= link_to 'Back', permits_path %>

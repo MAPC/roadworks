@@ -16,3 +16,15 @@
     @media (max-width: $size) { @content; }
   }
 }
+
+@mixin bars($color, $width) {
+  content: '';
+  position: absolute;
+  display: block;
+  z-index: 0;
+
+  height: $global_pad * 2;
+  width: $width;
+
+  border: 3px solid $color;
+}

@@ -1,16 +1,9 @@
 Rails.application.routes.draw do
-  scope '/api' do
-    scope '/city' do
-      get '/:name' => 'city#show'
-    end
-    scope '/road' do
-      get '/' => 'road#index'
-      get '/:id' => 'road#show'
-    end
-    scope '/node' do
-      get '/' => 'node#index'
-      get '/:id' => 'node#show'
-    end
+  namespace :api do
+    resources :cities, only: [:show]
+    resources :roads, only: [:index, :show]
+    resources :nodes, only: [:index, :show]
+    resources :plans, only: [:index, :create, :show]
   end
   # Let React Router take care of everything not API related
   get '*path', to: 'application#index'

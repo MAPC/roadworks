@@ -3,7 +3,7 @@
 
   z-index: 0;
 
-  width: $elem_Card-width * 2;
+  width: ($elem_Card-width * 2) + $global_pad;
   margin: $global_pad 0;
 
   box-shadow: $global_shadow;

@@ -1,4 +1,6 @@
 .component.SearchBar {
+  z-index: 10;
+
   .search-input {
     z-index: 1;
 
@@ -10,7 +12,7 @@
     box-shadow: $global_shadow;
 
     input {
-      width: 100%; 
+      width: 90%; 
       margin: 0;
       padding: 5px;
       padding-left: 42px;
@@ -36,6 +38,22 @@
       height: 60%;
       width: auto;
     }
+
+    span.x {
+      position: absolute;
+      right: 4px;
+      top: 0;
+      z-index: 8;
+
+      font-size: 20px;
+
+      &:not(.active) {
+        opacity: .4; 
+        cursor: default;
+
+        &:hover { color: $color_font-medium; }
+      }
+    }
   }
 
   ul.CardList {
@@ -47,6 +65,7 @@
     width: $elem_Card-width;
 
     border: 1px solid $color_brand-secondary;
+    box-shadow: $global_shadow;
 
     &:before {
       @include bars($color_brand-secondary, ($global_pad / 2) + 2);

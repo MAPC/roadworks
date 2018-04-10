@@ -21,9 +21,6 @@
     overflow: hidden;
     transition: $border_trans;
 
-    span.diamond {
-    }
-
     &.inactive {
       padding-left: $pad_h + ($border_width / 2);
 

@@ -18,21 +18,32 @@ class SearchBar extends React.Component {
       const classes = result.type === 'permit' ? 'borderless' : '';
       const styles = { borderColor: result.color };
 
+      const diamond = (() => {
+        if (result.type === 'permit') {
+          return <span className="diamond" style={styles}></span>;
+        }
+      })();
+
       return (
         <li key={`${result.title}${result.typeDetail}`} className={classes} style={styles}>
-          <div className="result-column">
+          {diamond}
+
+          <div className="result-column result-details">
             <h3>{result.title}</h3>
-              
+            {result.typeDetail}
           </div>
 
-          <div className="result-column">
+          <div className="result-column result-tags">
             <Tags items={result.tags} />
           </div>
         </li>
       );
     });
 
-    const resultsClasses = (results.length > 0) ? 'active' : '';
+    const resultsClasses = [
+      'component CardList',
+      (results.length > 0) ? 'active' : '',
+    ].join(' ').trim();
 
     return (
       <div className="component SearchBar">

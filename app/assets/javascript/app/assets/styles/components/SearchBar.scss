@@ -36,13 +36,36 @@
     }
   }
 
-  ul {
+  ul.CardList {
+    border: 1px solid $color_brand-secondary;
+
     &:before {
       @include bars($color_brand-secondary, ($global_pad / 2) + 2);
     }
 
     &.active {
       display: block;    
+    }
+
+    li {
+      display: flex;
+
+      padding-top: 10px;
+      padding-bottom: 10px;
+
+      h3 { margin: 0; }
+
+      .result-details {
+        flex: 1 0 60%; 
+
+        margin-right: 5%;
+      }
+
+      .result-tags {
+        flex: 1 0 35%;
+
+        span { display: block; } 
+      }
     }
   }
 }

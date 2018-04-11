@@ -89,7 +89,9 @@ function workingPlanReducer(state = {
     case types.WORKING_PLAN.TIMEFRAME.ADD:
       return Object.assign({}, state, {
         timeframes: state.timeframes.concat([
-          Object.assign({}, blankTimeframe),
+          Object.assign({}, blankTimeframe, {
+            segments: [Object.assign({}, blankSegment)],
+          }),
         ]),
         activeSegment: null,
       });

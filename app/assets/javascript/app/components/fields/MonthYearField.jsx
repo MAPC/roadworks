@@ -37,32 +37,42 @@ class MonthYearField extends React.Component {
   }
 
   setTimeConstraints() {
-    const selectedYear = (this.state.year && this.state.year !== 'NONE') ? parseInt(this.state.year) : null;
+    const intOrNull = x => (x && x !== 'NONE') ? parseInt(x) : null;
+    const selectedYear = intOrNull(this.state.year);
+    const selectedMonth = intOrNull(this.state.month);
+
     let startMonth = 0;
     let endMonth = monthPool.length;
     let startYear = this.props.startYear || (new Date()).getFullYear();
     let range = this.props.range || 25;
+    let startYearMod = 0;
 
     if (this.props.predate) {
       const predate = new Date(this.props.predate);
       const predateYear = predate.getFullYear()
+      const predateMonth = predate.getMonth();
 
       if (selectedYear) {
         if (predateYear === selectedYear) {
-          startMonth = predate.getMonth();
+          startMonth = predateMonth;
         }
         else if (predateYear > selectedYear) {
           this.setState({ year: predateYear });
         }
       }
 
+      if (selectedMonth && predateMonth > selectedMonth) {
+        startYearMod = 1; 
+      }
+
       range -= (predateYear - startYear);
-      startYear = predateYear;
+      startYear = predateYear + startYearMod;
     }
 
     if (this.props.postdate) {
       const postdate = new Date(this.props.postdate);
       const postdateYear = postdate.getFullYear();
+      const postdateMonth = postdate.getMonth();
 
       if (selectedYear) {
         if (postdateYear === selectedYear) {
@@ -73,7 +83,11 @@ class MonthYearField extends React.Component {
         }
       }
 
-      range = (postdateYear - startYear) + 1;
+      if (selectedMonth && postdateMonth < selectedMonth) {
+        startYearMod = -1;
+      }
+
+      range = (postdateYear - startYear) + 1 + startYearMod;
     }
 
     this.monthOptions = monthPool.slice(startMonth, endMonth);

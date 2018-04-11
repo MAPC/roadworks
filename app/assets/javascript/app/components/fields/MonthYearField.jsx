@@ -33,22 +33,21 @@ class MonthYearField extends React.Component {
 
     this.onMonthChange = this.onMonthChange.bind(this);
     this.onYearChange = this.onYearChange.bind(this);
-    this.setTimeConstraints = this.setTimeConstraints.bind(this);
   }
 
-  setTimeConstraints() {
+  componentWillUpdate(nextProps, nextState) {
     const intOrNull = x => (x && x !== 'NONE') ? parseInt(x) : null;
-    const selectedYear = intOrNull(this.state.year);
-    const selectedMonth = intOrNull(this.state.month);
+    const selectedYear = intOrNull(nextState.year);
+    const selectedMonth = intOrNull(nextState.month);
 
     let startMonth = 0;
     let endMonth = monthPool.length;
-    let startYear = this.props.startYear || (new Date()).getFullYear();
-    let range = this.props.range || 25;
+    let startYear = nextProps.startYear || (new Date()).getFullYear();
+    let range = nextProps.range || 25;
     let startYearMod = 0;
 
-    if (this.props.predate) {
-      const predate = new Date(this.props.predate);
+    if (nextProps.predate) {
+      const predate = new Date(nextProps.predate);
       const predateYear = predate.getFullYear()
       const predateMonth = predate.getMonth();
 
@@ -69,8 +68,8 @@ class MonthYearField extends React.Component {
       startYear = predateYear + startYearMod;
     }
 
-    if (this.props.postdate) {
-      const postdate = new Date(this.props.postdate);
+    if (nextProps.postdate) {
+      const postdate = new Date(nextProps.postdate);
       const postdateYear = postdate.getFullYear();
       const postdateMonth = postdate.getMonth();
 
@@ -118,8 +117,6 @@ class MonthYearField extends React.Component {
   }
 
   render() {
-    this.setTimeConstraints();
-
     return (
       <div className="multi-select">
         <SelectField

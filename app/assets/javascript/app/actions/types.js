@@ -8,11 +8,14 @@ export default {
   ROAD: {
     BATCH_UPDATE: 'ROAD_BATCH_UPDATE',
   },
+  PLAN: {
+    UPDATE: 'PLAN_UPDATE',
+  },
   WORKING_PLAN: {
     NAME: {
       CHANGE: 'WORKING_PLAN_NAME_CHANGE',
     },
-    TYPE: {
+    PLAN_TYPE: {
       CHANGE: 'WORKING_PLAN_TYPE_CHANGE',
     },
     TIMEFRAME: {
@@ -25,14 +28,16 @@ export default {
         CHANGE: 'WORKING_PLAN_TIMEFRAME_END_CHANGE',
       },
       SEGMENT: {
+        ADD: 'WORKING_PLAN_TIMEFRAME_SEGMENT_ADD',
+        REMOVE: 'WORKING_PLAN_TIMEFRAME_SEGMENT_REMOVE',
         ROAD: {
-          UPDATE: 'WORKING_PLAN_SEGMENT_ROAD_UPDATE',
+          CHANGE: 'WORKING_PLAN_SEGMENT_ROAD_CHANGE',
+        },
+        IS_SEGMENT: {
+          CHANGE: 'WORKING_PLAN_SEGMENT_IS_SEGMENT_CHANGE',
         },
         END_POINT: {
-          UPDATE: 'WORKING_PLAN_SEGMENT_END_POINT_UPDATE',
-        },
-        END_POINT_TYPE: {
-          UPDATE: 'WORKING_PLAN_SEGMENT_END_POINT_TYPE_UPDATE',
+          CHANGE: 'WORKING_PLAN_SEGMENT_END_POINT_CHANGE',
         },
       },
     },

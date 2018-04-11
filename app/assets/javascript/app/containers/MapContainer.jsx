@@ -125,14 +125,12 @@ const mapStateToProps = (state, props) => {
   const cityName = props.match.params.city.toUpperCase();
   const city = state.city.cache[cityName];
   // Find the active segment that will be zoomed to
-  const activeSegment = state.workingPlan.activeSegment != null
-      ? state.workingPlan.segments[state.workingPlan.activeSegment]
-      : null;
+  const activeSegment = state.workingPlan.activeSegment || null;
   // ActiveCoordinates reflect the points that must be fit within the map's
   // viewing bounds
   let activeCoordinates = null;
-  if (activeSegment && state.road.cache[activeSegment.road]) {
-    const activeSegmentRoad = state.road.cache[activeSegment.road];
+  if (activeSegment && state.road.cache[activeSegment.road_id]) {
+    const activeSegmentRoad = state.road.cache[activeSegment.road_id];
     activeCoordinates = activeSegmentRoad.nodes
         .map(id => state.node.cache[id].geojson.coordinates);
   } else if (city && city.mask) {
@@ -140,55 +138,59 @@ const mapStateToProps = (state, props) => {
   }
   const nodeCache = state.node.cache;
   // Calculate all of the properly formatted layers for display on the map
-  const segmentLayers = state.workingPlan.segments.reduce((layers, segment, index) => {
-    // Fetch the base road for the current segment
-    const segmentRoad = state.road.cache[segment.road];
-    if (segment.nodes.length) {
-      // If the segment is not the whole road, plot the calculated path between
-      // the orig and dest nodes
-      const geometry = createGeometryFromNodes(
-        segment.nodes,
-        Object.assign({}, nodeCache, segment.custom_nodes)
-      );
-      return layers.concat([
-        formatLineLayer(
-          index.toString(),
-          segment.version,
-          '#aaa',
-          JSON.parse(segmentRoad.geojson)
-        ),
-        formatLineLayer(
-          index.toString() + 's_line',
-          segment.version,
-          '#f00',
-          geometry
-        ),
-        formatPointLayer(
-          index.toString() + 's_start',
-          segment.version,
-          '#f00',
-          geometry.coordinates[0]
-        ),
-        formatPointLayer(
-          index.toString() + 's_end',
-          segment.version,
-          '#f00',
-          geometry.coordinates[geometry.coordinates.length - 1]
-        ),
-      ]);
-    } else if (segmentRoad && segmentRoad.nodes.length) {
-      // Plot the whole road, if no partial path has been calculated
-      return layers.concat([
-        formatLineLayer(
-          index.toString(),
-          segment.version,
-          '#f00',
-          JSON.parse(segmentRoad.geojson)
-        ),
-      ]);
-    }
-    return layers;
-  }, []);
+  const segmentLayers = state.workingPlan.timeframes
+      .reduce((layers, timeframe, timeframeIndex) =>
+    layers.concat(timeframe.segments.reduce((layers, segment, segmentIndex) => {
+      // Fetch the base road for the current segment
+      const segmentRoad = state.road.cache[segment.road_id];
+      const layerId = `${timeframeIndex.toString()}-${segmentIndex.toString()}`;
+      if (segment.nodes.length) {
+        // If the segment is not the whole road, plot the calculated path between
+        // the orig and dest nodes
+        const geometry = createGeometryFromNodes(
+          segment.nodes,
+          Object.assign({}, nodeCache, segment.custom_nodes)
+        );
+        return layers.concat([
+          formatLineLayer(
+            layerId,
+            segment.version,
+            '#aaa',
+            JSON.parse(segmentRoad.geojson)
+          ),
+          formatLineLayer(
+           `${layerId}-s_line`,
+            segment.version,
+            '#f00',
+            geometry
+          ),
+          formatPointLayer(
+            `${layerId}-s_start`,
+            segment.version,
+            '#f00',
+            geometry.coordinates[0]
+          ),
+          formatPointLayer(
+            `${layerId}-s_end`,
+            segment.version,
+            '#f00',
+            geometry.coordinates[geometry.coordinates.length - 1]
+          ),
+        ]);
+      } else if (segmentRoad && segmentRoad.nodes.length) {
+        // Plot the whole road, if no partial path has been calculated
+        return layers.concat([
+          formatLineLayer(
+            layerId,
+            segment.version,
+            '#f00',
+            JSON.parse(segmentRoad.geojson)
+          ),
+        ]);
+      }
+      return layers;
+    }, []))
+  , []);
 
   const cityLayers = city ? formatCityLayers(city.geojson, city.mask) : [];
   return {

@@ -4,8 +4,7 @@ import PlanForm from '../components/PlanForm';
 import {
   planNameChange,
   planTypeChange,
-  planRemoveTimeframe,
-  planAddTimeframe,
+  planTimeframeAdd,
 } from '../actions/workingPlanActions';
 
 const mapStateToProps = (state, props) => {
@@ -20,8 +19,7 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     onPlanNameChange: (name) => dispatch(planNameChange(name)),
     onPlanTypeChange: (type) => dispatch(planTypeChange(type)),
-    removeTimeframe: (index) => dispatch(planRemoveTimeframe(index)),
-    addTimeframe: () => dispatch(planAddTimeframe()),
+    addTimeframe: () => dispatch(planTimeframeAdd()),
   };
 };
 

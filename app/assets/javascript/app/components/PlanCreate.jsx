@@ -10,10 +10,14 @@ class PlanCreate extends React.Component {
       <section className="component PlanCreate">
         <h3>Add Plan to Map</h3>
 
-        <PlanFormContainer />    
+        <PlanFormContainer />
 
-        <button className="styled primary" data-action="add-to-map">
-          <span class="plus">+</span>
+        <button
+          className="styled primary"
+          data-action="add-to-map"
+          onClick={this.props.createPlan}
+        >
+          <span className="plus">+</span>
           Add to Map
         </button>
       </section>

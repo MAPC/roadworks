@@ -36,7 +36,7 @@ class TextField extends React.Component {
 }
 
 TextField.propTypes = {
-  value: PropTypes.number,
+  value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   debounce: PropTypes.number,
 };

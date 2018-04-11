@@ -1,10 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import YearField from './fields/YearField';
-import MonthField from './fields/MonthField';
-import SelectField from './fields/SelectField';
-import SegmentFieldContainer from '../containers/SegmentFieldContainer';
+import MonthYearField from './MonthYearField';
+import SegmentFieldContainer from '../../containers/SegmentFieldContainer';
 
 class TimeframeField extends React.Component {
 
@@ -12,17 +10,28 @@ class TimeframeField extends React.Component {
     const segments = this.props.segmentIndicies.map((index) => (
       <SegmentFieldContainer
         key={index}
-        timeframeIndex={this.props.timeframeIndex}
+        timeframeIndex={this.props.index}
         index={index}
       />
     ));
-
+    const startDateDisplay = this.props.start
+        ? new Date(this.props.start)
+            .toLocaleString('en-us', { month: "long", year: 'numeric' })
+        : 'Unknown Date';
+    const endDateDisplay = this.props.end
+        ? new Date(this.props.end)
+            .toLocaleString('en-us', { month: "long", year: 'numeric' })
+        : 'Unknown Date';
     return (
       <div className="timeframe">
         <div className="timeframe-header">
-          <h4>From <span>May 2018</span> to <span>September 2018</span></h4>
+          <h4>From <span>{startDateDisplay}</span> to <span>{endDateDisplay}</span></h4>
 
-          <button className="minor" data-action="delete-timeframe">
+          <button
+            className="minor"
+            data-action="delete-timeframe"
+            onClick={this.props.removeTimeframe}
+          >
             Delete Timeframe
           </button>
         </div>
@@ -31,18 +40,22 @@ class TimeframeField extends React.Component {
           <div className="column">
             <div className="field minor">
               <label htmlFor="start-date">Start Date</label>
-              <div className="multi-select">
-                <MonthField name="start-date-month" />
-                <YearField name="start-date-year" />
-              </div>
+              <MonthYearField
+                monthName="start-date-month"
+                yearName="start-date-year"
+                value={this.props.start}
+                onChange={this.props.onTimeframeStartChange}
+              />
             </div>
 
             <div className="field minor">
               <label htmlFor="end-date">End Date</label>
-              <div className="multi-select">
-                <MonthField name="end-date-month" />
-                <YearField name="end-date-year" />
-              </div>
+              <MonthYearField
+                monthName="end-date-month"
+                yearName="end-date-year"
+                value={this.props.end}
+                onChange={this.props.onTimeframeEndChange}
+              />
             </div>
           </div>
 
@@ -69,7 +82,6 @@ TimeframeField.propTypes = {
   segmentIndicies: PropTypes.array,
   onTimeframeStartChange: PropTypes.func.isRequired,
   onTimeframeEndChange: PropTypes.func.isRequired,
-  removeSegment: PropTypes.func.isRequired,
   addSegment: PropTypes.func.isRequired,
 };
 

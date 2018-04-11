@@ -4,12 +4,13 @@ import TimeframeField from '../components/fields/TimeframeField';
 import {
   timeframeStartChange,
   timeframeEndChange,
-  timeframeRemoveSegment,
-  timeframeAddSegment,
+  timeframeSegmentRemove,
+  timeframeSegmentAdd,
+  planTimeframeRemove,
 } from '../actions/workingPlanActions';
 
 const mapStateToProps = (state, props) => {
-  const timeframe = state.workingPlan.timeframe[props.index];
+  const timeframe = state.workingPlan.timeframes[props.index];
   return {
     start: timeframe.start,
     end: timeframe.end,
@@ -19,10 +20,12 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    onTimeframeStartChange: (date) => dispatch(timeframeStartChange(date)),
-    onTimeframeEndChange: (date) => dispatch(timeframeEndChange(date)),
-    removeSegment: (index) => dispatch(timeframeRemoveSegment(index)),
-    addSegment: (index) => dispatch(timeframeAddSegment(index)),
+    onTimeframeStartChange: (date) =>
+        dispatch(timeframeStartChange(props.index, date)),
+    onTimeframeEndChange: (date) =>
+        dispatch(timeframeEndChange(props.index, date)),
+    addSegment: () => dispatch(timeframeSegmentAdd(props.index)),
+    removeTimeframe: () => dispatch(planTimeframeRemove(props.index)),
   };
 };
 

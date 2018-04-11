@@ -4,6 +4,73 @@ import utils from './utils';
 import {
   updateNodes,
 } from './nodeActions';
+import {
+  updatePlan,
+} from './planActions';
+
+/* Plan level actions ------------------------------------------------------- */
+
+export function planNameChange(name) {
+  return {
+    type: types.WORKING_PLAN.NAME.CHANGE,
+    name,
+  };
+}
+
+export function planTypeChange(type) {
+  return {
+    type: types.WORKING_PLAN.PLAN_TYPE.CHANGE,
+    plan_type: type,
+  };
+}
+
+export function planTimeframeRemove(index) {
+  return {
+    type: types.WORKING_PLAN.TIMEFRAME.REMOVE,
+    timeframeIndex: index,
+  };
+}
+
+export function planTimeframeAdd(index) {
+  return {
+    type: types.WORKING_PLAN.TIMEFRAME.ADD,
+  };
+}
+
+/* Timeframe level actions -------------------------------------------------- */
+
+export function timeframeStartChange(index, date) {
+  return {
+    type: types.WORKING_PLAN.TIMEFRAME.START.CHANGE,
+    timeframeIndex: index,
+    start: date,
+  };
+}
+
+export function timeframeEndChange(index, date) {
+  return {
+    type: types.WORKING_PLAN.TIMEFRAME.END.CHANGE,
+    timeframeIndex: index,
+    end: date,
+  };
+}
+
+export function timeframeSegmentAdd(timeframeIndex) {
+  return {
+    type: types.WORKING_PLAN.TIMEFRAME.SEGMENT.ADD,
+    timeframeIndex,
+  };
+}
+
+export function timeframeSegmentRemove(timeframeIndex, segmentIndex) {
+  return {
+    type: types.WORKING_PLAN.TIMEFRAME.SEGMENT.REMOVE,
+    timeframeIndex,
+    segmentIndex,
+  };
+}
+
+/* Segment level actions ---------------------------------------------------- */
 
 // Recursively generate a path between two nodes
 const path = (nodeMap, visited, origIds, destIds) => {
@@ -78,7 +145,7 @@ const generateCrossStreetOptions = (road, nodeMap, roadMap) => {
 };
 
 // Update the base road for a segment and generate cross street options
-export function updateSegmentRoad(segmentIndex, roadId) {
+export function updateSegmentRoad(timeframeIndex, segmentIndex, roadId) {
   return async (dispatch, getState) => {
     const state = getState();
     const availableNodes = Object.keys(state.node.cache);
@@ -99,50 +166,56 @@ export function updateSegmentRoad(segmentIndex, roadId) {
       roadCache
     );
     dispatch({
-      type: types.WORKING_PLAN.TIMEFRAME.SEGMENT.ROAD.UPDATE,
-      index: segmentIndex,
+      type: types.WORKING_PLAN.TIMEFRAME.SEGMENT.ROAD.CHANGE,
+      timeframeIndex,
+      segmentIndex,
       road: roadId,
       crossStreetOptions,
     });
   };
 }
 
-export function updateSegmentEndPointType(segmentIndex, type, isOrigin) {
-
-  console.log(arguments);
+export function updateSegmentEndPointType(
+  timeframeIndex,
+  segmentIndex,
+  type,
+  isOrigin
+) {
 
   return (dispatch, getState) => {
-    const segment = getState().workingPlan.segments[segmentIndex];
+    const segment = getState().workingPlan.timeframes[timeframeIndex]
+        .segments[segmentIndex];
     let orig, dest, is_orig_type_address, is_dest_type_address, nodes, custom_nodes;
     if (isOrigin) {
       is_orig_type_address = type;
       orig = null;
       is_dest_type_address = segment.is_dest_type_address;
       dest = segment.dest;
-      nodes = [dest];
+      nodes = dest ? [dest] : [];
       custom_nodes = Object.assign({}, segment.custom_nodes, { [-1]: null });
     } else {
       is_orig_type_address = segment.is_orig_type_address;
       orig = segment.orig;
       is_dest_type_address = type;
       dest = null;
-      nodes = [orig];
+      nodes = orig ? [orig] : [];
       custom_nodes = Object.assign({}, segment.custom_nodes, { [-2]: null });
     }
     return dispatch({
-      type: types.WORKING_PLAN.TIMEFRAME.SEGMENT.END_POINT_TYPE.UPDATE,
-      index: segmentIndex,
+      type: types.WORKING_PLAN.TIMEFRAME.SEGMENT.END_POINT.CHANGE,
+      timeframeIndex,
+      segmentIndex,
       is_orig_type_address,
       orig,
       is_dest_type_address,
       dest,
-      nodes: [],
+      nodes,
       custom_nodes,
     });
   };
 }
 
-function createCustomNode(partialNodeCache, location, address) {
+const createCustomNode = (partialNodeCache, location, address) => {
   const distance = (node) => utils.distanceBetweenLocations(
     location,
     node.geojson.coordinates
@@ -178,12 +251,18 @@ function createCustomNode(partialNodeCache, location, address) {
 }
 
 // Update an end point for a segment and generate the partial path
-export function updateSegmentEndPoint(segmentIndex, value, isOrigin) {
+export function updateSegmentEndPoint(
+  timeframeIndex,
+  segmentIndex,
+  value,
+  isOrigin
+) {
   return async (dispatch, getState) => {
     const state = getState();
-    const segment = state.workingPlan.segments[segmentIndex];
+    const segment = state.workingPlan.timeframes[timeframeIndex]
+        .segments[segmentIndex];
     const partialNodeCache = partialNodeCacheForRoad(
-      state.road.cache[segment.road],
+      state.road.cache[segment.road_id],
       state.node.cache
     );
 
@@ -210,7 +289,7 @@ export function updateSegmentEndPoint(segmentIndex, value, isOrigin) {
           [nodeId]: Object.assign({}, { id: nodeId }, customNode),
         }),
       };
-    })(partialNodeCache, segment, state.road.cache[segment.road], value, isOrigin);
+    })(partialNodeCache, segment, state.road.cache[segment.road_id], value, isOrigin);
 
     const newNodes = ((nodeCache, newEndpoints) => {
       if (!newEndpoints.orig || !newEndpoints.dest) {
@@ -234,8 +313,9 @@ export function updateSegmentEndPoint(segmentIndex, value, isOrigin) {
     })(partialNodeCache, newEndpoints);
 
     return dispatch({
-      type: types.WORKING_PLAN.TIMEFRAME.SEGMENT.END_POINT.UPDATE,
-      index: segmentIndex,
+      type: types.WORKING_PLAN.TIMEFRAME.SEGMENT.END_POINT.CHANGE,
+      timeframeIndex,
+      segmentIndex,
       is_orig_type_address: segment.is_orig_type_address,
       is_dest_type_address: segment.is_dest_type_address,
       nodes: newNodes,
@@ -246,29 +326,16 @@ export function updateSegmentEndPoint(segmentIndex, value, isOrigin) {
   };
 }
 
-export function planRemoveTimeframe(index) {
-  return {
-    type: types.WORKING_PLAN.TIMEFRAME.REMOVE,
-    index,
+export function createPlan() {
+  return async (dispatch, getState) => {
+    const workingPlan = getState().workingPlan;
+    const response = await api.createPlan(workingPlan, true, 'AYER');
+    if (response.status == 200) {
+      const result = await response.json();
+      dispatch(updatePlan(result));
+    }
   };
 }
 
-export function planAddTimeframe(index) {
-  return {
-    type: types.WORKING_PLAN.TIMEFRAME.ADD,
-  };
-}
 
-export function planNameChange(name) {
-  return {
-    type: types.WORKING_PLAN.NAME.CHANGE,
-    name,
-  };
-}
 
-export function planTypeChange(type) {
-  return {
-    type: types.WORKING_PLAN.TYPE.CHANGE,
-    type,
-  };
-}

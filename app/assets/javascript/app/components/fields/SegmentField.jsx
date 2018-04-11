@@ -35,7 +35,7 @@ class SegmentField extends React.Component {
         <div className="road-selector">
           <DropdownField
             options={this.props.roadOptions}
-            value={this.props.segment.road}
+            value={this.props.segment.road_id}
             onChange={this.props.onRoadChange}
             placeholder="-- Select Road --"
           />
@@ -44,7 +44,7 @@ class SegmentField extends React.Component {
             value={this.state.isSegment}
             onChange={this.toggleIsSegment}
           />
-          <button className="x" onClick={() => this.props.removeSegment(this.props.segment)}>+</button>
+          <button className="x" onClick={this.props.removeSegment}>+</button>
         </div>
 
         {this.state.isSegment ? (
@@ -70,12 +70,12 @@ class SegmentField extends React.Component {
                 options={this.props.crossStreetOptions}
                 value={this.props.segment.orig}
                 onChange={(opt) => this.props.onOrigChange(opt.value)}
-                disabled={!this.props.segment.road}
+                disabled={!this.props.segment.road_id}
                 placeholder="-- Select Endpoint --"
               />
             )}
           </div>
-          
+
           <div className="endpoint-delim">
             to
           </div>
@@ -91,7 +91,7 @@ class SegmentField extends React.Component {
               <TextField
                 value={this.props.segment.custom_nodes[this.props.segment.dest]
                     ? this.props.segment.custom_nodes[this.props.segment.dest].address
-                    : null}
+                    : ''}
                 placeholder="Address Number ..."
                 onChange={this.props.onDestChange}
                 debounce={500}
@@ -101,7 +101,7 @@ class SegmentField extends React.Component {
                 options={this.props.crossStreetOptions}
                 value={this.props.segment.dest}
                 onChange={(opt) => this.props.onDestChange(opt.value)}
-                disabled={!this.props.segment.road}
+                disabled={!this.props.segment.road_id}
                 placeholder="-- Select Endpoint --"
               />
             )}
@@ -116,7 +116,7 @@ class SegmentField extends React.Component {
 SegmentField.propTypes = {
   roadOptions: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
-    value: PropTypes.number,
+    value: PropTypes.string,
   })).isRequired,
   crossStreetOptions: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,

@@ -31,9 +31,15 @@ class DropdownField extends React.Component {
 DropdownField.propTypes = {
   options: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
-    value: PropTypes.number,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
   })).isRequired,
-  value: PropTypes.number,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
 };

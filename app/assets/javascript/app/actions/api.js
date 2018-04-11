@@ -39,10 +39,23 @@ export default {
       method: 'GET',
     });
     const geocoding = await response.json();
-    console.log(geocoding)
     return geocoding.features.length &&
         geocoding.features[0].geometry.type == 'Point'
         ? geocoding.features[0].geometry.coordinates
         : null;
   },
+  createPlan: async (plan, published, city) => {
+    return fetch(`/api/plans`, {
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
+      credentials: 'same-origin',
+      method: 'POST',
+      body: JSON.stringify({
+        plan,
+        published,
+        city,
+      }),
+    });
+  }
 };

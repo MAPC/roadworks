@@ -2,6 +2,8 @@ module Api
   class PlansController < ApiController
     def permit_plan_params(params)
       plan = params[:plan]
+      plan[:city] = params[:city]
+      plan[:published] = params[:published]
       plan[:timeframes_attributes] = plan[:timeframes]
       plan.delete(:timeframes)
       plan[:timeframes_attributes].each do |timeframe|
@@ -23,7 +25,7 @@ module Api
             :orig,
             :is_dest_type_address,
             :dest,
-            :custom_nodes,
+            custom_nodes: [],
             nodes: []
           ]
         ]

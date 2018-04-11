@@ -11,9 +11,9 @@ import fmt from '../util/fmt';
 class Cards extends React.Component {
 
   render() {
-    const cards = this.props.cards.map(card => {
+    const cards = this.props.cards.map((card, index) => {
       return (
-        <CardContainer title={card.title}>
+        <CardContainer key={index} title={card.title}>
           <CardList items={card.items} type={card.type} />
         </CardContainer>
       );

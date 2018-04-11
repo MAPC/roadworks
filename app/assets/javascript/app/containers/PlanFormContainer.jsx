@@ -2,23 +2,24 @@ import { connect } from 'react-redux';
 import PlanForm from '../components/PlanForm';
 
 import {
-  updateSegmentRoad,
-  updateSegmentEndPoint,
-  removeSegment,
-  addSegment,
+  planNameChange,
+  planTypeChange,
+  planTimeframeAdd,
 } from '../actions/workingPlanActions';
 
 const mapStateToProps = (state, props) => {
   return {
-    segments: state.workingPlan.segments,
+    name: state.workingPlan.name,
+    type: state.workingPlan.plan_type,
+    timeframeIndicies: Array.from(state.workingPlan.timeframes.keys()),
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-  // parse
   return {
-    removeSegment: (segment) => dispatch(removeSegment(segment)),
-    addSegment: (segment) => dispatch(addSegment(segment)),
+    onPlanNameChange: (name) => dispatch(planNameChange(name)),
+    onPlanTypeChange: (type) => dispatch(planTypeChange(type)),
+    addTimeframe: () => dispatch(planTimeframeAdd()),
   };
 };
 

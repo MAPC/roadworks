@@ -12,15 +12,6 @@ class PermitsController < ApplicationController
   def show
   end
 
-  # GET /permits/new
-  def new
-    @permit = Permit.new
-  end
-
-  # GET /permits/1/edit
-  def edit
-  end
-
   # POST /permits
   # POST /permits.json
   def create
@@ -48,16 +39,6 @@ class PermitsController < ApplicationController
         format.html { render :edit }
         format.json { render json: @permit.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /permits/1
-  # DELETE /permits/1.json
-  def destroy
-    @permit.destroy
-    respond_to do |format|
-      format.html { redirect_to permits_url, notice: 'Permit was successfully destroyed.' }
-      format.json { head :no_content }
     end
   end
 

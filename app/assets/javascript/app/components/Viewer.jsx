@@ -15,6 +15,7 @@ class Viewer extends React.Component {
   componentDidMount() {
     this.props.fetchCity();
     this.props.fetchRoads();
+    this.props.fetchPlans();
   }
 
   render() {

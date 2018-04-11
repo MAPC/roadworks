@@ -31,6 +31,15 @@ export default {
       method: 'GET',
     });
   },
+  getPlans: (city) => {
+    return fetch(`/api/plans?city=${city}`, {
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
+      credentials: 'same-origin',
+      method: 'GET',
+    });
+  },
   geocodeToLngLat: async (address) => {
     const response = await fetch(`http://pelias.mapc.org/v1/search?text=${address}`, {
       headers: new Headers({

@@ -7,9 +7,7 @@ function roadReducer(state = {
     case types.ROAD.BATCH_UPDATE:
       const cachePartial = {};
       action.roads.forEach(road => cachePartial[road.id] = road);
-
       const newCache = Object.assign({}, state.cache, cachePartial);
-
       return Object.assign({}, state, { cache: newCache });
     default:
       return state

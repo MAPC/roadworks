@@ -5,7 +5,7 @@ import {
   updateNodes,
 } from './nodeActions';
 import {
-  updatePlan,
+  updatePlans,
 } from './planActions';
 
 /* Plan level actions ------------------------------------------------------- */
@@ -341,7 +341,7 @@ export function createPlan(city) {
     const response = await api.createPlan(workingPlan, true, city.toUpperCase());
     if (response.status == 200) {
       const result = await response.json();
-      dispatch(updatePlan(result));
+      dispatch(updatePlans([result]));
     }
   };
 }

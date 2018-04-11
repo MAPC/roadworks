@@ -9,7 +9,7 @@ export default {
     BATCH_UPDATE: 'ROAD_BATCH_UPDATE',
   },
   PLAN: {
-    UPDATE: 'PLAN_UPDATE',
+    BATCH_UPDATE: 'PLAN_BATCH_UPDATE',
   },
   WORKING_PLAN: {
     NAME: {

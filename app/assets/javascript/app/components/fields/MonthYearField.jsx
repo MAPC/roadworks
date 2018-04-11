@@ -5,30 +5,40 @@ import SelectField from './SelectField';
 class MonthYearField extends React.Component {
   constructor(props) {
     super(props);
-    this.monthOptions = [
-      { label: 'January', value: '0' },
-      { label: 'February', value: '1' },
-      { label: 'March', value: '2' },
-      { label: 'April', value: '3' },
-      { label: 'May', value: '4' },
-      { label: 'June', value: '5' },
-      { label: 'July', value: '6' },
-      { label: 'August', value: '7' },
-      { label: 'September', value: '8' },
-      { label: 'October', value: '9' },
-      { label: 'November', value: '10' },
-      { label: 'December', value: '11' },
-    ];
+
+    const monthPool = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ].map((label, value) => ({ label, value }));
+
+    const startMonth = parseInt(this.props.startMonth) || 0;
+    const endMonth = parseInt(this.props.endMonth) || monthPool.length;
+    
+    this.monthOptions = monthPool.slice(startMonth, endMonth);
+
     const startYear = this.props.startYear || (new Date()).getFullYear();
     const range = this.props.range || 25;
+
     this.yearOptions = (new Array(range)).fill(null).map((_, i) => ({
       label: (startYear + i).toString(),
       value: (startYear + i).toString(),
     }));
+
     this.state = {
       month: 'NONE',
       year: 'NONE',
     };
+
     this.onMonthChange = this.onMonthChange.bind(this);
     this.onYearChange = this.onYearChange.bind(this);
   }

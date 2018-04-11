@@ -32,3 +32,6 @@ yarn-debug.log*
 yarn-error.log
 
 .DS_Store
+
+# Ignore encrypted secrets key file.
+config/secrets.yml.key

@@ -44,7 +44,7 @@ const assignNewSegment = (state, action, newSegment) => {
         }),
       }),
     }),
-    activeSegment: newSegment,
+    focusedRoad: newSegment.road_id,
   });
 };
 
@@ -53,7 +53,7 @@ const assignNewTimeframe = (state, action, newTimeframe) => {
     timeframes: Object.assign([...state.timeframes], {
       [action.timeframeIndex]: newTimeframe,
     }),
-    activeSegment: null,
+    focusedRoad: null,
   });
 };
 
@@ -63,7 +63,7 @@ function workingPlanReducer(state = {
   timeframes: [Object.assign({}, blankTimeframe, {
     segments: [Object.assign({}, blankSegment)],
   })],
-  activeSegment: null,
+  focusedRoad: null,
 }, action) {
   const currTimeframe = typeof(action.timeframeIndex) !== 'undefined'
       ? state.timeframes[action.timeframeIndex] : null;
@@ -77,13 +77,13 @@ function workingPlanReducer(state = {
     case types.WORKING_PLAN.NAME.CHANGE:
       return Object.assign({}, state, {
         name: action.name,
-        activeSegment: null,
+        focusedRoad: null,
       });
 
     case types.WORKING_PLAN.PLAN_TYPE.CHANGE:
       return Object.assign({}, state, {
         plan_type: action.plan_type,
-        activeSegment: null,
+        focusedRoad: null,
       });
 
     case types.WORKING_PLAN.TIMEFRAME.ADD:
@@ -93,14 +93,14 @@ function workingPlanReducer(state = {
             segments: [Object.assign({}, blankSegment)],
           }),
         ]),
-        activeSegment: null,
+        focusedRoad: null,
       });
 
     case types.WORKING_PLAN.TIMEFRAME.REMOVE:
       return Object.assign({}, state, {
         timeframes: state.timeframes.slice(0, action.timeframeIndex)
             .concat(state.timeframes.slice(action.timeframeIndex + 1)),
-        activeSegment: null,
+        focusedRoad: null,
       });
 
     case types.WORKING_PLAN.TIMEFRAME.START.CHANGE:

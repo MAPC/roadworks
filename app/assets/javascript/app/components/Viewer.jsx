@@ -36,7 +36,7 @@ class Viewer extends React.Component {
           </nav>
         </header>
         <div className="page-wrapper">
-          <Route path="/:city" component={MapContainer} />
+          <Route path="/:city/:resource?/:action?" component={MapContainer} />
 
           <div className="left-panel">
             <SearchBarContainer />

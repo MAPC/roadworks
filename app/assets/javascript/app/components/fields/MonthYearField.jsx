@@ -2,45 +2,73 @@ import React from 'react';
 
 import SelectField from './SelectField';
 
+const monthPool = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+].map((label, value) => ({ label, value }));
+
+
 class MonthYearField extends React.Component {
+
   constructor(props) {
     super(props);
-
-    const monthPool = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ].map((label, value) => ({ label, value }));
-
-    const startMonth = parseInt(this.props.startMonth) || 0;
-    const endMonth = parseInt(this.props.endMonth) || monthPool.length;
-    
-    this.monthOptions = monthPool.slice(startMonth, endMonth);
-
-    const startYear = this.props.startYear || (new Date()).getFullYear();
-    const range = this.props.range || 25;
-
-    this.yearOptions = (new Array(range)).fill(null).map((_, i) => ({
-      label: (startYear + i).toString(),
-      value: (startYear + i).toString(),
-    }));
 
     this.state = {
       month: 'NONE',
       year: 'NONE',
     };
 
+    this.monthOptions = monthPool;
+    this.yearOptions = [];
+
     this.onMonthChange = this.onMonthChange.bind(this);
     this.onYearChange = this.onYearChange.bind(this);
+    this.setTimeConstraints = this.setTimeConstraints.bind(this);
+  }
+
+  setTimeConstraints() {
+    let startMonth = 0;
+    let endMonth = monthPool.length;
+    let startYear = this.props.startYear || (new Date()).getFullYear();
+    let range = this.props.range || 25;
+
+    if (this.props.predate) {
+      const predate = new Date(this.props.predate);
+      const predateYear = predate.getFullYear()
+
+      if (this.state.year && this.state.year !== 'NONE') {
+        const selectedYear = parseInt(this.state.year);
+
+        if (predateYear === selectedYear) {
+          startMonth = predate.getMonth();
+        }
+        else if (predateYear > selectedYear) {
+          this.setState({ year: predateYear });
+        }
+      }
+
+      range -= (predateYear - startYear);
+      startYear = predateYear;
+    }
+
+    if (this.props.postdate) {
+    }
+
+    this.monthOptions = monthPool.slice(startMonth, endMonth);
+    this.yearOptions = (new Array(range)).fill(null).map((_, i) => ({
+      label: (startYear + i).toString(),
+      value: (startYear + i).toString(),
+    }));
   }
 
   onMonthChange(month) {
@@ -64,6 +92,8 @@ class MonthYearField extends React.Component {
   }
 
   render() {
+    this.setTimeConstraints();
+
     return (
       <div className="multi-select">
         <SelectField

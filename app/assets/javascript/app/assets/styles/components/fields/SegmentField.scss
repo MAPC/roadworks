@@ -1,6 +1,9 @@
 .component.SegmentField {
 
-  .x { float: right; }
+  .x { 
+    position: absolute; 
+    right: 0;
+  }
 
   .road-selector {
     .ToggleField {
@@ -11,7 +14,7 @@
   }
 
   .endpoints {
-    margin-top: $global_pad / 2;
+    margin: ($global_pad / 2) auto $global_pad;
     padding-left: $global_pad;
 
     border-left: 7px solid $color_bg-medium; 

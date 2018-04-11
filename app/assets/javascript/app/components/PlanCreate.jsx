@@ -1,9 +1,16 @@
 import React from 'react';
 
+import Form from './Form';
 import PlanFormContainer from '../containers/PlanFormContainer';
 
 
-class PlanCreate extends React.Component {
+class PlanCreate extends Form {
+
+  afterSubmit(err) {
+    if (!err)  {
+      this.props.createPlan();
+    }
+  }
 
   render() {
     return (
@@ -15,7 +22,7 @@ class PlanCreate extends React.Component {
         <button
           className="styled primary"
           data-action="add-to-map"
-          onClick={this.props.createPlan}
+          onClick={this.submit}
         >
           <span className="plus">+</span>
           Add to Map

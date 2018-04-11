@@ -6,8 +6,8 @@ import {
 } from '../actions/workingPlanActions';
 
 const mapStateToProps = state => state;
-const mapDispatchToProps = dispatch => ({
-  createPlan: () => dispatch(createPlan()),
+const mapDispatchToProps = (dispatch, props) => ({
+  createPlan: () => dispatch(createPlan(props.match.params.city)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlanCreate);

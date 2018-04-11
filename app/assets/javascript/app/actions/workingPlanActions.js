@@ -326,10 +326,10 @@ export function updateSegmentEndPoint(
   };
 }
 
-export function createPlan() {
+export function createPlan(city) {
   return async (dispatch, getState) => {
     const workingPlan = getState().workingPlan;
-    const response = await api.createPlan(workingPlan, true, 'AYER');
+    const response = await api.createPlan(workingPlan, true, city.toUpperCase());
     if (response.status == 200) {
       const result = await response.json();
       dispatch(updatePlan(result));

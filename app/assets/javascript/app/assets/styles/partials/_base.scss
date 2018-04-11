@@ -8,4 +8,6 @@ input { outline: none; }
 h1 { font-size: 26px; }
 h3 { font-size: 14px; }
 
+ol { padding: 0; }
+
 .absolute-center { @extend ._vertical-center; }

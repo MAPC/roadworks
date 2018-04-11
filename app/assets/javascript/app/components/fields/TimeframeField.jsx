@@ -23,7 +23,7 @@ class TimeframeField extends React.Component {
             .toLocaleString('en-us', { month: "long", year: 'numeric' })
         : 'Unknown Date';
     return (
-      <div className="timeframe">
+      <div className="component TimeframeField">
         <div className="timeframe-header">
           <h4>From <span>{startDateDisplay}</span> to <span>{endDateDisplay}</span></h4>
 

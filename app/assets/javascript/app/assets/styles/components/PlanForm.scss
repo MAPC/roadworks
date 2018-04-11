@@ -1,4 +1,5 @@
 .component.PlanForm {
+  z-index: 4;
 
   width: 100%;
   padding: $global_pad;
@@ -6,7 +7,6 @@
   background: $color_bg-light;
   border: 1px solid $color_brand-secondary;
   border-top: 0;
-  z-index: 4;
 
   .key-info {
     display: flex; 
@@ -42,61 +42,13 @@
 
   button.light { font-size: 12px; }
 
-  .timeframe {
-    @extend ._clear;
-
-    padding-bottom: 8px;
-    margin-bottom: 8px;
+  .timeframes {
+    max-height: 50vh; 
+    margin: 0 auto ($global_pad / 2);
 
     border-bottom: 1px solid $color_bg-medium;
-
-    .timeframe-header {
-      margin: 18px auto 10px;
-
-      button { float: right; }    
-
-      .minor { top: 3px; }
-    } 
-
-    h4 {
-      display: inline-block; 
-
-      margin: 0;
-
-      font-size: 14px;
-
-      span { color: $color_brand-primary; } 
-    }
-
-    button[data-action="add-road"] { 
-      float: right; 
-
-      margin-top: $global_pad * 3;
-    }
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
 
-
-  .timeframe-columns {
-    display: flex; 
-
-    .column {
-      &:first-of-type { flex: 1 0 40%; } 
-      &:last-of-type { flex: 1 0 60%; }
-    }
-
-    .field { margin-bottom: 10px; }
-
-    label {
-      display: block;
-
-      margin-bottom: 4px; 
-
-      font-size: 12px; 
-      font-weight: 600;
-    }
-
-    .multi-select {
-      .SelectField + .SelectField { margin-left: 10px; }
-    }
-  }
 }

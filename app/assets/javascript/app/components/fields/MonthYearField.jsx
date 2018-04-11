@@ -17,6 +17,8 @@ const monthPool = [
   'December',
 ].map((label, value) => ({ label, value }));
 
+const intOrNull = x => (x && x !== 'NONE') ? parseInt(x) : null;
+
 
 class MonthYearField extends React.Component {
 
@@ -36,64 +38,25 @@ class MonthYearField extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    const intOrNull = x => (x && x !== 'NONE') ? parseInt(x) : null;
     const selectedYear = intOrNull(nextState.year);
-    const selectedMonth = intOrNull(nextState.month);
 
-    let startMonth = 0;
-    let endMonth = monthPool.length;
-    let startYear = nextProps.startYear || (new Date()).getFullYear();
-    let range = nextProps.range || 25;
-    let startYearMod = 0;
+    if (selectedYear) {
+      if (nextProps.predate) {
+        const predateYear = (new Date(nextProps.predate)).getFullYear();
 
-    if (nextProps.predate) {
-      const predate = new Date(nextProps.predate);
-      const predateYear = predate.getFullYear()
-      const predateMonth = predate.getMonth();
-
-      if (selectedYear) {
-        if (predateYear === selectedYear) {
-          startMonth = predateMonth;
-        }
-        else if (predateYear > selectedYear) {
+        if (predateYear > selectedYear) {
           this.setState({ year: predateYear });
         }
       }
 
-      if (selectedMonth && predateMonth > selectedMonth) {
-        startYearMod = 1; 
-      }
+      if (nextProps.postdate) {
+        const postdateYear = (new Date(nextProps.postdate)).getFullYear();
 
-      range -= (predateYear - startYear);
-      startYear = predateYear + startYearMod;
-    }
-
-    if (nextProps.postdate) {
-      const postdate = new Date(nextProps.postdate);
-      const postdateYear = postdate.getFullYear();
-      const postdateMonth = postdate.getMonth();
-
-      if (selectedYear) {
-        if (postdateYear === selectedYear) {
-          endMonth = postdate.getMonth() + 1;
-        }
-        else if (postdateYear < selectedYear) {
+        if (postdateYear < selectedYear) {
           this.setState({ year: postdateYear });
         }
       }
-
-      if (selectedMonth && postdateMonth < selectedMonth) {
-        startYearMod = -1;
-      }
-
-      range = (postdateYear - startYear) + 1 + startYearMod;
     }
-
-    this.monthOptions = monthPool.slice(startMonth, endMonth);
-    this.yearOptions = (new Array(range)).fill(null).map((_, i) => ({
-      label: (startYear + i).toString(),
-      value: (startYear + i).toString(),
-    }));
   }
 
   onMonthChange(month) {
@@ -117,19 +80,67 @@ class MonthYearField extends React.Component {
   }
 
   render() {
+    const selectedYear = intOrNull(this.state.year);
+    const selectedMonth = intOrNull(this.state.month);
+
+    let startMonth = 0;
+    let endMonth = monthPool.length;
+    let startYear = this.props.startYear || (new Date()).getFullYear();
+    let range = this.props.range || 25;
+    let startYearMod = 0;
+
+    if (this.props.predate) {
+      const predate = new Date(this.props.predate);
+      const predateYear = predate.getFullYear()
+      const predateMonth = predate.getMonth();
+
+      if (selectedYear && predateYear === selectedYear) {
+        startMonth = predateMonth;
+      }
+
+      if (selectedMonth && predateMonth > selectedMonth) {
+        startYearMod = 1; 
+      }
+
+      range -= (predateYear - startYear);
+      startYear = predateYear + startYearMod;
+    }
+
+    if (this.props.postdate) {
+      const postdate = new Date(this.props.postdate);
+      const postdateYear = postdate.getFullYear();
+      const postdateMonth = postdate.getMonth();
+
+      if (selectedYear && postdateYear === selectedYear) {
+        endMonth = postdate.getMonth() + 1;
+      }
+
+      if (selectedMonth && postdateMonth < selectedMonth) {
+        startYearMod = -1;
+      }
+
+      range = (postdateYear - startYear) + 1 + startYearMod;
+    }
+
+    const monthOptions = monthPool.slice(startMonth, endMonth);
+    const yearOptions = (new Array(range)).fill(null).map((_, i) => ({
+      label: (startYear + i).toString(),
+      value: (startYear + i).toString(),
+    }));
+
     return (
       <div className="multi-select">
         <SelectField
           name={this.props.monthName}
           placeholder={'-- Month --'}
-          options={this.monthOptions}
+          options={monthOptions}
           value={this.state.month}
           onChange={this.onMonthChange}
         />
         <SelectField
           name={this.props.yearName}
           placeholder={'-- Year --'}
-          options={this.yearOptions}
+          options={yearOptions}
           value={this.state.year}
           onChange={this.onYearChange}
         />

@@ -37,6 +37,7 @@ class MonthYearField extends React.Component {
   }
 
   setTimeConstraints() {
+    const selectedYear = (this.state.year && this.state.year !== 'NONE') ? parseInt(this.state.year) : null;
     let startMonth = 0;
     let endMonth = monthPool.length;
     let startYear = this.props.startYear || (new Date()).getFullYear();
@@ -46,9 +47,7 @@ class MonthYearField extends React.Component {
       const predate = new Date(this.props.predate);
       const predateYear = predate.getFullYear()
 
-      if (this.state.year && this.state.year !== 'NONE') {
-        const selectedYear = parseInt(this.state.year);
-
+      if (selectedYear) {
         if (predateYear === selectedYear) {
           startMonth = predate.getMonth();
         }
@@ -62,6 +61,19 @@ class MonthYearField extends React.Component {
     }
 
     if (this.props.postdate) {
+      const postdate = new Date(this.props.postdate);
+      const postdateYear = postdate.getFullYear();
+
+      if (selectedYear) {
+        if (postdateYear === selectedYear) {
+          endMonth = postdate.getMonth() + 1;
+        }
+        else if (postdateYear < selectedYear) {
+          this.setState({ year: postdateYear });
+        }
+      }
+
+      range = (postdateYear - startYear) + 1;
     }
 
     this.monthOptions = monthPool.slice(startMonth, endMonth);

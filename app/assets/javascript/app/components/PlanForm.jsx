@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import TextField from './fields/TextField';
 import SelectField from './fields/SelectField';
 import TimeframeFieldContainer from '../containers/TimeframeFieldContainer';
 
@@ -21,11 +22,12 @@ class PlanForm extends React.Component {
         <div className="key-info">
           <div className="field">
             <label htmlFor="plan-name">Plan Name</label>
-            <input
+            <TextField
               name="plan-name"
               placeholder="Enter Plan Name ..."
               value={this.props.name}
-              onChange={(e) => this.props.onPlanNameChange(e.target.value)}
+              onChange={(value) => this.props.onPlanNameChange(value)}
+              debounce={500}
             />
           </div>
 

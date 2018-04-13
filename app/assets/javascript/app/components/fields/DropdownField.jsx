@@ -10,10 +10,11 @@ import 'react-virtualized-select/styles.css';
 class DropdownField extends React.Component {
 
   render() {
-    const options = this.props.options.filter(option => option.label !== null);
+    const options = this.props.options.filter(option => option.label !== null)
+                                      .sort((a,b) => a.label.localeCompare(b.label));
 
     return (
-      <div className="component DropdownField">
+      <div className="component DropdownField" name={this.props.name}>
         <Select
           options={options}
           value={this.props.value}

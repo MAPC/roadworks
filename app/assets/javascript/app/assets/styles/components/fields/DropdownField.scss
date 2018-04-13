@@ -4,10 +4,14 @@
 
   width: 50%;
 
+  &.invalid {
+    .Select-control {
+      @extend ._invalid-field; 
+    } 
+  }
+
   .Select.is-disabled {
-    .Select-placeholder {
-      color: $color_font-medium;
-    }
+    .Select-placeholder { color: $color_font-medium; }
   }
 
   .Select-placeholder {
@@ -30,9 +34,7 @@
     width: 100%; 
   }
 
-  .Select-input {
-    height: auto; 
-  }
+  .Select-input { height: auto; }
 
   .Select-value {
     padding-right: 10px !important;
@@ -50,9 +52,7 @@
     }
   }
 
-  .Select-clear-zone {
-    right: -8px;
-  }
+  .Select-clear-zone { right: -8px; }
 
   .Select-arrow { 
     @extend ._arrow;
@@ -76,6 +76,9 @@
     }
   }
 
-  .Select-menu-outer { font-size: 12px;}
+  .Select-menu-outer { 
+    color: $color_font-dark;
+    font-size: 12px;
+  }
 
 }

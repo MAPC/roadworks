@@ -8,23 +8,12 @@ import TextField from './TextField';
 import enums from './../../constants/enums';
 import capitalize from '../../util/capitalize';
 
+
 class SegmentField extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isSegment: false,
-    };
-
-    this.toggleIsSegment = this.toggleIsSegment.bind(this);
-  }
-
-  toggleIsSegment() {
-    this.setState({ isSegment: !this.state.isSegment });
-  }
-
   render() {
+    const { timeframeIndex, index } = this.props;
+
     const endpointLabels = {
       on: 'Address',
       off: 'Cross Street'
@@ -34,6 +23,7 @@ class SegmentField extends React.Component {
       <div className="component SegmentField">
         <div className="road-selector">
           <DropdownField
+            name={`segment-${timeframeIndex}-${index}`}
             options={this.props.roadOptions}
             value={this.props.segment.road_id}
             onChange={this.props.onRoadChange}
@@ -41,13 +31,13 @@ class SegmentField extends React.Component {
           />
           <ToggleField
             labels={{on: "Segment", off: "Whole Road" }}
-            value={this.state.isSegment}
-            onChange={this.toggleIsSegment}
+            value={this.props.segment.is_segment}
+            onChange={this.props.onTypeChange}
           />
           <button className="x" onClick={this.props.removeSegment}>+</button>
         </div>
 
-        {this.state.isSegment ? (
+        {this.props.segment.is_segment ? (
         <div className="endpoints">
           <div className="endpoint">
             <ToggleField
@@ -58,6 +48,7 @@ class SegmentField extends React.Component {
             />
             {this.props.segment.is_orig_type_address ? (
               <TextField
+                name={`segment-orig-${timeframeIndex}-${index}`}
                 value={this.props.segment.custom_nodes[this.props.segment.orig]
                     ? this.props.segment.custom_nodes[this.props.segment.orig].address
                     : ''}
@@ -67,6 +58,7 @@ class SegmentField extends React.Component {
               />
             ) : (
               <DropdownField
+                name={`segment-orig-${timeframeIndex}-${index}`}
                 options={this.props.crossStreetOptions}
                 value={this.props.segment.orig}
                 onChange={(opt) => this.props.onOrigChange(opt.value)}
@@ -89,6 +81,7 @@ class SegmentField extends React.Component {
             />
             {this.props.segment.is_dest_type_address ? (
               <TextField
+                name={`segment-dest-${timeframeIndex}-${index}`}
                 value={this.props.segment.custom_nodes[this.props.segment.dest]
                     ? this.props.segment.custom_nodes[this.props.segment.dest].address
                     : ''}
@@ -98,6 +91,7 @@ class SegmentField extends React.Component {
               />
             ) : (
               <DropdownField
+                name={`segment-dest-${timeframeIndex}-${index}`}
                 options={this.props.crossStreetOptions}
                 value={this.props.segment.dest}
                 onChange={(opt) => this.props.onDestChange(opt.value)}

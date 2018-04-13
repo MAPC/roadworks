@@ -175,6 +175,15 @@ export function updateSegmentRoad(timeframeIndex, segmentIndex, roadId) {
   };
 }
 
+export function updateSegmentType(timeframeIndex, segmentIndex, is_segment) {
+  return {
+    type: types.WORKING_PLAN.TIMEFRAME.SEGMENT.IS_SEGMENT.CHANGE,
+    timeframeIndex,
+    segmentIndex,
+    is_segment,
+  };
+}
+
 export function updateSegmentEndPointType(
   timeframeIndex,
   segmentIndex,

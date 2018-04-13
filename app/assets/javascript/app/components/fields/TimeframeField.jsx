@@ -44,8 +44,8 @@ class TimeframeField extends React.Component {
               <label htmlFor="start-date">Start Date</label>
               <MonthYearField
                 postdate={this.props.end}
-                monthName="start-date-month"
-                yearName="start-date-year"
+                monthName={`start-date-month-${this.props.index}`}
+                yearName={`start-date-year-${this.props.index}`}
                 value={this.props.start}
                 onChange={this.props.onTimeframeStartChange}
               />
@@ -55,8 +55,8 @@ class TimeframeField extends React.Component {
               <label htmlFor="end-date">End Date</label>
               <MonthYearField
                 predate={this.props.start}
-                monthName="end-date-month"
-                yearName="end-date-year"
+                monthName={`end-date-month-${this.props.index}`}
+                yearName={`end-date-year-${this.props.index}`}
                 value={this.props.end}
                 onChange={this.props.onTimeframeEndChange}
               />

@@ -26,6 +26,7 @@ class TextField extends React.Component {
   render() {
     return (
       <input
+        name={this.props.name}
         className="component TextField"
         value={this.props.debounce ? this.state.value : this.props.value}
         onChange={this.onChange}

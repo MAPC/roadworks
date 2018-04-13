@@ -85,11 +85,9 @@ class Map extends React.Component {
       if ((prevLayerMap[key] && !layerMap[key]) || layersChanged) {
         this.map.removeLayer(key);
         this.map.removeSource(key);
-        console.log('removed', key);
       }
       if ((!prevLayerMap[key] && layerMap[key]) || layersChanged) {
         this.map.addLayer(layerMap[key]);
-        console.log('added', key);
       }
     });
 

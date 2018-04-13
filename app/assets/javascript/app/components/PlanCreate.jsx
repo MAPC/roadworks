@@ -58,6 +58,10 @@ class PlanCreate extends AbstractForm {
     this.props.createPlan();
   }
 
+  componentWillMount() {
+    this.props.fetchData();
+  }
+
   render() {
     const errorMessage = (this.state.errorMessage !== null) 
                           ? <div className="error-message">{this.state.errorMessage}</div>

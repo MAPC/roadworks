@@ -1,4 +1,8 @@
 export default {
+  FETCH: {
+    SET_PENDING: 'FETCH_SET_PENDING',
+    LOAD_ALL: 'FETCH_LOAD_ALL',
+  },
   CITY: {
     UPDATE: 'CITY_UPDATE',
   },

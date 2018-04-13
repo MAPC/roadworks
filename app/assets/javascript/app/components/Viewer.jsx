@@ -12,12 +12,6 @@ import capitalize from '../util/capitalize';
 
 class Viewer extends React.Component {
 
-  componentDidMount() {
-    this.props.fetchCity();
-    this.props.fetchRoads();
-    this.props.fetchPlans();
-  }
-
   render() {
     const townLower = this.props.match.params.city.toLowerCase();
     const townCapitalized = capitalize(this.props.match.params.city);

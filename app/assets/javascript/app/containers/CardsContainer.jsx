@@ -1,6 +1,10 @@
 import { connect } from 'react-redux';
 import Cards from '../components/Cards';
 
+import {
+  fetchPlanViewData,
+} from '../actions/fetchActions';
+
 const mapStateToProps = state => {
   return {
     cards: [
@@ -82,7 +86,8 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, props) => ({
+  fetchData: () => dispatch(fetchPlanViewData(props.match.params.city)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cards);

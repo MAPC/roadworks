@@ -12,6 +12,6 @@ export function fetchPlans(city) {
   return async (dispatch, getState) => {
     const response = await api.getPlans(city);
     const result = await response.json();
-    dispatch(updatePlans(result));
+    return dispatch(updatePlans(result));
   };
 }

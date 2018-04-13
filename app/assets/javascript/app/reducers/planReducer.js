@@ -6,6 +6,7 @@ function planReducer(state = {
   let newCache;
   let cachePartial;
   switch (action.type) {
+    case types.FETCH.LOAD_ALL:
     case types.PLAN.BATCH_UPDATE:
       cachePartial = {};
       action.plans.forEach(plan => cachePartial[plan.id] = plan);

@@ -1,3 +1,4 @@
+
 export function flatten(arr, depth) {
   return arr.reduce((acc, arr) => {
     return acc.concat(Array.isArray(arr) && depth > 1 ? flatten(arr, depth - 1) : arr);
@@ -15,16 +16,14 @@ export function createGeometryFromNodes(path, nodeCache) {
 };
 
 // Format a line layer for display in Mapbox
-export function formatLineLayer(id, version, color, geometry, isDashed) {
-  const features = [{
-    type: 'Feature',
-    properties: {
-    },
-    geometry,
-  }];
+export function formatLineLayer(id, version, color, offset, geometry, isDashed) {
   const dashedProps = isDashed ? {
     'line-dasharray': [6, 6],
   } : {};
+  const offsetMod = offset % 2;
+  const lineOffset = offsetMod
+      ? ((offsetMod + (offset - offsetMod) / 2) * 1)
+      : ((offsetMod + (offset - offsetMod) / 2) * -1);
   return {
     id,
     version,
@@ -32,30 +31,40 @@ export function formatLineLayer(id, version, color, geometry, isDashed) {
     source: {
       type: 'geojson',
       data: {
-        type: 'FeatureCollection',
-        features: features,
+        type: 'Feature',
+        geometry: geometry ,
+        properties: {
+          lineOffset,
+        },
       },
     },
     layout: {
-        'line-join': 'round',
-        'line-cap': 'round',
+      'line-join': 'round',
+      'line-cap': 'round',
+      'line-miter-limit': 10,
     },
     paint: Object.assign({}, {
-        'line-color': color,
-        'line-width': 6,
+      'line-color': color,
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        8, 1,
+        16, 3,
+      ],
+      'line-offset': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        8, ['*', ['get', 'lineOffset'], 2],
+        16, ['*', ['get', 'lineOffset'], 4],
+      ],
     }, dashedProps),
   };
 };
 
 // Format a point layer for display in Mapbox
 export function formatPointLayer(id, version, color, coordinates) {
-  const features = [{
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates,
-    },
-  }];
   return {
     id,
     version,
@@ -63,8 +72,12 @@ export function formatPointLayer(id, version, color, coordinates) {
     source: {
       type: 'geojson',
       data: {
-        type: 'FeatureCollection',
-        features: features,
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'Point',
+          coordinates,
+        },
       },
     },
     layout: {
@@ -85,15 +98,15 @@ export function formatWorkingSegmentLayers(id, segment, road, nodeCache) {
     const firstPoint = geometry.coordinates[0];
     const lastPoint = geometry.coordinates[geometry.coordinates.length - 1];
     return [
-      formatLineLayer(id, segment.version, '#aaa', road.geojson),
-      formatLineLayer(`${id}-s_line`, segment.version, '#f00', geometry),
-      formatPointLayer(`${id}-s_start`, segment.version, '#f00', firstPoint),
-      formatPointLayer(`${id}-s_end`, segment.version, '#f00', lastPoint),
+      formatLineLayer(id, segment.version, '#aaa', 0, road.geojson),
+      formatLineLayer(`${id}-s_line`, segment.version, '#f00', 0, geometry),
+      formatPointLayer(`${id}-s_start`, segment.version, '#f00', 0, firstPoint),
+      formatPointLayer(`${id}-s_end`, segment.version, '#f00', 0, lastPoint),
     ];
   } else if (road && road.nodes.length) {
     // Plot the whole road, if no partial path has been calculated
     return [
-      formatLineLayer(id, segment.version, '#f00', road.geojson),
+      formatLineLayer(id, segment.version, '#f00', 0, road.geojson),
     ];
   }
   return [];
@@ -108,6 +121,7 @@ export function formatCityLayers(outline, mask) {
       type: 'geojson',
       data: {
         type: 'Feature',
+        properties: {},
         geometry: mask,
       },
     },
@@ -125,6 +139,7 @@ export function formatCityLayers(outline, mask) {
       type: 'geojson',
       data: {
         type: 'Feature',
+        properties: {},
         geometry: outline,
       },
     },
@@ -139,7 +154,7 @@ export function formatCityLayers(outline, mask) {
   }];
 };
 
-export function formatPlanSegmentLayer(id, segment, roadCache, nodeCache) {
+export function formatPlanSegmentLayer(id, segment, offset, roadCache, nodeCache) {
   const geometry = ((segment, roadCache, nodeCache) => {
     const road = roadCache[segment.road_id];
     if (segment.nodes.length) {
@@ -148,7 +163,7 @@ export function formatPlanSegmentLayer(id, segment, roadCache, nodeCache) {
     } else if (road && road.nodes.length) {
       return road.geojson;
     }
-    return null;
+    return {};
   })(segment, roadCache, nodeCache);
-  return formatLineLayer(id, 0, '#00f', geometry);
+  return formatLineLayer(id, 0, '#ef4579', offset, geometry);
 }

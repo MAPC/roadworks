@@ -1,4 +1,6 @@
 import { connect } from 'react-redux';
+import mapboxgl from 'mapbox-gl';
+
 import Map from '../components/Map';
 
 import constants from './../constants/constants';
@@ -27,9 +29,14 @@ function getPlanLayers(plans, roadCache, nodeCache) {
   return plans.reduce((plLayers, plan, plIndex) => {
     return plLayers.concat(plan.timeframes.reduce((tfLayers, timeframe, tfIndex) => {
       return tfLayers.concat(timeframe.segments.reduce((stLayers, segment, stIndex) => {
+        console.log(segment)
         const layerId = `${plIndex}-${tfIndex}-${stIndex}`;
         return stLayers.concat([
-          formatPlanSegmentLayer(layerId, segment, roadCache, nodeCache),
+          formatPlanSegmentLayer(layerId + 'a', segment, 0, roadCache, nodeCache),
+          formatPlanSegmentLayer(layerId + 'b', segment, 1, roadCache, nodeCache),
+          formatPlanSegmentLayer(layerId + 'c', segment, 2, roadCache, nodeCache),
+          formatPlanSegmentLayer(layerId + 'd', segment, 3, roadCache, nodeCache),
+          formatPlanSegmentLayer(layerId + 'e', segment, 4, roadCache, nodeCache),
         ]);
       }, []));
     }, []));
@@ -58,20 +65,26 @@ const mapStateToProps = (state, props) => {
   const segmentLayers = ((state, city, resource, action) => {
     const roadCache = state.road.cache;
     const nodeCache = state.node.cache;
+    console.log(roadCache, nodeCache);
     if (resource == 'plan' && action == 'create') {
       const timeframes = state.workingPlan.timeframes;
       return getWorkingSegmentLayers(timeframes, roadCache, nodeCache);
+    } else if (Object.keys(roadCache).length && Object.keys(nodeCache).length) {
+      const plans = Object.values(state.plan.cache).reduce((plans, plan) => {
+        return (plan.city == cityName) ? plans.concat([plan]) : plans;
+      }, []);
+      return getPlanLayers(plans, roadCache, nodeCache);
     }
-    const plans = Object.values(state.plan.cache).reduce((plans, plan) => {
-      return plan.city == cityName ? plans.concat([plan]) : plans;
-    }, []);
-    return getPlanLayers(plans, roadCache, nodeCache);
+    return [];
   })(state, city, resource, action);
-
   const cityLayers = city ? formatCityLayers(city.geojson, city.mask) : [];
+  const fitBounds = activeCoordinates ? activeCoordinates.reduce(
+    (bounds, coord) => bounds.extend(coord),
+    new mapboxgl.LngLatBounds(activeCoordinates[0], activeCoordinates[0])
+  ) : null;
   return {
     layers: segmentLayers.concat(cityLayers),
-    activeCoordinates,
+    fitBounds,
     centroid: city ? city.centroid.coordinates : constants.MAP.DEFAULT_CENTROID,
     bounds: city ? flatten(city.bounds.coordinates, 1) : null,
   };

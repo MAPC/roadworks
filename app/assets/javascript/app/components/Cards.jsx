@@ -10,6 +10,10 @@ import fmt from '../util/fmt';
 
 class Cards extends React.Component {
 
+  componentWillMount() {
+    this.props.fetchData();
+  }
+
   render() {
     const cards = this.props.cards.map((card, index) => {
       return (

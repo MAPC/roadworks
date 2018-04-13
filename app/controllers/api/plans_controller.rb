@@ -25,7 +25,15 @@ module Api
             :orig,
             :is_dest_type_address,
             :dest,
-            custom_nodes: [],
+            custom_nodes: [
+              :id,
+              :address,
+              neighbors: [],
+              geojson: [
+                :type,
+                coordinates: [],
+              ],
+            ],
             nodes: []
           ]
         ]

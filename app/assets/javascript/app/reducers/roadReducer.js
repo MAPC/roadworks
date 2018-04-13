@@ -4,6 +4,7 @@ function roadReducer(state = {
   cache: {},
 }, action) {
   switch (action.type) {
+    case types.FETCH.LOAD_ALL:
     case types.ROAD.BATCH_UPDATE:
       const cachePartial = {};
       action.roads.forEach((road) => {

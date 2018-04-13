@@ -1,8 +1,4 @@
 class PlanSerializer < ActiveModel::Serializer
   attributes :id, :name, :plan_type, :city, :published, :timeframes
-  def timeframes
-    return self.object.timeframes.map do |timeframe|
-      TimeframeSerializer.new(timeframe)
-    end
-  end
+  has_many :timeframes
 end

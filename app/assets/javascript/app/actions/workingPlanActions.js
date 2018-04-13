@@ -156,7 +156,7 @@ export function updateSegmentRoad(timeframeIndex, segmentIndex, roadId) {
     if (neededNodes.length) {
       const response = await api.getNodes(neededNodes);
       const result = await response.json();
-      dispatch(updateNodes(result.data));
+      dispatch(updateNodes(result));
     }
     const nodeCache = getState().node.cache;
     const roadCache = getState().road.cache;

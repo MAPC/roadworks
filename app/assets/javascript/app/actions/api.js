@@ -29,7 +29,6 @@ export default {
     return get(`/api/nodes?${asString}`);
   },
   getCity: (city) => {
-    console.log(city)
     return get(`/api/cities/${city}`);
   },
   getAllRoads: (city) => {

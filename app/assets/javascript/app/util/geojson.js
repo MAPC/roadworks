@@ -154,16 +154,22 @@ export function formatCityLayers(outline, mask) {
   }];
 };
 
-export function formatPlanSegmentLayer(id, segment, offset, roadCache, nodeCache) {
-  const geometry = ((segment, roadCache, nodeCache) => {
-    const road = roadCache[segment.road_id];
-    if (segment.nodes.length) {
-      const mergedNodeCache = Object.assign({}, nodeCache, segment.custom_nodes);
-      return createGeometryFromNodes(segment.nodes, mergedNodeCache);
-    } else if (road && road.nodes.length) {
-      return road.geojson;
-    }
-    return {};
-  })(segment, roadCache, nodeCache);
-  return formatLineLayer(id, 0, '#ef4579', offset, geometry);
+export function getSegmentGeometryAndNodes(segment, roadCache, nodeCache) {
+  const road = roadCache[segment.road_id];
+  if (segment.nodes.length) {
+    const mergedNodeCache = Object.assign({}, nodeCache, segment.custom_nodes);
+    return {
+      geometry: createGeometryFromNodes(segment.nodes, mergedNodeCache),
+      nodes: segment.nodes,
+    };
+  } else if (road && road.nodes.length) {
+    return {
+      geometry: road.geojson,
+      nodes: road.nodes,
+    };
+  }
+  return {
+    geometry: {},
+    nodes: [],
+  };
 }

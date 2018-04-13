@@ -9,6 +9,7 @@ import {
   formatCityLayers,
   formatWorkingSegmentLayers,
   formatPlanSegmentLayer,
+  getSegmentGeometry,
   flatten,
 } from '../util/geojson';
 
@@ -26,21 +27,43 @@ function getWorkingSegmentLayers(timeframes, roadCache, nodeCache) {
 }
 
 function getPlanLayers(plans, roadCache, nodeCache) {
-  return plans.reduce((plLayers, plan, plIndex) => {
+  const layerKits = plans.reduce((plLayers, plan, plIndex) => {
     return plLayers.concat(plan.timeframes.reduce((tfLayers, timeframe, tfIndex) => {
       return tfLayers.concat(timeframe.segments.reduce((stLayers, segment, stIndex) => {
-        console.log(segment)
         const layerId = `${plIndex}-${tfIndex}-${stIndex}`;
-        return stLayers.concat([
-          formatPlanSegmentLayer(layerId + 'a', segment, 0, roadCache, nodeCache),
-          formatPlanSegmentLayer(layerId + 'b', segment, 1, roadCache, nodeCache),
-          formatPlanSegmentLayer(layerId + 'c', segment, 2, roadCache, nodeCache),
-          formatPlanSegmentLayer(layerId + 'd', segment, 3, roadCache, nodeCache),
-          formatPlanSegmentLayer(layerId + 'e', segment, 4, roadCache, nodeCache),
-        ]);
+        const { geometry, nodes } = getSegmentGeometryAndNodes(segment, roadCache, nodeCache);
+        return stLayers.concat([{
+          layerId,
+          color: '#ef4579', // Will come from plan eventually
+          geometry,
+          nodes,
+        }]);
       }, []));
     }, []));
   }, []);
+
+  const nodesToLayer = {};
+  const overlapsWith = {};
+  const offsetMap = {};
+
+  layerKits.forEach((kit) => {
+    kit.nodes.forEach((nodeId) => {
+      nodesToLayer[nodeId] = nodesToLayer[nodeId]
+          ? nodesToLayer[nodeId].concat([kit.layerId])
+          : [kit.layerId];
+    });
+  });
+
+  // Object.keys(nodesToLayer).filter((arr) => arr.length > 1).forEach((overlap) => {
+  //   overlap.forEach((layerId) => {
+  //     overlapsWith[layerId] = overlapsWith[layerId]
+  //         ?
+  //   })
+  //   overlapsWith
+  // });
+
+  console.log(layerKits);
+  return [];
 }
 
 const mapStateToProps = (state, props) => {
@@ -65,7 +88,6 @@ const mapStateToProps = (state, props) => {
   const segmentLayers = ((state, city, resource, action) => {
     const roadCache = state.road.cache;
     const nodeCache = state.node.cache;
-    console.log(roadCache, nodeCache);
     if (resource == 'plan' && action == 'create') {
       const timeframes = state.workingPlan.timeframes;
       return getWorkingSegmentLayers(timeframes, roadCache, nodeCache);

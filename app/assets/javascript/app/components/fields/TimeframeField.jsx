@@ -43,6 +43,7 @@ class TimeframeField extends React.Component {
             <div className="field minor">
               <label htmlFor="start-date">Start Date</label>
               <MonthYearField
+                postdate={this.props.end}
                 monthName={`start-date-month-${this.props.index}`}
                 yearName={`start-date-year-${this.props.index}`}
                 value={this.props.start}
@@ -53,6 +54,7 @@ class TimeframeField extends React.Component {
             <div className="field minor">
               <label htmlFor="end-date">End Date</label>
               <MonthYearField
+                predate={this.props.start}
                 monthName={`end-date-month-${this.props.index}`}
                 yearName={`end-date-year-${this.props.index}`}
                 value={this.props.end}

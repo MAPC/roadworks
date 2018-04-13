@@ -3,6 +3,7 @@ import SegmentField from '../components/fields/SegmentField';
 
 import {
   updateSegmentRoad,
+  updateSegmentType,
   updateSegmentEndPoint,
   updateSegmentEndPointType,
   timeframeSegmentRemove,
@@ -32,13 +33,15 @@ const mapDispatchToProps = (dispatch, props) => {
     onRoadChange: (opt) => dispatch(updateSegmentRoad(
         props.timeframeIndex, props.index, opt.value)),
     onOrigTypeChange: (value) => dispatch(updateSegmentEndPointType(
-        props.timeframeIndex, props.index, !value, true)),
+        props.timeframeIndex, props.index, value, true)),
     onOrigChange: (value) => dispatch(updateSegmentEndPoint(
         props.timeframeIndex, props.index, value, true)),
     onDestTypeChange: (value) => dispatch(updateSegmentEndPointType(
-        props.timeframeIndex, props.index, !value, false)),
+        props.timeframeIndex, props.index, value, false)),
     onDestChange: (value) => dispatch(updateSegmentEndPoint(
         props.timeframeIndex, props.index, value, false)),
+    onTypeChange: (value) => dispatch(updateSegmentType(
+        props.timeframeIndex, props.index, value)),
     removeSegment: () =>
         dispatch(timeframeSegmentRemove(props.timeframeIndex, props.index)),
   };

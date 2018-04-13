@@ -56,4 +56,17 @@
     }
   }
 
+  .error-message {
+    @extend ._invalid-field;
+    float: left;
+
+    max-width: 50%;
+    padding: 7px 14px;
+    margin-top: $global_pad;
+
+    font-size: 12px;
+
+    border: 1px solid;
+  }
+
 }

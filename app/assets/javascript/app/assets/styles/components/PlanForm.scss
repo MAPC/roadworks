@@ -44,7 +44,7 @@
 
   .timeframes {
     max-height: 50vh; 
-    margin: 0 auto ($global_pad / 2);
+    margin: ($global_pad / 2) auto;
 
     border-bottom: 1px solid $color_bg-medium;
     overflow-y: scroll;

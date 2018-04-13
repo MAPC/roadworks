@@ -7,7 +7,7 @@ class ToggleField extends React.Component {
     super(props);
 
     this.toggle = this.toggle.bind(this);
-    this._active = !this.props.value;
+    this._active = this.props.value;
   }
 
   toggle() {

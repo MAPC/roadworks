@@ -30,3 +30,10 @@
   border-left: ($elem_arrow-size * .8) solid transparent !important;
   border-right: ($elem_arrow-size * .8) solid transparent !important;
 }
+
+._invalid-field {
+  color: $color_font-negative;
+
+  border-color: $color_font-negative; 
+  background-color: $color_bg-negative;
+}

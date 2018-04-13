@@ -1,0 +1,7 @@
+.component.Form {
+
+  .invalid {
+    @extend ._invalid-field;
+  }
+
+}

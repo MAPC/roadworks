@@ -14,6 +14,7 @@ class TimeframeField extends React.Component {
         index={index}
       />
     ));
+
     const startDateDisplay = this.props.start
         ? new Date(this.props.start)
             .toLocaleString('en-us', { month: "long", year: 'numeric' })
@@ -22,6 +23,7 @@ class TimeframeField extends React.Component {
         ? new Date(this.props.end)
             .toLocaleString('en-us', { month: "long", year: 'numeric' })
         : 'Unknown Date';
+
     return (
       <div className="component TimeframeField">
         <div className="timeframe-header">
@@ -41,8 +43,8 @@ class TimeframeField extends React.Component {
             <div className="field minor">
               <label htmlFor="start-date">Start Date</label>
               <MonthYearField
-                monthName="start-date-month"
-                yearName="start-date-year"
+                monthName={`start-date-month-${this.props.index}`}
+                yearName={`start-date-year-${this.props.index}`}
                 value={this.props.start}
                 onChange={this.props.onTimeframeStartChange}
               />
@@ -51,8 +53,8 @@ class TimeframeField extends React.Component {
             <div className="field minor">
               <label htmlFor="end-date">End Date</label>
               <MonthYearField
-                monthName="end-date-month"
-                yearName="end-date-year"
+                monthName={`end-date-month-${this.props.index}`}
+                yearName={`end-date-year-${this.props.index}`}
                 value={this.props.end}
                 onChange={this.props.onTimeframeEndChange}
               />

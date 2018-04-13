@@ -22,8 +22,6 @@ class AbstractForm extends React.Component {
     this.valid = true;
   }
 
-  validate(props) { /* Defined by concrete class */ }
-
   triggerValidate() {
     const form = document.querySelector(`*[data-form="${this.formId}"]`);
     Array.from(form.querySelectorAll('.invalid')).forEach(field => field.classList.remove('invalid'));
@@ -42,18 +40,16 @@ class AbstractForm extends React.Component {
     }
   }
 
+  validate(props)   { /* Defined by concrete class */ }
+
+  formDidValidate() { /* Defined by concrete class */ }
+
   componentDidUpdate() {
     if (this.hasSubmitted && !this.hasSetError) {
       this.triggerValidate();
     }
     else {
       this.hasSetError = false; 
-    }
-  }
-
-  formDidValidate(err, result) {
-    if (err) {
-      console.error(err);
     }
   }
 
@@ -69,6 +65,7 @@ class AbstractForm extends React.Component {
   invalidate(errorMessage) {
     this.hasSetError = true;
     this.setState({ errorMessage });
+
     throw new Error(errorMessage);
   }
 

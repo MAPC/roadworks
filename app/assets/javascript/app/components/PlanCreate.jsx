@@ -54,10 +54,8 @@ class PlanCreate extends AbstractForm {
     }
   }
 
-  formDidValidate(err) {
-    if (!err)  {
-      this.props.createPlan();
-    }
+  formDidValidate() {
+    this.props.createPlan();
   }
 
   render() {
@@ -66,7 +64,7 @@ class PlanCreate extends AbstractForm {
                           : null;
 
     return (
-      <section className="component PlanCreate Form" data-form={this.formId}>
+      <section className="component PlanCreate" data-form={this.formId}>
         <h3>Add Plan to Map</h3>
 
         <PlanFormContainer />

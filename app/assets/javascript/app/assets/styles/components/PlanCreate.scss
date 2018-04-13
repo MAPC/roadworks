@@ -1,4 +1,5 @@
 .component.PlanCreate {
+  @extend .abstract.Form;
   $bar_width: ($global_pad / 2) + 2;
 
   z-index: 0;

@@ -42,10 +42,7 @@
     width: $elem_Card-width / 2;
     margin-top: $global_pad;
 
-    background: $color_brand-primary;
     box-shadow: $global_shadow;
-
-    &:hover { background: $color_brand-primary--dark; }
 
     .plus {
       display: inline-block;

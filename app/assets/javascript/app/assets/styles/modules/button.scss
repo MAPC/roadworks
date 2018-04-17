@@ -21,6 +21,12 @@ button, .button {
       &:hover { background: $color_bg-medium--active; }
     }
 
+    &.primary {
+      background: $color_brand-primary; 
+
+      &:hover { background: $color_brand-primary--dark; }
+    }
+
     img {
       top: 2px;
       display: inline-block; 

@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route } from 'react-router'
+import { Route, Link } from 'react-router-dom';
 
 import MapContainer from '../containers/MapContainer';
 import CardsContainer from '../containers/CardsContainer';
 import SearchBarContainer from '../containers/SearchBarContainer';
+import LoginFormContainer from '../containers/LoginFormContainer';
 import PlanCreateContainer from '../containers/PlanCreateContainer';
 
 import capitalize from '../util/capitalize';
@@ -18,6 +19,8 @@ class Viewer extends React.Component {
   }
 
   render() {
+    const showLoginLink = `${this.props.location.pathname}#login`;
+    const showLoginForm = this.props.location.hash === '#login';
     const townLower = this.props.match.params.city.toLowerCase();
     const townCapitalized = capitalize(this.props.match.params.city);
 
@@ -31,7 +34,7 @@ class Viewer extends React.Component {
 
           <nav>
             <a href="">FAQ</a>
-            <a href="">Login</a>
+            <Link to={showLoginLink}>Municipal Login</Link>
           </nav>
         </header>
         <div className="page-wrapper">
@@ -43,6 +46,8 @@ class Viewer extends React.Component {
             <Route path="/:city" component={CardsContainer} />
             <Route path="/:city/plan/create" component={PlanCreateContainer} />
           </div>
+
+          {showLoginForm ? <LoginFormContainer /> : null}
         </div>
       </section>
     );

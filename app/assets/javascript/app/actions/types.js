@@ -11,6 +11,20 @@ export default {
   PLAN: {
     UPDATE: 'PLAN_UPDATE',
   },
+  USER: {
+    UPDATE: 'USER_UPDATE',
+  },
+  LOGIN: {
+    FORM: {
+      EMAIL: {
+        CHANGE: 'LOGIN_FORM_EMAIL_CHANGE',
+      },
+      PASSWORD: {
+        CHANGE: 'LOGIN_FORM_PASSWORD_CHANGE',
+      },
+    },
+    USER: 'LOGIN_USER',
+  },
   WORKING_PLAN: {
     NAME: {
       CHANGE: 'WORKING_PLAN_NAME_CHANGE',

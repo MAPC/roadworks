@@ -10,7 +10,7 @@ class Tags extends React.Component {
         const classes = ['tag', (tag.type === 'user') ? 'light' : null].join(' ').trim();
 
         return (
-          <li className={classes}>
+          <li key={tag.value} className={classes}>
             <img src={imgSrc} />
             {tag.value}
           </li>

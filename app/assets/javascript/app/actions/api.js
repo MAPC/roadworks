@@ -57,5 +57,17 @@ export default {
         city,
       }),
     });
-  }
+  },
+  login: async (email, password) => {
+    return fetch('/api/users/sign_in', {
+      headers: new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }),
+      method: 'POST',
+      body: JSON.stringify({
+        user: { email, password },
+      }),
+    });
+  },
 };

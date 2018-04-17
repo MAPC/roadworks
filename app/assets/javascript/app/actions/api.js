@@ -34,7 +34,7 @@ export default {
   getAllRoads: (city) => {
     return get(`/api/roads?city=${city}`);
   },
-  getRoads: (roadIds) => {
+  getRoadsById: (roadIds) => {
     const asString = roadIds.length
         ? roadIds.slice(1).reduce((s, id) => s + `&id[]=${id}`, `id[]=${roadIds[0]}`)
         : '';

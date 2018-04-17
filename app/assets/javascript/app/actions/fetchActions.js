@@ -28,13 +28,16 @@ export function fetchPlanViewData(cityName) {
       pRoadIds.concat(plan.timeframes.reduce((tRoadIds, timeframe) =>
         tRoadIds.concat(timeframe.segments.reduce((sRoadIds, segment) =>
           sRoadIds.concat([segment.road_id]), [])), [])), []);
-    const roadsResponse = await api.getRoads(roadIds);
+    if (!roadIds.length) {
+      return dispatch(fetchLoadAll(city, plans, [], []));
+    }
+    const roadsResponse = await api.getRoadsById(roadIds);
     const roads = await roadsResponse.json();
     const nodeIds = roads.reduce((nodeIds, road) =>
       nodeIds.concat(road.nodes), []);
     const nodesResponse = await api.getNodes(nodeIds);
     const nodes = await nodesResponse.json();
-    dispatch(fetchLoadAll(city, plans, roads, nodes));
+    return dispatch(fetchLoadAll(city, plans, roads, nodes));
   };
 }
 

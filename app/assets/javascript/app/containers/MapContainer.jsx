@@ -28,14 +28,14 @@ function getWorkingSegmentLayers(timeframes, roadCache, nodeCache) {
 }
 
 function getPlanLayers(plans, roadCache, nodeCache) {
-  const layerKits = plans.reduce((plLayers, plan, plIndex) => {
-    return plLayers.concat(plan.timeframes.reduce((tfLayers, timeframe, tfIndex) => {
-      return tfLayers.concat(timeframe.segments.reduce((stLayers, segment, stIndex) => {
-        const layerId = `${plIndex}-${tfIndex}-${stIndex}`;
+  const layerKits = plans.reduce((plLayers, plan) => {
+    return plLayers.concat(plan.timeframes.reduce((tfLayers, timeframe) => {
+      return tfLayers.concat(timeframe.segments.reduce((stLayers, segment) => {
+        const layerId = `${plan.id}-${timeframe.id}-${segment.id}`;
         const { geometry, nodes } = getSegmentGeometryAndNodes(segment, roadCache, nodeCache);
         return stLayers.concat([{
           layerId,
-          color: '#ef4579', // Will come from plan eventually
+          color: plan.color,
           geometry,
           nodes,
         }]);
@@ -55,7 +55,7 @@ function getPlanLayers(plans, roadCache, nodeCache) {
 }
 
 const mapStateToProps = (state, props) => {
-  const cityName = props.match.params.city.toUpperCase();
+  const cityName = props.match.params.city.toUpperCase().replace('-', ' ');
   const { resource, action } = props.match.params;
   const city = state.city.cache[cityName];
 
@@ -81,7 +81,9 @@ const mapStateToProps = (state, props) => {
       return getWorkingSegmentLayers(timeframes, roadCache, nodeCache);
     } else if (Object.keys(roadCache).length && Object.keys(nodeCache).length) {
       const plans = Object.values(state.plan.cache).reduce((plans, plan) => {
-        return (plan.city == cityName) ? plans.concat([plan]) : plans;
+        return (plan.city == cityName && state.view.active[plan.id])
+            ? plans.concat([plan])
+            : plans;
       }, []);
       return getPlanLayers(plans, roadCache, nodeCache);
     }

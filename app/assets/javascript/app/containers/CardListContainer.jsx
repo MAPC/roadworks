@@ -1,49 +1,27 @@
 import { connect } from 'react-redux';
-import Cards from '../components/Cards';
+import CardList from '../components/CardList';
 
 import {
   fetchPlanViewData,
 } from '../actions/fetchActions';
 
-const mapStateToProps = state => {
+import {
+  toggleActive,
+} from '../actions/viewActions';
+
+const mapStateToProps = (state) => {
+  const plans = Object.keys(state.plan.cache).map((planId) => ({
+    id: planId,
+    title: state.plan.cache[planId].name,
+    active: state.view.active[planId],
+    color: state.plan.cache[planId].color,
+  }));
   return {
     cards: [
       {
-        title: 'Town Plans',
+        title: 'Plans and Moratoriums',
         type: 'plan',
-        items: [
-          {
-            title: '2015-2020 Road Paving Plan',
-            active: true,
-            color: '#EF4579',
-          },
-          {
-            title: 'Sewer Repair Plan',
-            active: true,
-            color: '#F0E92D',
-          },
-          {
-            title: 'Water Repair Plan',
-            active: false,
-            color: '#F26262',
-          },
-        ],
-      },
-      {
-        title: 'Utility Company Capital Plans',
-        type: 'plan',
-        items: [
-          {
-            title: '2019 Eversource Construction Plan',
-            active: true,
-            color: '#45CEEF',
-          },
-          {
-            title: '5 Year Road Paving Plan',
-            active: true,
-            color: '#97E890',
-          },
-        ],
+        items: plans,
       },
       {
         title: 'All Permits',
@@ -87,7 +65,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = (dispatch, props) => ({
+  toggleActive: (id) => dispatch(toggleActive(id)),
   fetchData: () => dispatch(fetchPlanViewData(props.match.params.city)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cards);
+export default connect(mapStateToProps, mapDispatchToProps)(CardList);

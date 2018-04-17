@@ -7,6 +7,7 @@ import nodeReducer from './nodeReducer';
 import planReducer from './planReducer';
 import roadReducer from './roadReducer';
 import segmentReducer from './segmentReducer';
+import viewReducer from './viewReducer';
 import workingPlanReducer from './workingPlanReducer';
 
 const rootReducer = combineReducers({
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   plan: planReducer,
   road: roadReducer,
   segment: segmentReducer,
+  view: viewReducer,
   workingPlan: workingPlanReducer,
   router: routerReducer,
 });

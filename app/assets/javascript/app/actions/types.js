@@ -15,6 +15,9 @@ export default {
   PLAN: {
     BATCH_UPDATE: 'PLAN_BATCH_UPDATE',
   },
+  VIEW: {
+    TOGGLE_ACTIVE: 'VIEW_TOGGLE_ACTIVE',
+  },
   WORKING_PLAN: {
     NAME: {
       CHANGE: 'WORKING_PLAN_NAME_CHANGE',

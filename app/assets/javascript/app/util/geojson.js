@@ -27,21 +27,29 @@ export function generateUniqueOffsets(kits) {
 
   // Identify the overlaps between layers using the same node
   const overlaps = Object.values(nodesToLayer).filter((arr) => arr.length > 1);
-  const overlapsWith = overlaps.reduce((map, overlap) =>
-    Object.assign(map, overlap.reduce((map, layerId, index) => {
+  const overlapsWith = overlaps.reduce((overlapsWith, overlap) =>
+    Object.assign(overlapsWith, overlap.reduce((layerMap, layerId, index) => {
+      // A layer can only trigger an overlap with layers of different plans
       const others = overlap.slice(0, index)
-          .concat(overlap.slice(index + 1, overlap.length));
-      return Object.assign(map, {
-        [layerId]: (map[layerId]
-            ? new Set([...map[layerId], ...others])
-            : new Set(others)),
-      });
+          .concat(overlap.slice(index + 1, overlap.length))
+          .filter((id) => id.split('-')[0] != layerId.split('-')[0]);
+      const more = overlapsWith[layerId] ? new Set([
+        ...overlapsWith[layerId].more,
+        ...others.filter((id) =>
+          overlapsWith[layerId].more.has(id) ||
+          overlapsWith[layerId].once.has(id)),
+      ]) : new Set([]);
+      const once = overlapsWith[layerId] ? new Set([
+        ...overlapsWith[layerId].once,
+        ...others,
+      ].filter((id) => !more.has(id))) : new Set(others);
+      return Object.assign(layerMap, { [layerId]: { once, more } });
     }, {}))
   , {});
 
   // Assign the lowest available unique offset to each layer
   const offsetMap = Object.keys(overlapsWith).reduce((map, layerId) => {
-    const takenOffsets = Array.from(overlapsWith[layerId])
+    const takenOffsets = Array.from(overlapsWith[layerId].more)
         .reduce((taken, id) => map[id] > -1
           ? taken.concat([map[id]])
           : taken, [])

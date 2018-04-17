@@ -97,7 +97,7 @@ class Map extends React.Component {
         this.props.fitBounds.toString() != prevProps.fitBounds.toString())) {
       this.fitBounds(this.props.fitBounds);
     }
-    if (this.props.bounds &&
+    if (this.props.bounds.length &&
         this.props.bounds != prevProps.bounds) {
       this.setMaxBounds(this.props.bounds);
     }

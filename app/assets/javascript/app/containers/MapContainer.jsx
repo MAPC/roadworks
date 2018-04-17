@@ -6,10 +6,11 @@ import Map from '../components/Map';
 import constants from './../constants/constants';
 
 import {
+  generateUniqueOffsets,
   formatCityLayers,
   formatWorkingSegmentLayers,
-  formatPlanSegmentLayer,
-  getSegmentGeometry,
+  formatLineLayer,
+  getSegmentGeometryAndNodes,
   flatten,
 } from '../util/geojson';
 
@@ -42,28 +43,15 @@ function getPlanLayers(plans, roadCache, nodeCache) {
     }, []));
   }, []);
 
-  const nodesToLayer = {};
-  const overlapsWith = {};
-  const offsetMap = {};
+  const offsetMap = generateUniqueOffsets(layerKits);
 
-  layerKits.forEach((kit) => {
-    kit.nodes.forEach((nodeId) => {
-      nodesToLayer[nodeId] = nodesToLayer[nodeId]
-          ? nodesToLayer[nodeId].concat([kit.layerId])
-          : [kit.layerId];
-    });
-  });
-
-  // Object.keys(nodesToLayer).filter((arr) => arr.length > 1).forEach((overlap) => {
-  //   overlap.forEach((layerId) => {
-  //     overlapsWith[layerId] = overlapsWith[layerId]
-  //         ?
-  //   })
-  //   overlapsWith
-  // });
-
-  console.log(layerKits);
-  return [];
+  return layerKits.map((kit) => formatLineLayer(
+    kit.layerId,
+    0,
+    kit.color,
+    (offsetMap[kit.layerId] || 0),
+    kit.geometry
+  ));
 }
 
 const mapStateToProps = (state, props) => {
@@ -108,7 +96,7 @@ const mapStateToProps = (state, props) => {
     layers: segmentLayers.concat(cityLayers),
     fitBounds,
     centroid: city ? city.centroid.coordinates : constants.MAP.DEFAULT_CENTROID,
-    bounds: city ? flatten(city.bounds.coordinates, 1) : null,
+    bounds: city ? flatten(city.bounds.coordinates, 1) : [],
   };
 };
 

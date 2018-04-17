@@ -15,6 +15,46 @@ export function createGeometryFromNodes(path, nodeCache) {
   };
 };
 
+export function generateUniqueOffsets(kits) {
+  // Identify all of the layers attached to each node being used
+  const nodesToLayer = kits.reduce((nodesToLayer, kit) =>
+    Object.assign(nodesToLayer, kit.nodes.reduce((kitMap, nodeId) =>
+      Object.assign(kitMap, {
+        [nodeId]: (nodesToLayer[nodeId] ? nodesToLayer[nodeId].concat([kit.layerId]) : [kit.layerId]),
+      })
+    , {}))
+  , {});
+
+  // Identify the overlaps between layers using the same node
+  const overlaps = Object.values(nodesToLayer).filter((arr) => arr.length > 1);
+  const overlapsWith = overlaps.reduce((map, overlap) =>
+    Object.assign(map, overlap.reduce((map, layerId, index) => {
+      const others = overlap.slice(0, index)
+          .concat(overlap.slice(index + 1, overlap.length));
+      return Object.assign(map, {
+        [layerId]: (map[layerId]
+            ? new Set([...map[layerId], ...others])
+            : new Set(others)),
+      });
+    }, {}))
+  , {});
+
+  // Assign the lowest available unique offset to each layer
+  const offsetMap = Object.keys(overlapsWith).reduce((map, layerId) => {
+    const takenOffsets = Array.from(overlapsWith[layerId])
+        .reduce((taken, id) => map[id] > -1
+          ? taken.concat([map[id]])
+          : taken, [])
+        .sort();
+    const lowestAvailable = takenOffsets.reduce((lowest, offset) =>
+        (offset == lowest ? lowest + 1 : lowest), 0);
+    return Object.assign(map, {
+      [layerId]: lowestAvailable,
+    });
+  }, {});
+  return offsetMap;
+}
+
 // Format a line layer for display in Mapbox
 export function formatLineLayer(id, version, color, offset, geometry, isDashed) {
   const dashedProps = isDashed ? {

@@ -41,7 +41,7 @@ export function fetchPlanViewData(cityName) {
 export function fetchPlanCreateData(cityName) {
   return async (dispatch, getState) => {
     const cityResponse = await api.getCity(cityName);
-    const city = await cityRepsonse.json();
+    const city = await cityResponse.json();
     const roadsResponse = await api.getAllRoads(cityName);
     const roads = await roadsResponse.json();
     return dispatch(fetchLoadAll(city, [], roads, []));

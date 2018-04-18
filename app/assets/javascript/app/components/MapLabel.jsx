@@ -5,9 +5,26 @@ import Hourglass from './Hourglass';
 class MapLabel extends React.Component {
 
   render() {
-    const icon = this.props.type === 'plan'
-                ? <Hourglass type="empty" color={this.props.items[0].color} />
-                : <img src="/assets/shovel.svg" />;
+    const icon = (() => {
+      if (this.props.type === 'plan') {
+        let hourglassType = 'empty';
+        const dataYear = parseInt(this.props.items[0].top);
+        const currentYear = parseInt((new Date()).getFullYear()); 
+        const diff = Math.abs(dataYear - currentYear);
+
+        if (diff >= 3) {
+          hourglassType = 'full';
+        }
+        else if (diff >= 1) {
+          hourglassType = 'half';
+        }
+
+        return (<Hourglass type={hourglassType} color={this.props.items[0].color} />);
+      }
+      else {
+        return (<img src="/assets/shovel.svg" />);
+      }
+    })();
 
     const items = this.props.items.map(item => {
       return (

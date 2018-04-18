@@ -110,7 +110,7 @@ class Map extends React.Component {
   render() {
     const planItems = [
       {
-        top: 2019,
+        top: 2021,
         bottom: 'October',
         color: '#A48EB2',
       },

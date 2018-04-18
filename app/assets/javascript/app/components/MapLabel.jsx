@@ -24,7 +24,7 @@ class MapLabel extends React.Component {
 
     return (
       <div className="component MapLabel">
-        <div className="icon-wrapper">{icon}</div>
+        <div className={`icon-wrapper ${this.props.type}`}>{icon}</div>
 
         <ul className="label-items">
           {items}

@@ -20,6 +20,10 @@
     height: $min_height + 16;
     width: 28px;
 
+    &.plan {
+      top: -4px; 
+    }
+
     img {
       max-height: 100%; 
       width: auto;

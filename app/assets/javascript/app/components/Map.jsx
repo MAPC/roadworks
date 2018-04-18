@@ -133,7 +133,7 @@ class Map extends React.Component {
       <section className="component Map">
         <div className="map-layer" ref={el => this.mapContainer = el} />
 
-        <MapLabel type="permit" items={permitItems} />
+        <MapLabel type="plan" items={planItems} />
       </section>
     );
   }

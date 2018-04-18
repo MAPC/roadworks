@@ -24,7 +24,7 @@ class Hourglass extends React.Component {
         five: {
           fill: 'none',
           stroke: '#818184',
-          strokeWidth: '3px',
+          strokeWidth: '1px',
         },
         six: {
           clipPath: "url(#clip-path-2)",

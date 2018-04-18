@@ -3,5 +3,11 @@ export default {
   MAP: {
     MAX_BOUNDS: [[-74.5, 41], [-69, 43]],
     DEFAULT_CENTROID: [-71.0589, 42.3601],
+    LABELS: {
+      HOURGLASS_YEARS: {
+        FULL: 3,
+        HALF: 1,
+      },
+    },
   },
 };

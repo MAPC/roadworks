@@ -3,6 +3,7 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 
 import constants from './../constants/constants';
+import MapLabel from './MapLabel';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -90,7 +91,6 @@ class Map extends React.Component {
         this.map.addLayer(layerMap[key]);
       }
     });
-
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -108,9 +108,32 @@ class Map extends React.Component {
   }
 
   render() {
+    const planItems = [
+      {
+        top: 2021,
+        bottom: 'October',
+        color: '#A48EB2',
+      },
+    ];
+
+    const permitItems = [
+      {
+        top: 'National Grid' ,
+        bottom: 'Oct. 30 - Nov. 14',
+        color: '#F26262',
+      },
+      {
+        top: 'Eversource' ,
+        bottom: 'Jan. 3 - Jan. 13',
+        color: '#45CEEF',
+      },
+    ];
+
     return (
       <section className="component Map">
         <div className="map-layer" ref={el => this.mapContainer = el} />
+
+        <MapLabel type="plan" items={planItems} />
       </section>
     );
   }

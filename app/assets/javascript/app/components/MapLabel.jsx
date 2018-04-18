@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Hourglass from './Hourglass';
+import constants from '../constants/constants';
 
 class MapLabel extends React.Component {
 
@@ -12,10 +13,10 @@ class MapLabel extends React.Component {
         const currentYear = parseInt((new Date()).getFullYear()); 
         const diff = Math.abs(dataYear - currentYear);
 
-        if (diff >= 3) {
+        if (diff >= constants.MAP.LABELS.HOURGLASS_YEARS.FULL) {
           hourglassType = 'full';
         }
-        else if (diff >= 1) {
+        else if (diff >= constants.MAP.LABELS.HOURGLASS_YEARS.HALF) {
           hourglassType = 'half';
         }
 

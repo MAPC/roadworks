@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  namespace :api do
-    devise_for :users
+  devise_for :users, controllers: { sessions: 'sessions' }, path_prefix: 'api'
 
+  namespace :api do
     resources :cities, only: [:show]
     resources :roads, only: [:index, :show]
     resources :nodes, only: [:index]

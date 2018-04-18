@@ -71,8 +71,8 @@ export default {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       }),
-      method: 'POST',
       credentials: 'same-origin',
+      method: 'POST',
       body: JSON.stringify({
         user: { email, password },
         [csrf.param]: csrf.token,

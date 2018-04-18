@@ -1,0 +1,9 @@
+.component.MapLabel {
+  @extend ._vertical-center;
+  position: fixed;
+
+  padding: 0;
+  margin: 0 auto;
+
+  border: 2px solid $color_bg-dark;
+}

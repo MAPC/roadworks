@@ -23,7 +23,7 @@ class Hourglass extends React.Component {
         },
         five: {
           fill: 'none',
-          stroke: '#4e4e4e',
+          stroke: '#818184',
           strokeWidth: '3px',
         },
         six: {
@@ -113,7 +113,7 @@ class Hourglass extends React.Component {
       }
     })();
 
-    return (<span className="component Hourglass">{icon}</span>);
+    return (<span className={`component Hourglass ${this.props.type}`}>{icon}</span>);
   }
 
 }

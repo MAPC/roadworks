@@ -1,9 +1,49 @@
 .component.MapLabel {
-  @extend ._vertical-center;
-  position: fixed;
+  $min_height: 45px;
+  $border: 2px solid $color_bg-dark;
 
+  @extend ._vertical-center;
+  position: absolute;
+
+  width: fit-content;
   padding: 0;
   margin: 0 auto;
 
-  border: 2px solid $color_bg-dark;
+  border: $border;
+
+  .icon-wrapper {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    z-index: 1;
+
+    height: $min_height + 16;
+    width: 28px;
+
+    img {
+      max-height: 100%; 
+      width: auto;
+    }
+  } 
+
+  ul.label-items {
+    margin: 0;
+
+    li {
+      font-size: 12px;
+      text-align: center;
+
+      background: $color_bg-light;
+
+      & + li { border-top: $border; } 
+      & > div { 
+        padding: 1px 12px; 
+        padding-left: 25px;
+      }
+    } 
+
+    .label-item-bottom {
+      color: $color_font-light; 
+    }
+  }
 }

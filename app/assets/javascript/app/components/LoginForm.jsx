@@ -8,7 +8,6 @@ import TextField from './fields/TextField';
 class LoginForm extends AbstractForm {
 
   validate(props) {
-    console.log(props);
     if (props.email === null || props.email === '')  {
       this.markInvalid('email');
     }

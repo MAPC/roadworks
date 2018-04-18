@@ -48,6 +48,6 @@
     "webpack-dev-server": "^2.11.1"
   },
   "scripts": {
-    "start": "concurrently \"rails s\" \"./bin/webpack-dev-server\""
+    "start": "concurrently --kill-others \"rails s\" \"./bin/webpack-dev-server\""
   }
 }

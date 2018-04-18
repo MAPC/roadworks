@@ -1,5 +1,10 @@
 import constants from './../constants/constants';
 
+const getCSRF = () => ({
+  param: document.querySelector('meta[name="csrf-param"]').content,
+  token: document.querySelector('meta[name="csrf-token"]').content,
+});
+
 export default {
   getNodes: (nodeIds) => {
     const asString = nodeIds.length
@@ -59,14 +64,18 @@ export default {
     });
   },
   login: async (email, password) => {
+    const csrf = getCSRF();
+
     return fetch('/api/users/sign_in', {
       headers: new Headers({
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       }),
       method: 'POST',
+      credentials: 'same-origin',
       body: JSON.stringify({
         user: { email, password },
+        [csrf.param]: csrf.token,
       }),
     });
   },

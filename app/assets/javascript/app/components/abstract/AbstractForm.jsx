@@ -8,9 +8,9 @@ class AbstractForm extends React.Component {
     super(props);
 
     this.state = {
-      errorMessage: null, 
+      errorMessage: null,
     };
-    
+
     this.submit = this.submit.bind(this);
     this.validate = this.validate.bind(this);
     this.formDidValidate = this.formDidValidate.bind(this);
@@ -33,7 +33,7 @@ class AbstractForm extends React.Component {
     this.valid = true;
 
     try {
-      this.validate(this.props); 
+      this.validate(this.props);
     }
     catch(e) {
       this.valid = false;
@@ -49,14 +49,13 @@ class AbstractForm extends React.Component {
       this.triggerValidate();
     }
     else {
-      this.hasSetError = false; 
+      this.hasSetError = false;
     }
   }
 
   submit() {
     this.hasSubmitted = true;
     this.triggerValidate(this.props);
-
     if (this.valid) {
       this.formDidValidate();
     }

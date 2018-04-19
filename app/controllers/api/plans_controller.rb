@@ -95,7 +95,7 @@ module Api
 
     # GET /api/plan?city=AYER
     def index
-      plans = Plan.where(city: params[:city].upcase, published: true)
+      plans = Plan.where(city: params[:city].upcase.gsub(/-/, " "), published: true)
       if plans
         respond_to do |format|
           format.json { render json: plans }

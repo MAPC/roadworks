@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl';
 
 import constants from './../constants/constants';
@@ -14,6 +15,7 @@ class Map extends React.Component {
     super(props);
     this.state = {
       loaded: false,
+      markerMap: {},
     };
     this.fitBounds = this.fitBounds.bind(this);
     this.setMaxBounds = this.setMaxBounds.bind(this);
@@ -31,12 +33,12 @@ class Map extends React.Component {
       minZoom: 8,
       maxZoom: 16,
     });
+
     this.map.addControl(this.control, 'top-right');
     this.map.on('load', () => {
       this.map.resize();
-      this.props.layers.map((layer) => {
-        this.map.addLayer(layer);
-      });
+      this.redrawLayers(this.props.layers, []);
+      this.redrawMarkers(this.props.markers, []);
       if (this.props.fitBounds) {
         this.fitBounds(this.props.fitBounds);
       }
@@ -68,41 +70,77 @@ class Map extends React.Component {
   }
 
   redrawLayers(layers, prevLayers) {
-    const layerMap = {};
-    const prevLayerMap = {};
-    layers.forEach((layer) => {
-      layerMap[layer.id] = layer;
-      prevLayerMap[layer.id] = prevLayerMap[layer.id] || null;
+    const prevLayerMap = prevLayers.reduce((map, l) =>
+        Object.assign(map, { [l.id]: l }), {});
+    const layerMap = layers.reduce((map, l) =>
+        Object.assign(map, { [l.id]: l }), {});
+
+    const layersToBeAdded = Object.keys(layerMap).filter((id) =>
+        (!prevLayerMap[id] || layerMap[id].version != prevLayerMap[id].version));
+    const layersToBeRemoved = Object.keys(prevLayerMap).filter((id) =>
+        (!layerMap[id] || layerMap[id].version != prevLayerMap[id].version));
+
+    layersToBeRemoved.forEach((id) => {
+      this.map.removeLayer(id);
+      this.map.removeSource(id);
     });
-    prevLayers.forEach((layer) => {
-      layerMap[layer.id] = layerMap[layer.id] || null;
-      prevLayerMap[layer.id] = layer;
-    });
-    Object.keys(layerMap).forEach((key) => {
-      const layersChanged = prevLayerMap[key] && layerMap[key] &&
-          layerMap[key].version !== prevLayerMap[key].version;
-      if ((prevLayerMap[key] && !layerMap[key]) || layersChanged) {
-        this.map.removeLayer(key);
-        this.map.removeSource(key);
-      }
-      if ((!prevLayerMap[key] && layerMap[key]) || layersChanged) {
-        this.map.addLayer(layerMap[key]);
-      }
+
+    layersToBeAdded.forEach((id) => {
+      this.map.addLayer(layerMap[id]);
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if ((this.props.fitBounds && !prevProps.fitBounds) ||
-        (this.props.fitBounds &&
-        this.props.fitBounds.toString() != prevProps.fitBounds.toString())) {
-      this.fitBounds(this.props.fitBounds);
+  redrawMarkers(markers, prevMarkers) {
+    console.log(markers, prevMarkers)
+    const prevMarkerIds = prevMarkers.map((m) => m.id);
+    const markerIds = markers.map((m) => m.id);
+    const markersToBeAdded = markers.filter((m) =>
+        (!prevMarkerIds.includes(m.id) ||
+        !Object.keys(this.state.markerMap).includes(m.id.toString())));
+    const markersToBeRemoved = prevMarkers.filter((m) =>
+        !markerIds.includes(m.id));
+    console.log(markersToBeAdded, markersToBeRemoved)
+    const markerMapRemove = markersToBeRemoved.reduce((map, markerDetails) => {
+      const marker = this.state.markerMap[markerDetails.id];
+      const element = marker.getElement();
+      ReactDOM.unmountComponentAtNode(element);
+      element.remove();
+      marker.remove();
+      return Object.assign(map, { [markerDetails.id]: null });
+    }, {});
+
+    const markerMapAdd = markersToBeAdded.reduce((map, markerDetails) => {
+      const div = document.createElement('div');
+      const marker = new mapboxgl.Marker(div).setLngLat(markerDetails.coordinates);
+      ReactDOM.render(
+        <span className="diamond" style={{ borderColor: markerDetails.color }}></span>,
+        div,
+        () => marker.addTo(this.map)
+      );
+      return Object.assign(map, { [markerDetails.id]: marker });
+    }, {});
+
+    if (markersToBeAdded.length || markersToBeRemoved.length) {
+      this.setState({
+        markerMap: Object.assign(this.state.markerMap, markerMapAdd, markerMapRemove),
+      });
     }
-    if (this.props.bounds.length &&
-        this.props.bounds != prevProps.bounds) {
-      this.setMaxBounds(this.props.bounds);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
+    if ((nextProps.fitBounds && !this.props.fitBounds) ||
+        (nextProps.fitBounds &&
+        nextProps.fitBounds.toString() != this.props.fitBounds.toString())) {
+      this.fitBounds(nextProps.fitBounds);
+    }
+    if (nextProps.bounds.length &&
+        nextProps.bounds != this.props.bounds) {
+      this.setMaxBounds(nextProps.bounds);
     }
     if (this.state.loaded) {
-      this.redrawLayers(this.props.layers, prevProps.layers);
+      this.redrawLayers(nextProps.layers, this.props.layers);
+      this.redrawMarkers(nextProps.markers, this.props.markers);
     }
   }
 

@@ -8,7 +8,10 @@ import {
   fetchPlanCreateData,
 } from '../actions/fetchActions';
 
-const mapStateToProps = state => ({});
+const mapStateToProps = (state) => ({
+  workingPlan: state.workingPlan,
+});
+
 const mapDispatchToProps = (dispatch, props) => ({
   createPlan: () => dispatch(createPlan(props.match.params.city)),
   fetchData: () => dispatch(fetchPlanCreateData(props.match.params.city)),

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import AbstractForm from './abstract/AbstractForm';
 import PlanFormContainer from '../containers/PlanFormContainer';
@@ -63,26 +64,38 @@ class PlanCreate extends AbstractForm {
   }
 
   render() {
-    const errorMessage = (this.state.errorMessage !== null) 
-                          ? <div className="error-message">{this.state.errorMessage}</div>
-                          : null;
+    const errorMessage = (this.state.errorMessage !== null)
+        ? <div className="error-message">{this.state.errorMessage}</div>
+        : null;
 
     return (
       <section className="component PlanCreate" data-form={this.formId}>
-        <h3>Add Plan to Map</h3>
-
-        <PlanFormContainer />
-
-        {errorMessage}
-
-        <button
-          className="styled primary"
-          data-action="add-to-map"
-          onClick={this.submit}
+        <Link
+          to={`/${this.props.match.params.city}`}
+          className="button styled"
+          data-action="toggle-plan-form"
         >
-          <span className="plus">+</span>
-          Add to Map
-        </button>
+          <div>
+            <span className="x">+</span> Cancel
+          </div>
+        </Link>
+
+        <div className="form-block">
+          <h3>Add Plan to Map</h3>
+
+          <PlanFormContainer />
+
+          {errorMessage}
+
+          <button
+            className="styled primary"
+            data-action="add-to-map"
+            onClick={this.submit}
+          >
+            <span className="plus">+</span>
+            Add to Map
+          </button>
+        </div>
       </section>
     );
   }

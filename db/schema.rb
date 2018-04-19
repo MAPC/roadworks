@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180417144717) do
+ActiveRecord::Schema.define(version: 20180418191001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,9 +54,6 @@ ActiveRecord::Schema.define(version: 20180417144717) do
   end
 
   create_table "permits", force: :cascade do |t|
-    t.integer "kind"
-    t.string "applicant_first_name"
-    t.string "applicant_last_name"
     t.date "start_date"
     t.date "end_date"
     t.string "address"
@@ -64,6 +61,10 @@ ActiveRecord::Schema.define(version: 20180417144717) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "application_id"
+    t.string "applicant_name"
+    t.string "permit_type"
+    t.string "city_name"
+    t.geometry "geometry", limit: {:srid=>4326, :type=>"st_point"}
   end
 
   create_table "plans", force: :cascade do |t|

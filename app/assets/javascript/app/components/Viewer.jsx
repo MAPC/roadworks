@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route } from 'react-router'
+import { Route } from 'react-router';
 
 import MapContainer from '../containers/MapContainer';
 import CardListContainer from '../containers/CardListContainer';
@@ -33,9 +33,7 @@ class Viewer extends React.Component {
           <Route path="/:city/:resource?/:action?" component={MapContainer} />
 
           <div className="left-panel">
-            <SearchBarContainer />
-
-            <Route path="/:city" component={CardListContainer} />
+            <Route exact path="/:city" component={CardListContainer} />
             <Route path="/:city/plan/create" component={PlanCreateContainer} />
           </div>
         </div>

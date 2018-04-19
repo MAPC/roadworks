@@ -4,6 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import Map from '../components/Map';
 
 import constants from './../constants/constants';
+import enums from './../constants/enums';
 
 import {
   generateUniqueOffsets,
@@ -80,22 +81,45 @@ const mapStateToProps = (state, props) => {
       const timeframes = state.workingPlan.timeframes;
       return getWorkingSegmentLayers(timeframes, roadCache, nodeCache);
     } else if (Object.keys(roadCache).length && Object.keys(nodeCache).length) {
-      const plans = Object.values(state.plan.cache).reduce((plans, plan) => {
-        return (plan.city == cityName && state.view.active[plan.id])
-            ? plans.concat([plan])
-            : plans;
-      }, []);
+      const plans = state.view.hideAllPlans ? [] :
+          Object.values(state.plan.cache).reduce((plans, plan) => {
+            return (plan.city == cityName && !state.view.hiddenPlans[plan.id])
+                ? plans.concat([plan])
+                : plans;
+          }, []);
       return getPlanLayers(plans, roadCache, nodeCache);
     }
     return [];
   })(state, city, resource, action);
+
+  const markers = ((state, city, resource, action) => {
+    if (resource != 'plan' && action != 'create' && !state.view.hideAllPermits) {
+      return Object.values(state.permit.cache).reduce((permits, permit) => {
+        if (permit.city_name == cityName &&
+            !state.view.hiddenPermitTypes[permit.permit_type] &&
+            permit.geojson) {
+          return permits.concat([{
+            id: permit.id,
+            color: enums.PERMIT_TYPE_COLORS[permit.permit_type],
+            coordinates: permit.geojson.coordinates,
+          }]);
+        }
+        return permits;
+      }, []);
+    }
+    return [];
+  })(state, city, resource, action)
+
   const cityLayers = city ? formatCityLayers(city.geojson, city.mask) : [];
+
   const fitBounds = activeCoordinates ? activeCoordinates.reduce(
     (bounds, coord) => bounds.extend(coord),
     new mapboxgl.LngLatBounds(activeCoordinates[0], activeCoordinates[0])
   ) : null;
+
   return {
     layers: segmentLayers.concat(cityLayers),
+    markers,
     fitBounds,
     centroid: city ? city.centroid.coordinates : constants.MAP.DEFAULT_CENTROID,
     bounds: city ? flatten(city.bounds.coordinates, 1) : [],

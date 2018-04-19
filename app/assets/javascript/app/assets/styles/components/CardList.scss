@@ -29,16 +29,4 @@
     & > .Card + .Card { margin-top: $global_pad; }
   }
 
-  span.x {
-    display: inline-block;
-    top: 1px;
-
-    color: $color_font-light;
-    line-height: 14px;
-    font-size: 20px;
-    font-weight: 600;
-
-    transform: rotate(45deg);
-  }
-
 }

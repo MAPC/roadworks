@@ -6,3 +6,26 @@ export function toggleActive(id) {
     id,
   };
 }
+
+export function toggleAllPlans() {
+  return {
+    type: types.VIEW.TOGGLE_ALL_PLANS,
+  };
+}
+export function togglePlan(id) {
+  return {
+    type: types.VIEW.TOGGLE_PLAN,
+    id,
+  };
+}
+export function toggleAllPermitTypes() {
+  return {
+    type: types.VIEW.TOGGLE_ALL_PERMIT_TYPES,
+  };
+}
+export function togglePermitType(permitType) {
+  return {
+    type: types.VIEW.TOGGLE_PERMIT_TYPE,
+    permitType,
+  };
+}

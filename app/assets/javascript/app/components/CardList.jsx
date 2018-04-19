@@ -14,48 +14,38 @@ class CardList extends React.Component {
   }
 
   render() {
-    const cards = this.props.cards.map((card, index) => (
-      <Card
-        key={index}
-        title={card.title}
-        items={card.items}
-        type={card.type}
-        itemOnClick={this.props.toggleActive}
-      />
-    ));
-
     return (
       <section className="component CardList">
-        <Route path="/:city/plan/create" children={({ match }) => (
-          <div className={`plan-cards ${match ? 'inactive' : ''}`}>
-            {cards}
+        <div className={'plan-cards'}>
+          <Card
+            title={'Plans and Moratoriums'}
+            items={this.props.plans}
+            type={'plan'}
+            collapsed={this.props.hideAllPlans}
+            onClick={this.props.toggleAllPlans}
+            itemOnClick={this.props.togglePlan}
+          />
+          <Card
+            title={'Permits by Type'}
+            items={this.props.permitTypes}
+            type={'permit'}
+            collapsed={this.props.hideAllPermitTypes}
+            onClick={this.props.toggleAllPermitTypes}
+            itemOnClick={this.props.togglePermitType}
+          />
+        </div>
+        <Link
+          to={`/${this.props.match.params.city}/plan/create`}
+          className="button styled"
+          data-action="toggle-plan-form"
+        >
+          <div>
+            <img src="/assets/add-to-list.svg" />
+            Add Plan to Map
           </div>
-        )}/>
-        <Switch>
-          <Route path="/:city/plan/create" render={(props) => (
-            <Link
-              to={`/${props.match.params.city}`}
-              className="button styled"
-              data-action="toggle-plan-form"
-            >
-              <div>
-                <span className="x">+</span> Cancel
-              </div>
-            </Link>
-          )}/>
-          <Route exact path="/:city" render={(props) => (
-            <Link
-              to={`/${props.match.params.city}/plan/create`}
-              className="button styled"
-              data-action="toggle-plan-form"
-            >
-              <div>
-                <img src="/assets/add-to-list.svg" />
-                Add Plan to Map
-              </div>
-            </Link>
-          )}/>
-        </Switch>
+        </Link>
+
+
       </section>
     );
   }

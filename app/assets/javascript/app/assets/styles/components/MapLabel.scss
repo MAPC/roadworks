@@ -24,6 +24,9 @@
 
     &.plan {
       top: -4px;
+      svg {
+        height: $min_height + 8;
+      }
     }
 
     img {

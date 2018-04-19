@@ -5,6 +5,19 @@ export function flatten(arr, depth) {
   }, []);
 };
 
+export function getFirstPoint(geometry) {
+  const coordinates = ((geometry) => {
+    if (geometry.type == 'MultiLineString') {
+      return geometry.coordinates[0][0];
+    }
+    return geometry.coordinates[0];
+  })(geometry);
+  return {
+    type: 'Point',
+    coordinates,
+  };
+};
+
 // Use the GeoJSON in the nodes geometries to assemble a LineString
 export function createGeometryFromNodes(path, nodeCache) {
   const coordinates = path

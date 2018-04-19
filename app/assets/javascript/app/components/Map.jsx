@@ -114,34 +114,32 @@ class Map extends React.Component {
         !Object.keys(this.state.markerMap).includes(m.id.toString())));
     const markersToBeRemoved = prevMarkers.filter((m) =>
         !markerIds.includes(m.id));
-    const markerMapRemove = markersToBeRemoved.reduce((map, markerDetails) => {
-      const marker = this.state.markerMap[markerDetails.id];
-      const element = marker.getElement();
+    const markerMapRemove = markersToBeRemoved.reduce((map, marker) => {
+      const mbMarker = this.state.markerMap[marker.id];
+      const element = mbMarker.getElement();
       ReactDOM.unmountComponentAtNode(element);
       element.remove();
-      marker.remove();
-      return Object.assign(map, { [markerDetails.id]: null });
+      mbMarker.remove();
+      return Object.assign(map, { [marker.id]: null });
     }, {});
 
-    const markerMapAdd = markersToBeAdded.reduce((map, markerDetails) => {
+    const markerMapAdd = markersToBeAdded.reduce((map, marker) => {
       const div = document.createElement('div');
-      const marker = new mapboxgl.Marker(div).setLngLat(markerDetails.coordinates);
-      marker.setOffset([0, -22])
-      const permitItems = [
-        {
-          top: 'National Grid' ,
-          bottom: 'Oct. 30 - Nov. 14',
-          color: markerDetails.color,
-        },
-      ];
+      const mbMarker = new mapboxgl.Marker(div)
+          .setLngLat(marker.geometry.coordinates);
+      mbMarker.setOffset([0, -22])
       ReactDOM.render(
         <Provider store={store}>
-          <MapLabelContainer type="permit" items={permitItems} />
+          <MapLabelContainer type={marker.type} items={[{
+            top: marker.label.top,
+            bottom: marker.label.bottom,
+            color: marker.color,
+          }]} />
         </Provider>,
         div,
-        () => marker.addTo(this.map)
+        () => mbMarker.addTo(this.map)
       );
-      return Object.assign(map, { [markerDetails.id]: marker });
+      return Object.assign(map, { [marker.id]: mbMarker });
     }, {});
 
     if (markersToBeAdded.length || markersToBeRemoved.length) {
@@ -168,27 +166,6 @@ class Map extends React.Component {
   }
 
   render() {
-    const planItems = [
-      {
-        top: 2021,
-        bottom: 'October',
-        color: '#A48EB2',
-      },
-    ];
-
-    const permitItems = [
-      {
-        top: 'National Grid' ,
-        bottom: 'Oct. 30 - Nov. 14',
-        color: '#F26262',
-      },
-      {
-        top: 'Eversource' ,
-        bottom: 'Jan. 3 - Jan. 13',
-        color: '#45CEEF',
-      },
-    ];
-
     return (
       <section className="component Map">
         <div className="map-layer" ref={el => this.mapContainer = el} />
@@ -208,14 +185,23 @@ Map.propTypes = {
       type: PropTypes.string,
       coordinates: PropTypes.array,
     }).isRequired,
+    label: PropTypes.shape({
+      top: PropTypes.string,
+      bottom: PropTypes.string,
+    }),
   })),
   markers: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    color: PropTypes.string,
+    id: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
     geometry: PropTypes.shape({
       type: PropTypes.string,
       coordinates: PropTypes.array,
-    }),
+    }).isRequired,
+    label: PropTypes.shape({
+      top: PropTypes.string,
+      bottom: PropTypes.string,
+    }).isRequired,
   })),
   fitBounds: PropTypes.object,
 };

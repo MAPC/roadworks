@@ -148,6 +148,15 @@ const generateCrossStreetOptions = (road, nodeMap, roadMap) => {
 export function updateSegmentRoad(timeframeIndex, segmentIndex, roadId) {
   return async (dispatch, getState) => {
     const state = getState();
+    if (!roadId) {
+      return dispatch({
+        type: types.WORKING_PLAN.TIMEFRAME.SEGMENT.ROAD.CHANGE,
+        timeframeIndex,
+        segmentIndex,
+        road: null,
+        crossStreetOptions: [],
+      });
+    }
     const availableNodes = Object.keys(state.node.cache);
     const road = state.road.cache[roadId];
     const neededNodes = road.nodes.filter(id => !availableNodes.includes(id));

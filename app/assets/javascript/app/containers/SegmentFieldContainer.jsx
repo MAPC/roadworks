@@ -31,7 +31,7 @@ const mapDispatchToProps = (dispatch, props) => {
   // parse
   return {
     onRoadChange: (opt) => dispatch(updateSegmentRoad(
-        props.timeframeIndex, props.index, opt.value)),
+        props.timeframeIndex, props.index, opt ? opt.value : null)),
     onOrigTypeChange: (value) => dispatch(updateSegmentEndPointType(
         props.timeframeIndex, props.index, value, true)),
     onOrigChange: (value) => dispatch(updateSegmentEndPoint(

@@ -8,10 +8,8 @@ import enums from './../constants/enums';
 
 import {
   generateUniqueOffsets,
-  formatCityLayers,
-  formatWorkingSegmentLayers,
-  formatLineLayer,
   getSegmentGeometryAndNodes,
+  createGeometryFromNodes,
   flatten,
 } from '../util/geojson';
 
@@ -22,8 +20,54 @@ function getWorkingSegmentLayers(timeframes, roadCache, nodeCache) {
       // Fetch the base road for the current segment
       const road = roadCache[segment.road_id];
       const layerId = `${tfIndex}-${stIndex}`;
-      return layers.concat(
-          formatWorkingSegmentLayers(layerId, segment, road, nodeCache));
+      if (segment.nodes.length) {
+        // If the segment is not the whole road, plot the calculated path between
+        // the orig and dest nodes
+        const mergedNodeCache = Object.assign({}, nodeCache, segment.custom_nodes);
+        const geometry = createGeometryFromNodes(segment.nodes, mergedNodeCache);
+        const firstPoint = geometry.coordinates[0];
+        const lastPoint = geometry.coordinates[geometry.coordinates.length - 1];
+        return layers.concat([{
+          id: layerId,
+          type: 'line',
+          options: { offset: 0, before: 'city-outline' },
+          version: segment.version,
+          color: '#aaa',
+          geometry: road.geojson,
+        }, {
+          id: `${layerId}-s_line`,
+          type: 'line',
+          options: { offset: 0 },
+          version: segment.version,
+          color: '#f00',
+          geometry: geometry,
+        }, {
+          id: `${layerId}-s_start`,
+          type: 'circle',
+          options: { offset: 0 },
+          version: segment.version,
+          color: '#f00',
+          geometry: { type: 'Point', coordinates: firstPoint },
+        }, {
+          id: `${layerId}-s_end`,
+          type: 'circle',
+          options: { offset: 0 },
+          version: segment.version,
+          color: '#f00',
+          geometry: { type: 'Point', coordinates: lastPoint },
+        }]);
+      } else if (road && road.nodes.length) {
+        // Plot the whole road, if no partial path has been calculated
+        return layers.concat([{
+          id: layerId,
+          type: 'line',
+          options: { offset: 0 },
+          version: segment.version,
+          color: '#f00',
+          geometry: road.geojson,
+        }]);
+      }
+      return layers;
     }, []))
   , []);
 }
@@ -45,14 +89,14 @@ function getPlanLayers(plans, roadCache, nodeCache) {
   }, []);
 
   const offsetMap = generateUniqueOffsets(layerKits);
-
-  return layerKits.map((kit) => formatLineLayer(
-    kit.layerId,
-    0,
-    kit.color,
-    (offsetMap[kit.layerId] || 0),
-    kit.geometry
-  ));
+  return layerKits.map((kit) => ({
+    id: kit.layerId,
+    type: 'line',
+    version: 1,
+    color: kit.color,
+    options: { offset: (offsetMap[kit.layerId] || 0) },
+    geometry: kit.geometry,
+  }));
 }
 
 const mapStateToProps = (state, props) => {
@@ -99,7 +143,7 @@ const mapStateToProps = (state, props) => {
             !state.view.hiddenPermitTypes[permit.permit_type] &&
             permit.geojson) {
           return permits.concat([{
-            id: permit.id,
+            id: permit.id.toString(),
             color: enums.PERMIT_TYPE_COLORS[permit.permit_type],
             coordinates: permit.geojson.coordinates,
           }]);
@@ -110,7 +154,19 @@ const mapStateToProps = (state, props) => {
     return [];
   })(state, city, resource, action)
 
-  const cityLayers = city ? formatCityLayers(city.geojson, city.mask) : [];
+  const cityLayers = city ? [{
+    id: 'city-outline',
+    type: 'line',
+    version: 1,
+    color: '#f5a87c',
+    geometry: city.geojson,
+  }, {
+    id: 'city-mask',
+    type: 'fill',
+    version: 1,
+    color: '#000',
+    geometry: city.mask,
+  }] : [];
 
   const fitBounds = activeCoordinates ? activeCoordinates.reduce(
     (bounds, coord) => bounds.extend(coord),
@@ -118,7 +174,7 @@ const mapStateToProps = (state, props) => {
   ) : null;
 
   return {
-    layers: segmentLayers.concat(cityLayers),
+    layers: cityLayers.concat(segmentLayers),
     markers,
     fitBounds,
     centroid: city ? city.centroid.coordinates : constants.MAP.DEFAULT_CENTROID,

@@ -2,9 +2,15 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl';
+import { Provider } from 'react-redux';
+import { store } from './../store/appStore';
 
 import constants from './../constants/constants';
-import MapLabel from './MapLabel';
+import MapLabelContainer from './../containers/MapLabelContainer';
+
+import {
+  formatLayer,
+} from '../util/geojson';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -86,12 +92,21 @@ class Map extends React.Component {
     });
 
     layersToBeAdded.forEach((id) => {
-      this.map.addLayer(layerMap[id]);
+      const mapboxLayer = formatLayer(
+        id,
+        layerMap[id].type,
+        layerMap[id].color,
+        layerMap[id].geometry,
+        layerMap[id].options,
+      );
+      if (layerMap[id].options && layerMap[id].options.before) {
+        return this.map.addLayer(mapboxLayer, layerMap[id].options.before);
+      }
+      return this.map.addLayer(mapboxLayer);
     });
   }
 
   redrawMarkers(markers, prevMarkers) {
-    console.log(markers, prevMarkers)
     const prevMarkerIds = prevMarkers.map((m) => m.id);
     const markerIds = markers.map((m) => m.id);
     const markersToBeAdded = markers.filter((m) =>
@@ -99,7 +114,6 @@ class Map extends React.Component {
         !Object.keys(this.state.markerMap).includes(m.id.toString())));
     const markersToBeRemoved = prevMarkers.filter((m) =>
         !markerIds.includes(m.id));
-    console.log(markersToBeAdded, markersToBeRemoved)
     const markerMapRemove = markersToBeRemoved.reduce((map, markerDetails) => {
       const marker = this.state.markerMap[markerDetails.id];
       const element = marker.getElement();
@@ -112,8 +126,18 @@ class Map extends React.Component {
     const markerMapAdd = markersToBeAdded.reduce((map, markerDetails) => {
       const div = document.createElement('div');
       const marker = new mapboxgl.Marker(div).setLngLat(markerDetails.coordinates);
+      marker.setOffset([0, -22])
+      const permitItems = [
+        {
+          top: 'National Grid' ,
+          bottom: 'Oct. 30 - Nov. 14',
+          color: markerDetails.color,
+        },
+      ];
       ReactDOM.render(
-        <span className="diamond" style={{ borderColor: markerDetails.color }}></span>,
+        <Provider store={store}>
+          <MapLabelContainer type="permit" items={permitItems} />
+        </Provider>,
         div,
         () => marker.addTo(this.map)
       );
@@ -128,7 +152,6 @@ class Map extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps)
     if ((nextProps.fitBounds && !this.props.fitBounds) ||
         (nextProps.fitBounds &&
         nextProps.fitBounds.toString() != this.props.fitBounds.toString())) {
@@ -169,8 +192,6 @@ class Map extends React.Component {
     return (
       <section className="component Map">
         <div className="map-layer" ref={el => this.mapContainer = el} />
-
-        <MapLabel type="plan" items={planItems} />
       </section>
     );
   }
@@ -178,29 +199,23 @@ class Map extends React.Component {
 
 Map.propTypes = {
   layers: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    type: PropTypes.string,
-    source: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    version: PropTypes.number.isRequired,
+    color: PropTypes.string.isRequired,
+    options: PropTypes.object,
+    geometry: PropTypes.shape({
       type: PropTypes.string,
-      data: PropTypes.shape({
-        type: PropTypes.string,
-        features: PropTypes.arrayOf(PropTypes.shape({
-          type: PropTypes.string,
-          properties: PropTypes.shape({
-            name: PropTypes.string,
-            start: PropTypes.string,
-            end: PropTypes.string,
-            year: PropTypes.number,
-          }),
-          geometry: PropTypes.shape({
-            type: PropTypes.string,
-            coordinates: PropTypes.array,
-          }),
-        })),
-      }),
+      coordinates: PropTypes.array,
+    }).isRequired,
+  })),
+  markers: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    color: PropTypes.string,
+    geometry: PropTypes.shape({
+      type: PropTypes.string,
+      coordinates: PropTypes.array,
     }),
-    layout: PropTypes.object,
-    paint: PropTypes.object,
   })),
   fitBounds: PropTypes.object,
 };

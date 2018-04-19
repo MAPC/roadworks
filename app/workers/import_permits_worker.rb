@@ -38,7 +38,6 @@ class ImportPermitsWorker
     end
 
     submissions = JSON.parse(response.body)
-    puts submissions
     submissions['columns'].each do |column|
       col_details = column[1]
       submissions['items'].each do |permit|

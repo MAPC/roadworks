@@ -25,6 +25,13 @@ class LoginForm extends AbstractForm {
     login(email, password);
   }
 
+  componentDidMount() {
+    if (this.props.user.email !== null) {
+      this.props.redirect(this.props.redirectTo);
+    }
+  }
+  
+
   render() {
     return (
       <section className="component LoginForm" data-form={this.formId}>

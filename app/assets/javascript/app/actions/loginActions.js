@@ -17,12 +17,25 @@ export function onPasswordChange(password) {
 }
 
 export function loginUser(email, password) {
-  return async (dispatch, getState) => {
-    const response = await api.login(email, password);
-    console.log(response);
+  return async (dispatch) => {
+    const user = await api.login(email, password);
 
-    dispatch({ 
-      type: types.LOGIN.FORM.RESET
-    });
+    if (user) {
+      dispatch({
+        type: types.USER.UPDATE,
+        user,
+      });
+    }
+  };
+}
+
+export function logoutUser() {
+  return async (dispatch) => {
+    const res = await api.logout();
+
+    // Reload if we have logged out to obtain fresh CSRF tokens.
+    if (res.ok) {
+      window.location.reload();
+    }
   };
 }

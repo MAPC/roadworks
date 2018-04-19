@@ -77,6 +77,6 @@ export default {
         user: { email, password },
         [csrf.param]: csrf.token,
       }),
-    });
+    }).then(res => res.statusText === "Created" ? res.json() : null);
   },
 };

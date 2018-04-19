@@ -6,6 +6,16 @@
 
     <%= stylesheet_link_tag 'https://use.typekit.net/nrw2ooo.css' %>
 
+    <% if current_user %>
+      <script>
+        window.currentUser = {
+          user_id: <%= current_user.id %>,
+          email: "<%= current_user.email %>",
+          role: "<%= current_user.role %>",
+        };
+      </script>
+    <% end %>
+
     <%= stylesheet_pack_tag 'application' %>
     <%= javascript_pack_tag 'application' %>
   </head>

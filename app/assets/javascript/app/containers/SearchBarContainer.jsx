@@ -1,8 +1,6 @@
 import { connect } from 'react-redux';
 import SearchBar from '../components/SearchBar';
 
-import { fetchResults } from '../actions/searchBarActions';
-
 const mapStateToProps = state => ({
   results: [
     {

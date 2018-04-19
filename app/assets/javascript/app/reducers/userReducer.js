@@ -1,9 +1,10 @@
 import types from '../actions/types';
 
-function userReducer(state = {
-  email: null,
-  authenticated: false,
-}, action) {
+const initialState = window.currentUser 
+                     ? window.currentUser 
+                     : { user_id: null, email: null, role: 'utility' };
+
+function userReducer(state = initialState, action) {
   switch (action.type) {
     case types.USER.UPDATE:
       console.log(action);

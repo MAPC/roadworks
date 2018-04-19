@@ -5,7 +5,7 @@ import {
   updateNodes,
 } from './nodeActions';
 import {
-  updatePlan,
+  updatePlans,
 } from './planActions';
 
 /* Plan level actions ------------------------------------------------------- */
@@ -156,7 +156,7 @@ export function updateSegmentRoad(timeframeIndex, segmentIndex, roadId) {
     if (neededNodes.length) {
       const response = await api.getNodes(neededNodes);
       const result = await response.json();
-      dispatch(updateNodes(result.data));
+      dispatch(updateNodes(result));
     }
     const nodeCache = getState().node.cache;
     const roadCache = getState().road.cache;
@@ -341,7 +341,7 @@ export function createPlan(city) {
     const response = await api.createPlan(workingPlan, true, city.toUpperCase());
     if (response.status == 200) {
       const result = await response.json();
-      dispatch(updatePlan(result));
+      dispatch(updatePlans([result]));
     }
   };
 }

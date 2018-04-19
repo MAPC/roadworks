@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180417151256) do
+ActiveRecord::Schema.define(version: 20180417144717) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,27 @@ ActiveRecord::Schema.define(version: 20180417151256) do
     t.geometry "geometry", limit: {:srid=>4326, :type=>"multi_polygon"}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "municipal_boundaries", primary_key: "gid", id: :serial, force: :cascade do |t|
+    t.decimal "objectid", precision: 10
+    t.string "town", limit: 21
+    t.decimal "town_id", precision: 10
+    t.decimal "pop1980", precision: 10
+    t.decimal "pop1990", precision: 10
+    t.decimal "pop2000", precision: 10
+    t.decimal "popch80_90", precision: 10
+    t.decimal "popch90_00", precision: 10
+    t.string "municipality_type", limit: 2
+    t.decimal "fourcolor", precision: 10
+    t.decimal "fips_stco", precision: 10
+    t.decimal "sum_acres"
+    t.decimal "sum_square"
+    t.decimal "pop2010", precision: 10
+    t.decimal "popch00_10", precision: 10
+    t.decimal "st_area_sh"
+    t.decimal "st_length_"
+    t.geometry "geom", limit: {:srid=>4326, :type=>"multi_polygon"}
   end
 
   create_table "nodes", force: :cascade do |t|
@@ -52,9 +73,10 @@ ActiveRecord::Schema.define(version: 20180417151256) do
     t.string "city"
     t.boolean "published", default: false, null: false
     t.string "plan_type", null: false
+    t.string "color", default: "#F44336", null: false
   end
 
-  create_table "raw_segments", primary_key: "gid", id: :serial, force: :cascade do |t|
+  create_table "raw_segments", primary_key: "gid", id: :integer, default: nil, force: :cascade do |t|
     t.integer "classifica", limit: 2
     t.integer "admin_type", limit: 2
     t.string "street_nam", limit: 80

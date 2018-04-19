@@ -1,4 +1,8 @@
 export default {
+  FETCH: {
+    SET_PENDING: 'FETCH_SET_PENDING',
+    LOAD_ALL: 'FETCH_LOAD_ALL',
+  },
   CITY: {
     UPDATE: 'CITY_UPDATE',
   },
@@ -9,7 +13,10 @@ export default {
     BATCH_UPDATE: 'ROAD_BATCH_UPDATE',
   },
   PLAN: {
-    UPDATE: 'PLAN_UPDATE',
+    BATCH_UPDATE: 'PLAN_BATCH_UPDATE',
+  },
+  VIEW: {
+    TOGGLE_ACTIVE: 'VIEW_TOGGLE_ACTIVE',
   },
   WORKING_PLAN: {
     NAME: {

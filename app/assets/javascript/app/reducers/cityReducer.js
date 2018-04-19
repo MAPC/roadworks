@@ -4,6 +4,7 @@ function cityReducer(state = {
   cache: {},
 }, action) {
   switch (action.type) {
+    case types.FETCH.LOAD_ALL:
     case types.CITY.UPDATE:
       const cachePartial = {};
       cachePartial[action.city.name] = Object.assign({}, action.city, {

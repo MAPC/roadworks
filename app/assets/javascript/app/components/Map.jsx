@@ -28,6 +28,8 @@ class Map extends React.Component {
       center: this.props.centroid,
       maxBounds: constants.MAP.MAX_BOUNDS,
       zoom: 12,
+      minZoom: 8,
+      maxZoom: 16,
     });
     this.map.addControl(this.control, 'top-right');
     this.map.on('load', () => {
@@ -35,8 +37,8 @@ class Map extends React.Component {
       this.props.layers.map((layer) => {
         this.map.addLayer(layer);
       });
-      if (this.props.activeCoordinates) {
-        this.fitBounds(this.props.activeCoordinates);
+      if (this.props.fitBounds) {
+        this.fitBounds(this.props.fitBounds);
       }
       this.setState({ loaded: true });
     })
@@ -46,12 +48,8 @@ class Map extends React.Component {
     this.map.remove();
   }
 
-  fitBounds(coordinates) {
-    const newBounds = coordinates.reduce(
-      (bounds, coord) => bounds.extend(coord),
-      new mapboxgl.LngLatBounds(coordinates[0], coordinates[0])
-    );
-    this.map.fitBounds(newBounds, {
+  fitBounds(mapboxBounds) {
+    this.map.fitBounds(mapboxBounds, {
       padding: {
         top: 64,
         left: 600,
@@ -94,11 +92,12 @@ class Map extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.activeCoordinates &&
-        this.props.activeCoordinates != prevProps.activeCoordinates) {
-      this.fitBounds(this.props.activeCoordinates);
+    if ((this.props.fitBounds && !prevProps.fitBounds) ||
+        (this.props.fitBounds &&
+        this.props.fitBounds.toString() != prevProps.fitBounds.toString())) {
+      this.fitBounds(this.props.fitBounds);
     }
-    if (this.props.bounds &&
+    if (this.props.bounds.length &&
         this.props.bounds != prevProps.bounds) {
       this.setMaxBounds(this.props.bounds);
     }
@@ -165,7 +164,7 @@ Map.propTypes = {
     layout: PropTypes.object,
     paint: PropTypes.object,
   })),
-  activeCoordinates: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
+  fitBounds: PropTypes.object,
 };
 
 export default Map;

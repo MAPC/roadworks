@@ -16,7 +16,7 @@ export function onPasswordChange(password) {
   };
 }
 
-export function loginUser(email, password) {
+export function login(email, password) {
   return async (dispatch) => {
     const user = await api.login(email, password);
 
@@ -29,7 +29,7 @@ export function loginUser(email, password) {
   };
 }
 
-export function logoutUser() {
+export function logout() {
   return async (dispatch) => {
     const res = await api.logout();
 

@@ -79,4 +79,10 @@ export default {
       }),
     }).then(res => res.statusText === "Created" ? res.json() : null);
   },
+  logout: async () => {
+    return fetch('/api/users/sign_out', {
+      credentials: 'same-origin',
+      method: 'POST',
+    });
+  },
 };

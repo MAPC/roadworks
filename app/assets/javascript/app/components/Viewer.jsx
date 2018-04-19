@@ -36,7 +36,11 @@ class Viewer extends React.Component {
 
           <nav>
             <a href="">FAQ</a>
-            <Link to={showLoginLink}>Municipal Login</Link>
+
+            {this.props.user.email !== null
+              ? <button onClick={this.props.logout}>Logout {this.props.user.email}</button>
+              : <Link to={showLoginLink}>Municipal Login</Link>
+            }
           </nav>
         </header>
         <div className="page-wrapper">

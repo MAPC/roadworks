@@ -23,7 +23,6 @@ export default {
         CHANGE: 'LOGIN_FORM_PASSWORD_CHANGE',
       },
     },
-    USER: 'LOGIN_USER',
   },
   WORKING_PLAN: {
     NAME: {

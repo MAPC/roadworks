@@ -32,7 +32,13 @@ export function fetchPlanViewData(cityName) {
     const permitsResponse = await api.getPermits(cityName);
     const permits = await permitsResponse.json();
     if (!roadIds.length) {
-      return dispatch(fetchLoadAll(city, plans, [], [], permits));
+      return dispatch(fetchLoadAll(
+        city,
+        plans,
+        (noRoads = []),
+        (noNodes = []),
+        permits
+      ));
     }
     const roadsResponse = await api.getRoadsById(roadIds);
     const roads = await roadsResponse.json();
@@ -50,6 +56,12 @@ export function fetchPlanCreateData(cityName) {
     const city = await cityResponse.json();
     const roadsResponse = await api.getAllRoads(cityName);
     const roads = await roadsResponse.json();
-    return dispatch(fetchLoadAll(city, [], roads, [], []));
+    return dispatch(fetchLoadAll(
+      city,
+      (noPlans = []),
+      roads,
+      (noNodes = []),
+      (noPermits = [])
+    ));
   };
 }

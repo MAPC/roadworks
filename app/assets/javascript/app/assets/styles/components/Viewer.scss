@@ -46,13 +46,19 @@
 
       padding-top: ($elem_header-height - $font_size) / 6;
 
-      a {   
+      a, button {   
         display: inline-block;
 
         color: $color_font-light; 
         font-size: $font_size;
 
-        & + a { margin-left: $font_size * 2; }
+        & + a, & + button { margin-left: $font_size * 2; }
+      }
+
+      button {
+        background: none; 
+        border: none;
+        text-decoration: underline;
       }
     }
   }

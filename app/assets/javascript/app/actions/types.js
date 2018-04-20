@@ -23,6 +23,19 @@ export default {
     TOGGLE_DETAILS: 'VIEW_TOGGLE_DETAILS',
     SET_DETAILS: 'VIEW_SET_DETAILS',
   },
+  USER: {
+    UPDATE: 'USER_UPDATE',
+  },
+  LOGIN: {
+    FORM: {
+      EMAIL: {
+        CHANGE: 'LOGIN_FORM_EMAIL_CHANGE',
+      },
+      PASSWORD: {
+        CHANGE: 'LOGIN_FORM_PASSWORD_CHANGE',
+      },
+    },
+  },
   WORKING_PLAN: {
     NAME: {
       CHANGE: 'WORKING_PLAN_NAME_CHANGE',

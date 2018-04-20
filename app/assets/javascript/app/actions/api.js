@@ -1,5 +1,10 @@
 import constants from './../constants/constants';
 
+const getCSRF = () => ({
+  param: document.querySelector('meta[name="csrf-param"]').content,
+  token: document.querySelector('meta[name="csrf-token"]').content,
+});
+
 function get(url) {
   return fetch(url, {
     headers: new Headers({
@@ -65,5 +70,27 @@ export default {
       published,
       city,
     }));
-  }
+  },
+  login: async (email, password) => {
+    const csrf = getCSRF();
+
+    return fetch('/api/users/sign_in', {
+      headers: new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }),
+      credentials: 'same-origin',
+      method: 'POST',
+      body: JSON.stringify({
+        user: { email, password },
+        [csrf.param]: csrf.token,
+      }),
+    }).then(res => res.statusText === "Created" ? res.json() : null);
+  },
+  logout: async () => {
+    return fetch('/api/users/sign_out', {
+      credentials: 'same-origin',
+      method: 'DELETE'
+    });
+  },
 };

@@ -5,7 +5,7 @@ class TextField extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.value,
+      value: props.value || '',
       timer: null,
     };
     this.onChange = this.onChange.bind(this);
@@ -28,6 +28,7 @@ class TextField extends React.Component {
       <input
         name={this.props.name}
         className="component TextField"
+        type={this.props.type ? this.props.type : 'text'}
         value={this.props.debounce ? this.state.value : this.props.value}
         onChange={this.onChange}
         placeholder={this.props.placeholder}

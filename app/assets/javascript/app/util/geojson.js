@@ -49,8 +49,8 @@ export function generateUniqueOffsets(kits) {
       const others = overlap.slice(0, index)
           .concat(overlap.slice(index + 1, overlap.length))
           .filter((id) => {
-            decodedOtherId = segmentId.decode(id);
-            decodedLayerId = segmentId.decode(layerId);
+            const decodedOtherId = decodeId(id);
+            const decodedLayerId = decodeId(layerId);
             return decodedOtherId.plan != decodedLayerId.plan;
           });
       const more = overlapsWith[layerId] ? new Set([

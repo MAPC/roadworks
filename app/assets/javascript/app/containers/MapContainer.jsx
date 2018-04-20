@@ -189,7 +189,7 @@ const mapStateToProps = (state, props) => {
   })(state, city, resource, action);
 
   const permitMarkers = ((state, city, resource, action) => {
-    if (resource != 'plan' && action != 'create' && !state.view.hideAllPermits) {
+    if (resource != 'plan' && action != 'create' && !state.view.hideAllPermitTypes) {
       return Object.values(state.permit.cache).reduce((permits, permit) => {
         if (permit.city_name == cityName &&
             !state.view.hiddenPermitTypes[permit.permit_type] &&

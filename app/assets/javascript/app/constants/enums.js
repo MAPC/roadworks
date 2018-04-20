@@ -7,4 +7,11 @@ export default {
     STREET_OPENING: '#45CEEF',
     TRENCH: '#F26262',
   },
+  CARD_ROW: {
+    TYPES: {
+      PERMIT_TYPE: 'PERMIT_TYPE',
+      PLAN: 'PLAN',
+      DETAIL: 'DETAIL',
+    },
+  },
 };

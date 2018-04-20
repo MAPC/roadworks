@@ -1,5 +1,10 @@
 import types from './types';
-import { decodeId } from '../util/id';
+import {
+  decodeId
+} from '../util/id';
+import {
+  getCrossStreetName
+} from '../util/segment';
 
 export function toggleActive(id) {
   return {
@@ -42,12 +47,26 @@ export function toggleDetails() {
 
 export function setPermitDetails(id) {
   return (dispatch, getState) => {
-    console.log(id);
+    const state = getState();
+    const permit = state.permit.cache[id];
+
+    const rows = Object.keys(permit.application_data).reduce((rows, label) => {
+      const value = permit.application_data[label];
+      if (value) {
+        const adjusted = value.split('<br>').filter((line) => line).join(', ');
+        return rows.concat([{
+          label,
+          value: adjusted,
+        }]);
+      }
+      return rows;
+    }, []);
+
     return dispatch({
       type: types.VIEW.SET_DETAILS,
       title: '',
       subtitle: '',
-      rows: [],
+      rows,
     });
   };
 }
@@ -55,25 +74,26 @@ export function setPermitDetails(id) {
 export function setSegmentDetails(id) {
   return (dispatch, getState) => {
     const ids = decodeId(id);
-    const plan = getState().plan.cache[ids.planId];
+    const state = getState();
+    const plan = state.plan.cache[ids.planId];
     const timeframe = plan.timeframes[ids.timeframeIndex];
     const segment = timeframe.segments[ids.segmentIndex];
-    const road = getState().road.cache[segment.road_id];
+    const roadCache = state.road.cache;
+    const nodeCache = state.node.cache;
+    const road = roadCache[segment.road_id];
 
-    const getCrossStreetName = () => 'TBD';
-
-    const location = ((segment, road) => {
+    const location = ((segment, road, roadCache, nodeCache) => {
       if (segment.is_segment) {
         const orig = segment.is_orig_type_address
             ? `#${segment.custom_nodes[segment.orig].address}`
-            : getCrossStreetName(segment.orig);
+            : getCrossStreetName(nodeCache[segment.orig], road.id, roadCache);
         const dest = segment.is_dest_type_address
             ? `#${segment.custom_nodes[segment.dest].address}`
-            : getCrossStreetName(segment.dest);
+            : getCrossStreetName(nodeCache[segment.dest], road.id, roadCache);
         return `${road.name} from ${orig} to ${dest}`;
       }
       return road.name;
-    })(segment, road);
+    })(segment, road, roadCache, nodeCache);
 
     const rows = [{
       label: 'Plan',
@@ -91,11 +111,12 @@ export function setSegmentDetails(id) {
       label: 'Location',
       value: location,
     }];
+
     return dispatch({
       type: types.VIEW.SET_DETAILS,
-      title: plan.name,
+      title: road.name,
       subtitle: plan.plan_type,
-      rows: [],
+      rows,
     });
   };
 }

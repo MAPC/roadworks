@@ -4,7 +4,6 @@ import { Route } from 'react-router';
 
 import MapContainer from '../containers/MapContainer';
 import CardListContainer from '../containers/CardListContainer';
-import SearchBarContainer from '../containers/SearchBarContainer';
 import PlanCreateContainer from '../containers/PlanCreateContainer';
 
 import capitalize from '../util/capitalize';

@@ -14,14 +14,16 @@ class ImportPermitsWorker
       Permit.find_or_create_by(application_id: permit['application_id']) do |new_permit|
         new_permit.permit_type = permit_type
         new_permit.city_name = city_name
-        new_permit.applicant_name = permit['application_data']['Applicant Name']
-        new_permit.end_date = permit['application_data']['Estimated Completion Date']
-        if permit['application_data']['Location of Construction']
-          new_permit.address = permit['application_data']['Location of Construction'].gsub(/<br>/, ",") # Should be Location of Work
-        elsif permit['application_data']['Location of Work']
-          new_permit.address = permit['application_data']['Location of Work'].gsub(/<br>/, ",") # Should be Location of Work
+        new_permit.applicant_name = permit['mapped_application_data']['Applicant Name']
+        new_permit.end_date = permit['mapped_application_data']['Estimated Completion Date']
+        if permit['mapped_application_data']['Location of Construction']
+          new_permit.address = permit['mapped_application_data']['Location of Construction'].gsub(/<br>/, ",") # Should be Location of Work
+        elsif permit['mapped_application_data']['Location of Work']
+          new_permit.address = permit['mapped_application_data']['Location of Work'].gsub(/<br>/, ",") # Should be Location of Work
         end
         new_permit.payload = permit
+        new_permit.columns = permits['columns']
+        new_permit.application_data = permit['mapped_application_data']
       end
     end
   end
@@ -38,11 +40,12 @@ class ImportPermitsWorker
     end
 
     submissions = JSON.parse(response.body)
-    submissions['columns'].each do |column|
-      col_details = column[1]
-      submissions['items'].each do |permit|
-        permit['application_data'][col_details['printable_name']] =
-            permit['application_data'][col_details['printable_name']] ||
+    submissions['items'].each do |permit|
+      permit['mapped_application_data'] = Hash.new
+      submissions['columns'].each do |column|
+        col_details = column[1]
+        permit['mapped_application_data'][col_details['printable_name']] =
+            permit['mapped_application_data'][col_details['printable_name']] ||
             permit['application_data'][col_details['column_id']]
       end
     end

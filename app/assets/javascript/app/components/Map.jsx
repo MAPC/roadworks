@@ -130,11 +130,15 @@ class Map extends React.Component {
       mbMarker.setOffset([0, -22])
       ReactDOM.render(
         <Provider store={store}>
-          <MapLabelContainer type={marker.type} items={[{
-            top: marker.label.top,
-            bottom: marker.label.bottom,
-            color: marker.color,
-          }]} />
+          <MapLabelContainer
+            id={marker.id}
+            type={marker.type}
+            items={[{
+              top: marker.label.top,
+              bottom: marker.label.bottom,
+              color: marker.color,
+            }]}
+          />
         </Provider>,
         div,
         () => mbMarker.addTo(this.map)

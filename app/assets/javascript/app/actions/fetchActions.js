@@ -31,19 +31,12 @@ export function fetchPlanViewData(cityName) {
           sRoadIds.concat([segment.road_id]), [])), [])), []);
     const permitsResponse = await api.getPermits(cityName);
     const permits = await permitsResponse.json();
-    if (!roadIds.length) {
-      return dispatch(fetchLoadAll(
-        city,
-        plans,
-        (noRoads = []),
-        (noNodes = []),
-        permits
-      ));
-    }
-    const roadsResponse = await api.getRoadsById(roadIds);
+    const roadsResponse = await api.getAllRoads(cityName);
     const roads = await roadsResponse.json();
-    const nodeIds = roads.reduce((nodeIds, road) =>
-      nodeIds.concat(road.nodes), []);
+    const roadMap = roads.reduce((map, road) =>
+        Object.assign(map, { [road.id]: road }), {});
+    const nodeIds = roadIds.reduce((nodeIds, roadId) =>
+      nodeIds.concat(roadMap[roadId].nodes), []);
     const nodesResponse = await api.getNodes(nodeIds);
     const nodes = await nodesResponse.json();
     return dispatch(fetchLoadAll(city, plans, roads, nodes, permits));

@@ -5,6 +5,12 @@ function roadReducer(state = {
   hiddenPlans: {},
   hideAllPermitTypes: false,
   hiddenPermitTypes: {},
+  hideDetails: false,
+  details: {
+    title: '',
+    subtitle: '',
+    rows: [],
+  },
 }, action) {
   switch (action.type) {
     case types.VIEW.TOGGLE_ALL_PLANS:
@@ -26,6 +32,18 @@ function roadReducer(state = {
         hiddenPermitTypes: Object.assign({}, state.hiddenPermitTypes, {
           [action.permitType]: !state.hiddenPermitTypes[action.permitType],
         }),
+      });
+    case types.VIEW.TOGGLE_DETAILS:
+      return Object.assign({}, state, {
+        hideDetails: !state.hideDetails,
+      });
+    case types.VIEW.SET_DETAILS:
+      return Object.assign({}, state, {
+        details: {
+          title: action.title,
+          subtitle: action.subtitle,
+          rows: action.rows,
+        },
       });
     default:
       return state

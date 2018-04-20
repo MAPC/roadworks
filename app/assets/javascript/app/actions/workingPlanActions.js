@@ -5,7 +5,7 @@ import {
   updateNodes,
 } from './nodeActions';
 import {
-  updatePlan,
+  updatePlans,
 } from './planActions';
 
 /* Plan level actions ------------------------------------------------------- */
@@ -148,6 +148,15 @@ const generateCrossStreetOptions = (road, nodeMap, roadMap) => {
 export function updateSegmentRoad(timeframeIndex, segmentIndex, roadId) {
   return async (dispatch, getState) => {
     const state = getState();
+    if (!roadId) {
+      return dispatch({
+        type: types.WORKING_PLAN.TIMEFRAME.SEGMENT.ROAD.CHANGE,
+        timeframeIndex,
+        segmentIndex,
+        road: null,
+        crossStreetOptions: [],
+      });
+    }
     const availableNodes = Object.keys(state.node.cache);
     const road = state.road.cache[roadId];
     const neededNodes = road.nodes.filter(id => !availableNodes.includes(id));
@@ -156,7 +165,7 @@ export function updateSegmentRoad(timeframeIndex, segmentIndex, roadId) {
     if (neededNodes.length) {
       const response = await api.getNodes(neededNodes);
       const result = await response.json();
-      dispatch(updateNodes(result.data));
+      dispatch(updateNodes(result));
     }
     const nodeCache = getState().node.cache;
     const roadCache = getState().road.cache;
@@ -341,7 +350,7 @@ export function createPlan(city) {
     const response = await api.createPlan(workingPlan, true, city.toUpperCase());
     if (response.status == 200) {
       const result = await response.json();
-      dispatch(updatePlan(result));
+      dispatch(updatePlans([result]));
     }
   };
 }

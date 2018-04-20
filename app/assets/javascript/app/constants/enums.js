@@ -3,4 +3,8 @@ export default {
     NODE: 'NODE',
     ADDRESS: 'ADDRESS',
   },
+  PERMIT_TYPE_COLORS: {
+    STREET_OPENING: '#45CEEF',
+    TRENCH: '#F26262',
+  },
 };

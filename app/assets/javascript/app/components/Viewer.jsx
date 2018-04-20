@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Route, Link } from 'react-router-dom';
 
 import MapContainer from '../containers/MapContainer';
-import CardsContainer from '../containers/CardsContainer';
+import CardListContainer from '../containers/CardListContainer';
 import SearchBarContainer from '../containers/SearchBarContainer';
 import LoginFormContainer from '../containers/LoginFormContainer';
 import PlanCreateContainer from '../containers/PlanCreateContainer';
@@ -12,11 +12,6 @@ import capitalize from '../util/capitalize';
 
 
 class Viewer extends React.Component {
-
-  componentDidMount() {
-    this.props.fetchCity();
-    this.props.fetchRoads();
-  }
 
   render() {
     const showLoginLink = `${this.props.location.pathname}#login`;
@@ -44,12 +39,10 @@ class Viewer extends React.Component {
           </nav>
         </header>
         <div className="page-wrapper">
-          <Route path="/:city" component={MapContainer} />
+          <Route path="/:city/:resource?/:action?" component={MapContainer} />
 
           <div className="left-panel">
-            <SearchBarContainer />
-
-            <Route path="/:city" component={CardsContainer} />
+            <Route exact path="/:city" component={CardListContainer} />
             <Route path="/:city/plan/create" component={PlanCreateContainer} />
           </div>
 

@@ -1,70 +1,86 @@
 .component.PlanCreate {
-  @extend .abstract.Form;
-  $bar_width: ($global_pad / 2) + 2;
+  .form-block {
+    @extend .abstract.Form;
+    $bar_width: ($global_pad / 2) + 2;
 
-  z-index: 0;
+    z-index: 0;
 
-  width: ($elem_Card-width * 2) + $global_pad;
-  margin: $global_pad 0;
-
-  box-shadow: $global_shadow;
-
-  &:before {
-    @include bars($color_brand-secondary, $bar_width);
-
-    top: -$global_pad * 2;
-    left: ($elem_Card-width - $bar_width)/ 2;
-  }
-
-  &:after {
-    @include bars($color_brand-primary, $bar_width);
-
-    bottom: -$global_pad * 2;
-    right: ($elem_Card-width / 4) - $bar_width;
-  }
-
-  h3 {
-    margin: 0;
-    padding: ($global_pad / 2.5) $global_pad;
-
-    color: $color_font-light;
-    font-weight: 400;
-    font-size: 16px;
-
-    background: $color_brand-primary;
-    border-bottom: 5px solid $color_brand-secondary;
-  }
-
-  *[data-action="add-to-map"] {
-    float: right; 
-    z-index: 4;
-
-    width: $elem_Card-width / 2;
-    margin-top: $global_pad;
+    width: ($elem_Card-width * 2) + $global_pad;
+    margin: $global_pad 0;
 
     box-shadow: $global_shadow;
 
-    .plus {
-      display: inline-block;
+    &:before {
+      @include bars($color_brand-secondary, $bar_width);
 
-      margin-right: 8px;
+      top: -$global_pad * 2;
+      left: ($elem_Card-width - $bar_width)/ 2;
+    }
 
-      font-size: 22px;
-      line-height: 14px;
+    &:after {
+      @include bars($color_brand-primary, $bar_width);
+
+      bottom: -$global_pad * 2;
+      right: ($elem_Card-width / 4) - $bar_width;
+    }
+
+    h3 {
+      margin: 0;
+      padding: ($global_pad / 2.5) $global_pad;
+
+      color: $color_font-light;
+      font-weight: 400;
+      font-size: 16px;
+
+      background: $color_brand-primary;
+      border-bottom: 5px solid $color_brand-secondary;
+    }
+
+    *[data-action="add-to-map"] {
+      float: right;
+      z-index: 4;
+
+      width: $elem_Card-width / 2;
+      margin-top: $global_pad;
+
+      background: $color_brand-primary;
+      box-shadow: $global_shadow;
+
+      &:hover { background: $color_brand-primary--dark; }
+
+      .plus {
+        display: inline-block;
+
+        margin-right: 8px;
+
+        font-size: 22px;
+        line-height: 14px;
+      }
+    }
+
+    .error-message {
+      @extend ._invalid-field;
+      float: left;
+
+      max-width: 50%;
+      padding: 7px 14px;
+      margin-top: $global_pad;
+
+      font-size: 12px;
+
+      border: 1px solid;
     }
   }
 
-  .error-message {
-    @extend ._invalid-field;
-    float: left;
+  span.x {
+    display: inline-block;
+    top: 1px;
 
-    max-width: 50%;
-    padding: 7px 14px;
-    margin-top: $global_pad;
+    color: $color_font-light;
+    line-height: 14px;
+    font-size: 20px;
+    font-weight: 600;
 
-    font-size: 12px;
-
-    border: 1px solid;
+    transform: rotate(45deg);
   }
-
 }

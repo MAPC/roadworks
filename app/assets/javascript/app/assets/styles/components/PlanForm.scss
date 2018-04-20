@@ -9,24 +9,24 @@
   border-top: 0;
 
   .key-info {
-    display: flex; 
+    display: flex;
 
     .field {
-      &:first-of-type { 
-        flex: 1 0 auto; 
+      &:first-of-type {
+        flex: 1 0 auto;
 
         padding-right: $global_pad;
       }
       &:last-of-type { flex: 1 0 fit-content; }
 
       label {
-        display: block; 
+        display: block;
 
         margin-bottom: 4px;
 
         font-size: 14px;
         font-weight: 600;
-      } 
+      }
 
       input { width: 100%; }
     }
@@ -35,7 +35,7 @@
   button.light { font-size: 12px; }
 
   .timeframes {
-    max-height: 50vh; 
+    max-height: 50vh;
     margin: ($global_pad / 2) auto;
 
     border-bottom: 1px solid $color_bg-medium;

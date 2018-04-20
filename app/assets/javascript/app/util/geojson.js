@@ -1,3 +1,6 @@
+import {
+  decodeId,
+} from './id';
 
 export function flatten(arr, depth) {
   return arr.reduce((acc, arr) => {
@@ -45,7 +48,11 @@ export function generateUniqueOffsets(kits) {
       // A layer can only trigger an overlap with layers of different plans
       const others = overlap.slice(0, index)
           .concat(overlap.slice(index + 1, overlap.length))
-          .filter((id) => id.split('-')[0] != layerId.split('-')[0]);
+          .filter((id) => {
+            const decodedOtherId = decodeId(id);
+            const decodedLayerId = decodeId(layerId);
+            return decodedOtherId.plan != decodedLayerId.plan;
+          });
       const more = overlapsWith[layerId] ? new Set([
         ...overlapsWith[layerId].more,
         ...others.filter((id) =>

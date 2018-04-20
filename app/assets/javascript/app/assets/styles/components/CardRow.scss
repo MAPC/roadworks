@@ -1,0 +1,96 @@
+.component.CardRow {
+  $trans_dur: $elem_CardList-trans--dur;
+  $a_trans: opacity $trans_dur, top $trans_dur, color $trans_dur;
+  $border_trans: border $trans_dur, padding $trans_dur;
+  $border_width: 14px;
+  $diamond_trans: transform $trans_dur, border-color $trans_dur;
+  $pad_h: $global_pad + 2;
+
+  padding: 5px 4px 5px $pad_h;
+
+  font-size: 14px;
+  font-weight: 300;
+
+  background: $color_bg-light;
+  border-left: $border_width solid;
+  cursor: pointer;
+  overflow: hidden;
+  transition: $border_trans;
+
+  span.diamond {
+    left: $global_pad - $elem_diamond-size;
+  }
+
+  &.inactive {
+    padding-left: $pad_h + ($border_width / 2);
+
+    color: $color_font-medium;
+
+    border-left-width: $border_width / 2;
+    border-color: $color_bg-medium !important;
+    transition: $border_trans;
+
+    span.diamond {
+      border-color: $color_bg-medium !important;
+      transform: rotate(0deg) translateY(-50%);
+      transition: $diamond_trans;
+    }
+  }
+
+  &.borderless {
+    border-left: 0;
+    padding-left: $pad_h + $border_width;
+  }
+
+  &.info {
+    border-left: 0;
+    cursor: default;
+  }
+
+  .card-row-label {
+    color: #888;
+  }
+
+  a {
+    @extend ._vertical-center;
+    top: 65%;
+    left: inherit;
+    right: $global_pad;
+    display: inline-block;
+
+    color: $color_brand-primary;
+    font-size: 10px;
+    font-weight: 400;
+
+    background: $color_bg-light;
+    box-shadow: 0 0 12px 7px rgba($color_bg-light, 1);
+    border: 0;
+    opacity: 0;
+    transition: $a_trans;
+
+    &:hover {
+      color: $color_brand-primary--dark;
+      text-decoration: underline;
+
+      transition: $a_trans;
+    }
+  }
+
+  &.hoverable:hover {
+    padding-left: $pad_h + 4;
+
+    border-left-width: $border_width;
+    transition: $border_trans;
+
+    a {
+      top: 50%;
+
+      opacity: 1;
+      transition: $a_trans;
+    }
+
+    &.borderless { padding-left: $pad_h + $border_width + 4; }
+  }
+
+  & + li { border-top: 1px solid $color_bg-medium !important; }
+}

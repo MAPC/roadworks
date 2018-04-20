@@ -19,8 +19,6 @@ class Viewer extends React.Component {
     const townLower = this.props.match.params.city.toLowerCase();
     const townCapitalized = capitalize(this.props.match.params.city);
 
-    console.log(this.props);
-
     return (
       <section className="component Viewer">
         <header>

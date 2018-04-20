@@ -19,19 +19,26 @@ class CardList extends React.Component {
         <div className={'plan-cards'}>
           <Card
             title={'Plans and Moratoriums'}
+            placeholder={'No plans have been submitted for this area yet.'}
             items={this.props.plans}
-            type={'plan'}
             collapsed={this.props.hideAllPlans}
             onClick={this.props.toggleAllPlans}
             itemOnClick={this.props.togglePlan}
           />
           <Card
             title={'Permits by Type'}
+            placeholder={'There are no permit types available for this area.'}
             items={this.props.permitTypes}
-            type={'permit'}
             collapsed={this.props.hideAllPermitTypes}
             onClick={this.props.toggleAllPermitTypes}
             itemOnClick={this.props.togglePermitType}
+          />
+          <Card
+            title={'Details'}
+            placeholder={'Click a label on the map to view its details.'}
+            items={this.props.details}
+            collapsed={this.props.hideDetails}
+            onClick={this.props.toggleDetails}
           />
         </div>
         <Link

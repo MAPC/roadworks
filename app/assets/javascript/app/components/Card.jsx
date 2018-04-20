@@ -1,55 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Tags from './Tags';
+import CardRowPermitType from './CardRowPermitType';
+import CardRowPlan from './CardRowPlan';
+import CardRowDetail from './CardRowDetail';
+
+import enums from '../constants/enums';
 
 class Card extends React.Component {
 
   render() {
     const toggler = <span className="absolute-center">{this.props.collapsed ? '+' : '-'}</span>;
     const listContent = this.props.items.map(item => {
-
-      /*
-      * Attributes
-      */
-      const classes = [
-        (this.props.type === 'permit') ? 'borderless' : null,
-        (!item.active) ? 'inactive' : null,
-      ].join(' ').trim();
-
-      const styles = {
-        borderColor: item.color,
-      };
-
-
-      /*
-      * Children
-      */
-      const diamond = (() => {
-        if (this.props.type === 'permit') {
-          return <span className="diamond" style={styles}></span>;
-        }
-      })();
-
-      const editLink = (() => {
-        if (this.props.type !== 'permit') {
-          return <a href="">Edit</a>;
-        }
-      })();
-
-      return (
-        <li
-          key={item.title}
-          className={classes}
-          style={styles}
-          onClick={() => this.props.itemOnClick(item.id)}
-        >
-          {diamond}
-          {item.title}
-          <Tags items={item.tags} />
-          {editLink}
-        </li>
-      );
+      switch (item.type) {
+        case enums.CARD_ROW.TYPES.PERMIT_TYPE:
+          return (
+            <CardRowPermitType
+              key={item.id}
+              title={item.title}
+              color={item.color}
+              active={item.active}
+              onClick={() => this.props.itemOnClick(item.id)}
+            />
+          );
+        case enums.CARD_ROW.TYPES.PLAN:
+          return (
+            <CardRowPlan
+              key={item.id}
+              title={item.title}
+              color={item.color}
+              active={item.active}
+              onClick={() => this.props.itemOnClick(item.id)}
+            />
+          );
+        case enums.CARD_ROW.TYPES.DETAIL:
+          return (
+            <CardRowDetail
+              key={item.id}
+              label={item.label}
+              value={item.value}
+            />
+          );
+      }
     });
     return (
       <article className={`component Card ${this.props.collapsed ? 'collapsed' : ''}`}>
@@ -60,7 +52,9 @@ class Card extends React.Component {
           </button>
         </div>
         <ul className="card-items">
-          {listContent}
+          {listContent.length ? listContent : (
+            <li className="placeholder">{this.props.placeholder}</li>
+          )}
         </ul>
       </article>
     );

@@ -4,7 +4,6 @@ import { Route, Link } from 'react-router-dom';
 
 import MapContainer from '../containers/MapContainer';
 import CardListContainer from '../containers/CardListContainer';
-import SearchBarContainer from '../containers/SearchBarContainer';
 import LoginFormContainer from '../containers/LoginFormContainer';
 import PlanCreateContainer from '../containers/PlanCreateContainer';
 

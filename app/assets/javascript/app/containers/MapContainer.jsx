@@ -14,6 +14,10 @@ import {
   flatten,
 } from '../util/geojson';
 
+import {
+  encodeId,
+} from '../util/id';
+
 function getWorkingSegmentLayersAndMarkers(timeframes, roadCache, nodeCache) {
   // Calculate all of the properly formatted layers for display on the map
   return timeframes.reduce((pkg, timeframe, tfIndex) => {
@@ -109,9 +113,9 @@ function getWorkingSegmentLayersAndMarkers(timeframes, roadCache, nodeCache) {
 
 function getPlanLayersAndMarkers(plans, roadCache, nodeCache) {
   const layerKits = plans.reduce((plLayers, plan) => {
-    return plLayers.concat(plan.timeframes.reduce((tfLayers, timeframe) => {
-      return tfLayers.concat(timeframe.segments.reduce((stLayers, segment) => {
-        const layerId = `${plan.id}-${timeframe.id}-${segment.id}`;
+    return plLayers.concat(plan.timeframes.reduce((tfLayers, timeframe, timeframeIndex) => {
+      return tfLayers.concat(timeframe.segments.reduce((stLayers, segment, segmentIndex) => {
+        const layerId = encodeId(plan.id, timeframeIndex, segmentIndex);
         const { geometry, nodes } = getSegmentGeometryAndNodes(segment, roadCache, nodeCache);
         return stLayers.concat([{
           layerId,

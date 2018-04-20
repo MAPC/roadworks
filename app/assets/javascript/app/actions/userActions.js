@@ -7,12 +7,3 @@ export function updateUser(user) {
     user,
   };
 }
-
-export function login(email, password) {
-  return aysnc (dispatch, getState) => {
-    const response = await api.login(email, password);
-    const result = await response.json();
-
-    dispatch(updateUser(result.data));
-  };
-}

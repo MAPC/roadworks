@@ -4,6 +4,8 @@ function loginFormReducer(state = {
   email: null,
   password: null,
 }, action) {
+  console.log(state);
+
   switch (action.type) {
     case types.LOGIN.FORM.EMAIL.CHANGE:
       return Object.assign({}, state, { email: action.email });

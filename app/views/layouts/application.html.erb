@@ -6,7 +6,7 @@
 
     <%= stylesheet_link_tag 'https://use.typekit.net/nrw2ooo.css' %>
 
-    <% if current_user %>
+    <% if signed_in? %>
       <script>
         window.currentUser = {
           user_id: <%= current_user.id %>,

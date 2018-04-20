@@ -7,7 +7,7 @@ const initialState = window.currentUser
 function userReducer(state = initialState, action) {
   switch (action.type) {
     case types.USER.UPDATE:
-      console.log(action);
+      return Object.assign({}, state, action.user);
     default:
       return state;
   }

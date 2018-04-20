@@ -8,20 +8,22 @@ import TextField from './fields/TextField';
 class LoginForm extends AbstractForm {
 
   validate(props) {
-    if (props.email === null || props.email === '')  {
+    const { email, password } = this.props.loginForm;
+
+    if (email === null || email === '')  {
       this.markInvalid('email');
     }
 
     if (
-      props.password === null 
-      || props.password.length < 6
+      password === null 
+      || password.length < 6
     ) {
       this.markInvalid('password');
     }
   }
 
   formDidValidate() {
-    const { login, email, password } = this.props;
+    const { login, loginForm: { email , password } } = this.props;
     login(email, password);
   }
 
@@ -46,7 +48,7 @@ class LoginForm extends AbstractForm {
             <div className="field">
               <label htmlFor="email">Email</label>
               <TextField 
-                value={this.props.email} 
+                value={this.props.loginForm.email} 
                 name="email" 
                 placeholder="Enter email ..." 
                 onChange={this.props.onEmailChange} 
@@ -57,7 +59,7 @@ class LoginForm extends AbstractForm {
             <div className="field">
               <label htmlFor="password">Password</label>
               <TextField 
-                value={this.props.password}
+                value={this.props.loginForm.password}
                 type="password" 
                 name="password" 
                 placeholder="Enter password ..." 

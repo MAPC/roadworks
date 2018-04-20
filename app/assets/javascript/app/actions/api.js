@@ -80,14 +80,9 @@ export default {
     }).then(res => res.statusText === "Created" ? res.json() : null);
   },
   logout: async () => {
-    const csrf = getCSRF();
-
     return fetch('/api/users/sign_out', {
       credentials: 'same-origin',
-      method: 'DELETE',
-      body: JSON.stringify({
-        [csrf.param]: csrf.token,
-      }),
+      method: 'DELETE'
     });
   },
 };

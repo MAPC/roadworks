@@ -1,5 +1,7 @@
 import api from './api';
 import types from './types';
+import Cookies from 'js-cookie';
+import { push } from 'react-router-redux';
 
 
 export function onEmailChange(email) {
@@ -17,7 +19,7 @@ export function onPasswordChange(password) {
 }
 
 export function login(email, password) {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     const user = await api.login(email, password);
 
     if (user) {
@@ -25,6 +27,7 @@ export function login(email, password) {
         type: types.USER.UPDATE,
         user,
       });
+      dispatch(push(getState().router.location.pathname));
     }
   };
 }
@@ -35,6 +38,7 @@ export function logout() {
 
     // Reload if we have logged out to obtain fresh CSRF tokens.
     if (res.ok) {
+      Cookies.remove('_my_app_session', { path: '/', domain: window.location.hostname });
       window.location.reload();
     }
   };

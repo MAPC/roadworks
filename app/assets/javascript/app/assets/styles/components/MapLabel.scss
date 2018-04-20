@@ -8,6 +8,8 @@
   width: fit-content;
   padding: 0;
   margin: 0 auto;
+  white-space: nowrap;
+  cursor: pointer;
 
   border: $border;
 
@@ -21,14 +23,17 @@
     width: 28px;
 
     &.plan {
-      top: -4px; 
+      top: -4px;
+      svg {
+        height: $min_height + 8;
+      }
     }
 
     img {
-      max-height: 100%; 
+      max-height: 100%;
       width: auto;
     }
-  } 
+  }
 
   ul.label-items {
     margin: 0;
@@ -39,15 +44,15 @@
 
       background: $color_bg-light;
 
-      & + li { border-top: $border; } 
-      & > div { 
-        padding: 1px 12px; 
+      & + li { border-top: $border; }
+      & > div {
+        padding: 1px 12px;
         padding-left: 25px;
       }
-    } 
+    }
 
     .label-item-bottom {
-      color: $color_font-light; 
+      color: $color_font-light;
     }
   }
 }

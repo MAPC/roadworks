@@ -5,22 +5,8 @@ import Tags from './Tags';
 
 class Card extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {collapsed: false};
-
-    this.toggleCollapsed = this.toggleCollapsed.bind(this);
-  }
-
-
-  toggleCollapsed() {
-    this.setState({collapsed: !this.state.collapsed});
-  }
-
-
   render() {
-    const toggler = <span className="absolute-center">{this.state.collapsed ? '+' : '-'}</span>;
+    const toggler = <span className="absolute-center">{this.props.collapsed ? '+' : '-'}</span>;
     const listContent = this.props.items.map(item => {
 
       /*
@@ -66,10 +52,10 @@ class Card extends React.Component {
       );
     });
     return (
-      <article className={`component Card ${this.state.collapsed ? 'collapsed' : ''}`}>
+      <article className={`component Card ${this.props.collapsed ? 'collapsed' : ''}`}>
         <div className="card-header">
           <h3>{this.props.title}</h3>
-          <button onClick={this.toggleCollapsed}>
+          <button onClick={this.props.onClick}>
             {toggler}
           </button>
         </div>

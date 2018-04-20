@@ -29,7 +29,6 @@ const clearEndpoints = {
   orig: null,
   is_dest_type_address: false,
   dest: null,
-  crossStreetOptions: [],
   nodes: [],
   custom_nodes: {},
 };

@@ -62,6 +62,10 @@
       overflow: hidden;
       transition: $border_trans;
 
+      span.diamond {
+        left: $global_pad - $elem_diamond-size;
+      }
+
       &.inactive {
         padding-left: $pad_h + ($border_width / 2);
 

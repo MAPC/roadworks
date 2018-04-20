@@ -1,19 +1,17 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  type: 1
-  applicant_first_name: MyString
-  applicant_last_name: MyString
+  permit_type: STREET_OPENING
+  applicant_name: MyString
   start_date: 2018-04-09
   end_date: 2018-04-09
   address: MyString
-  payload: 
+  payload:
 
 two:
-  type: 1
-  applicant_first_name: MyString
-  applicant_last_name: MyString
+  permit_type: STREET_OPENING
+  applicant_name: MyString
   start_date: 2018-04-09
   end_date: 2018-04-09
   address: MyString
-  payload: 
+  payload:

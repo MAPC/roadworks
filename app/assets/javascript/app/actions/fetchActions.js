@@ -7,13 +7,14 @@ export function fetchSetPending() {
   };
 }
 
-export function fetchLoadAll(city, plans, roads, nodes) {
+export function fetchLoadAll(city, plans, roads, nodes, permits) {
   return {
     type: types.FETCH.LOAD_ALL,
     city,
     plans,
     roads,
     nodes,
+    permits,
   };
 }
 
@@ -28,8 +29,16 @@ export function fetchPlanViewData(cityName) {
       pRoadIds.concat(plan.timeframes.reduce((tRoadIds, timeframe) =>
         tRoadIds.concat(timeframe.segments.reduce((sRoadIds, segment) =>
           sRoadIds.concat([segment.road_id]), [])), [])), []);
+    const permitsResponse = await api.getPermits(cityName);
+    const permits = await permitsResponse.json();
     if (!roadIds.length) {
-      return dispatch(fetchLoadAll(city, plans, [], []));
+      return dispatch(fetchLoadAll(
+        city,
+        plans,
+        (noRoads = []),
+        (noNodes = []),
+        permits
+      ));
     }
     const roadsResponse = await api.getRoadsById(roadIds);
     const roads = await roadsResponse.json();
@@ -37,7 +46,7 @@ export function fetchPlanViewData(cityName) {
       nodeIds.concat(road.nodes), []);
     const nodesResponse = await api.getNodes(nodeIds);
     const nodes = await nodesResponse.json();
-    return dispatch(fetchLoadAll(city, plans, roads, nodes));
+    return dispatch(fetchLoadAll(city, plans, roads, nodes, permits));
   };
 }
 
@@ -47,6 +56,12 @@ export function fetchPlanCreateData(cityName) {
     const city = await cityResponse.json();
     const roadsResponse = await api.getAllRoads(cityName);
     const roads = await roadsResponse.json();
-    return dispatch(fetchLoadAll(city, [], roads, []));
+    return dispatch(fetchLoadAll(
+      city,
+      (noPlans = []),
+      roads,
+      (noNodes = []),
+      (noPermits = [])
+    ));
   };
 }

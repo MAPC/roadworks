@@ -1,9 +1,16 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl';
+import { Provider } from 'react-redux';
+import { store } from './../store/appStore';
 
 import constants from './../constants/constants';
-import MapLabel from './MapLabel';
+import MapLabelContainer from './../containers/MapLabelContainer';
+
+import {
+  formatLayer,
+} from '../util/geojson';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -14,6 +21,7 @@ class Map extends React.Component {
     super(props);
     this.state = {
       loaded: false,
+      markerMap: {},
     };
     this.fitBounds = this.fitBounds.bind(this);
     this.setMaxBounds = this.setMaxBounds.bind(this);
@@ -31,12 +39,12 @@ class Map extends React.Component {
       minZoom: 8,
       maxZoom: 16,
     });
+
     this.map.addControl(this.control, 'top-right');
     this.map.on('load', () => {
       this.map.resize();
-      this.props.layers.map((layer) => {
-        this.map.addLayer(layer);
-      });
+      this.redrawLayers(this.props.layers, []);
+      this.redrawMarkers(this.props.markers, []);
       if (this.props.fitBounds) {
         this.fitBounds(this.props.fitBounds);
       }
@@ -68,71 +76,99 @@ class Map extends React.Component {
   }
 
   redrawLayers(layers, prevLayers) {
-    const layerMap = {};
-    const prevLayerMap = {};
-    layers.forEach((layer) => {
-      layerMap[layer.id] = layer;
-      prevLayerMap[layer.id] = prevLayerMap[layer.id] || null;
+    const prevLayerMap = prevLayers.reduce((map, l) =>
+        Object.assign(map, { [l.id]: l }), {});
+    const layerMap = layers.reduce((map, l) =>
+        Object.assign(map, { [l.id]: l }), {});
+
+    const layersToBeAdded = Object.keys(layerMap).filter((id) =>
+        (!prevLayerMap[id] || layerMap[id].version != prevLayerMap[id].version));
+    const layersToBeRemoved = Object.keys(prevLayerMap).filter((id) =>
+        (!layerMap[id] || layerMap[id].version != prevLayerMap[id].version));
+
+    layersToBeRemoved.forEach((id) => {
+      this.map.removeLayer(id);
+      this.map.removeSource(id);
     });
-    prevLayers.forEach((layer) => {
-      layerMap[layer.id] = layerMap[layer.id] || null;
-      prevLayerMap[layer.id] = layer;
-    });
-    Object.keys(layerMap).forEach((key) => {
-      const layersChanged = prevLayerMap[key] && layerMap[key] &&
-          layerMap[key].version !== prevLayerMap[key].version;
-      if ((prevLayerMap[key] && !layerMap[key]) || layersChanged) {
-        this.map.removeLayer(key);
-        this.map.removeSource(key);
+
+    layersToBeAdded.forEach((id) => {
+      const mapboxLayer = formatLayer(
+        id,
+        layerMap[id].type,
+        layerMap[id].color,
+        layerMap[id].geometry,
+        layerMap[id].options,
+      );
+      if (layerMap[id].options && layerMap[id].options.before) {
+        return this.map.addLayer(mapboxLayer, layerMap[id].options.before);
       }
-      if ((!prevLayerMap[key] && layerMap[key]) || layersChanged) {
-        this.map.addLayer(layerMap[key]);
-      }
+      return this.map.addLayer(mapboxLayer);
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if ((this.props.fitBounds && !prevProps.fitBounds) ||
-        (this.props.fitBounds &&
-        this.props.fitBounds.toString() != prevProps.fitBounds.toString())) {
-      this.fitBounds(this.props.fitBounds);
+  redrawMarkers(markers, prevMarkers) {
+    const prevMarkerIds = prevMarkers.map((m) => m.id);
+    const markerIds = markers.map((m) => m.id);
+    const markersToBeAdded = markers.filter((m) =>
+        (!prevMarkerIds.includes(m.id) ||
+        !Object.keys(this.state.markerMap).includes(m.id.toString())));
+    const markersToBeRemoved = prevMarkers.filter((m) =>
+        !markerIds.includes(m.id));
+    const markerMapRemove = markersToBeRemoved.reduce((map, marker) => {
+      const mbMarker = this.state.markerMap[marker.id];
+      const element = mbMarker.getElement();
+      ReactDOM.unmountComponentAtNode(element);
+      element.remove();
+      mbMarker.remove();
+      return Object.assign(map, { [marker.id]: null });
+    }, {});
+
+    const markerMapAdd = markersToBeAdded.reduce((map, marker) => {
+      const div = document.createElement('div');
+      const mbMarker = new mapboxgl.Marker(div)
+          .setLngLat(marker.geometry.coordinates);
+      mbMarker.setOffset([0, -22])
+      ReactDOM.render(
+        <Provider store={store}>
+          <MapLabelContainer type={marker.type} items={[{
+            top: marker.label.top,
+            bottom: marker.label.bottom,
+            color: marker.color,
+          }]} />
+        </Provider>,
+        div,
+        () => mbMarker.addTo(this.map)
+      );
+      return Object.assign(map, { [marker.id]: mbMarker });
+    }, {});
+
+    if (markersToBeAdded.length || markersToBeRemoved.length) {
+      this.setState({
+        markerMap: Object.assign(this.state.markerMap, markerMapAdd, markerMapRemove),
+      });
     }
-    if (this.props.bounds.length &&
-        this.props.bounds != prevProps.bounds) {
-      this.setMaxBounds(this.props.bounds);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if ((nextProps.fitBounds && !this.props.fitBounds) ||
+        (nextProps.fitBounds &&
+        nextProps.fitBounds.toString() != this.props.fitBounds.toString())) {
+      this.fitBounds(nextProps.fitBounds);
+    }
+    if (nextProps.bounds.length &&
+        nextProps.bounds != this.props.bounds) {
+      this.setMaxBounds(nextProps.bounds);
     }
     if (this.state.loaded) {
-      this.redrawLayers(this.props.layers, prevProps.layers);
+      this.redrawLayers(nextProps.layers, this.props.layers);
+      this.redrawMarkers(nextProps.markers, this.props.markers);
     }
   }
 
   render() {
-    const planItems = [
-      {
-        top: 2021,
-        bottom: 'October',
-        color: '#A48EB2',
-      },
-    ];
-
-    const permitItems = [
-      {
-        top: 'National Grid' ,
-        bottom: 'Oct. 30 - Nov. 14',
-        color: '#F26262',
-      },
-      {
-        top: 'Eversource' ,
-        bottom: 'Jan. 3 - Jan. 13',
-        color: '#45CEEF',
-      },
-    ];
-
     return (
       <section className="component Map">
         <div className="map-layer" ref={el => this.mapContainer = el} />
-
-        <MapLabel type="plan" items={planItems} />
       </section>
     );
   }
@@ -140,29 +176,32 @@ class Map extends React.Component {
 
 Map.propTypes = {
   layers: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    type: PropTypes.string,
-    source: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    version: PropTypes.number.isRequired,
+    color: PropTypes.string.isRequired,
+    options: PropTypes.object,
+    geometry: PropTypes.shape({
       type: PropTypes.string,
-      data: PropTypes.shape({
-        type: PropTypes.string,
-        features: PropTypes.arrayOf(PropTypes.shape({
-          type: PropTypes.string,
-          properties: PropTypes.shape({
-            name: PropTypes.string,
-            start: PropTypes.string,
-            end: PropTypes.string,
-            year: PropTypes.number,
-          }),
-          geometry: PropTypes.shape({
-            type: PropTypes.string,
-            coordinates: PropTypes.array,
-          }),
-        })),
-      }),
+      coordinates: PropTypes.array,
+    }).isRequired,
+    label: PropTypes.shape({
+      top: PropTypes.string,
+      bottom: PropTypes.string,
     }),
-    layout: PropTypes.object,
-    paint: PropTypes.object,
+  })),
+  markers: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    geometry: PropTypes.shape({
+      type: PropTypes.string,
+      coordinates: PropTypes.array,
+    }).isRequired,
+    label: PropTypes.shape({
+      top: PropTypes.string,
+      bottom: PropTypes.string,
+    }).isRequired,
   })),
   fitBounds: PropTypes.object,
 };

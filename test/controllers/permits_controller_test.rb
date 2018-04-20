@@ -17,7 +17,7 @@ class PermitsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create permit" do
     assert_difference('Permit.count') do
-      post permits_url, params: { permit: { address: @permit.address, applicant_first_name: @permit.applicant_first_name, applicant_last_name: @permit.applicant_last_name, end_date: @permit.end_date, payload: @permit.payload, start_date: @permit.start_date, type: @permit.type } }
+      post permits_url, params: { permit: { address: @permit.address, applicant_name: @permit.applicant_name, end_date: @permit.end_date, payload: @permit.payload, start_date: @permit.start_date, permit_type: @permit.permit_type } }
     end
 
     assert_redirected_to permit_url(Permit.last)
@@ -34,7 +34,7 @@ class PermitsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update permit" do
-    patch permit_url(@permit), params: { permit: { address: @permit.address, applicant_first_name: @permit.applicant_first_name, applicant_last_name: @permit.applicant_last_name, end_date: @permit.end_date, payload: @permit.payload, start_date: @permit.start_date, type: @permit.type } }
+    patch permit_url(@permit), params: { permit: { address: @permit.address, applicant_name: @permit.applicant_name, end_date: @permit.end_date, payload: @permit.payload, start_date: @permit.start_date, permit_type: @permit.permit_type } }
     assert_redirected_to permit_url(@permit)
   end
 

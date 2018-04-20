@@ -43,6 +43,9 @@ export default {
   getPlans: (city) => {
     return get(`/api/plans?city=${city}`);
   },
+  getPermits: (city) => {
+    return get(`/api/permits?city=${city}`);
+  },
   geocodeToLngLat: async (address) => {
     const response = await fetch(`http://pelias.mapc.org/v1/search?text=${address}`, {
       headers: new Headers({

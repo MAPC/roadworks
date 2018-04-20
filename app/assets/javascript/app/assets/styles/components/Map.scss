@@ -13,5 +13,7 @@
     width: 100%;
 
   }
-
+  span.diamond {
+    left: - $elem_diamond-size;
+  }
 }

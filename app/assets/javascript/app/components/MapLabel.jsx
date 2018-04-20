@@ -10,7 +10,7 @@ class MapLabel extends React.Component {
       if (this.props.type === 'plan') {
         let hourglassType = 'empty';
         const dataYear = parseInt(this.props.items[0].top);
-        const currentYear = parseInt((new Date()).getFullYear()); 
+        const currentYear = parseInt((new Date()).getFullYear());
         const diff = Math.abs(dataYear - currentYear);
 
         if (diff >= constants.MAP.LABELS.HOURGLASS_YEARS.FULL) {
@@ -41,7 +41,7 @@ class MapLabel extends React.Component {
     });
 
     return (
-      <div className="component MapLabel">
+      <div className="component MapLabel" onClick={this.props.onClick}>
         <div className={`icon-wrapper ${this.props.type}`}>{icon}</div>
 
         <ul className="label-items">

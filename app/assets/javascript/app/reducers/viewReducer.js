@@ -1,22 +1,30 @@
 import types from '../actions/types';
 
 function roadReducer(state = {
-  active: {},
+  hideAllPlans: false,
+  hiddenPlans: {},
+  hideAllPermitTypes: false,
+  hiddenPermitTypes: {},
 }, action) {
   switch (action.type) {
-    case types.FETCH.LOAD_ALL:
-    case types.PLAN.BATCH_UPDATE:
-      const activePartial = {};
-      action.plans.forEach((plan) => {
-        activePartial[plan.id] = true;
-      });
+    case types.VIEW.TOGGLE_ALL_PLANS:
       return Object.assign({}, state, {
-        active: Object.assign({}, state.active, activePartial),
+        hideAllPlans: !state.hideAllPlans,
       });
-    case types.VIEW.TOGGLE_ACTIVE:
+    case types.VIEW.TOGGLE_PLAN:
       return Object.assign({}, state, {
-        active: Object.assign({}, state.active, {
-          [action.id]: !state.active[action.id],
+        hiddenPlans: Object.assign({}, state.hiddenPlans, {
+          [action.id]: !state.hiddenPlans[action.id],
+        }),
+      });
+    case types.VIEW.TOGGLE_ALL_PERMIT_TYPES:
+      return Object.assign({}, state, {
+        hideAllPermitTypes: !state.hideAllPermitTypes,
+      });
+    case types.VIEW.TOGGLE_PERMIT_TYPE:
+      return Object.assign({}, state, {
+        hiddenPermitTypes: Object.assign({}, state.hiddenPermitTypes, {
+          [action.permitType]: !state.hiddenPermitTypes[action.permitType],
         }),
       });
     default:

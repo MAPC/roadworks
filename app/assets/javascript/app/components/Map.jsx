@@ -107,13 +107,19 @@ class Map extends React.Component {
   }
 
   redrawMarkers(markers, prevMarkers) {
-    const prevMarkerIds = prevMarkers.map((m) => m.id);
-    const markerIds = markers.map((m) => m.id);
-    const markersToBeAdded = markers.filter((m) =>
-        (!prevMarkerIds.includes(m.id) ||
-        !Object.keys(this.state.markerMap).includes(m.id.toString())));
-    const markersToBeRemoved = prevMarkers.filter((m) =>
-        !markerIds.includes(m.id));
+    const prevMarkerMap = prevMarkers.reduce((map, m) =>
+        Object.assign(map, { [m.id]: m }), {});
+    const markerMap = markers.reduce((map, m) =>
+        Object.assign(map, { [m.id]: m }), {});
+    // const prevMarkerIds = prevMarkers.map((m) => m.id);
+    // const markerIds = markers.map((m) => m.id);
+    const markersToBeAdded = markers.filter((m) => (
+        !prevMarkerMap[m.id] ||
+        !Object.keys(this.state.markerMap).includes(m.id.toString()) ||
+        prevMarkerMap[m.id].version != markerMap[m.id].version));
+    const markersToBeRemoved = prevMarkers.filter((m) => (
+        !markerMap[m.id] ||
+        prevMarkerMap[m.id].version != markerMap[m.id].version));
     const markerMapRemove = markersToBeRemoved.reduce((map, marker) => {
       const mbMarker = this.state.markerMap[marker.id];
       const element = mbMarker.getElement();
@@ -148,7 +154,7 @@ class Map extends React.Component {
 
     if (markersToBeAdded.length || markersToBeRemoved.length) {
       this.setState({
-        markerMap: Object.assign(this.state.markerMap, markerMapAdd, markerMapRemove),
+        markerMap: Object.assign({}, this.state.markerMap, markerMapRemove, markerMapAdd),
       });
     }
   }

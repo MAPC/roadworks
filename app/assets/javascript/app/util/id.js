@@ -1,8 +1,21 @@
-export function encodeId(planId, timeframeIndex, segmentIndex) {
-  return `${planId}-${timeframeIndex}-${segmentIndex}`;
+export function encodeId(
+  planId,
+  timeframeId,
+  timeframeIndex,
+  segmentId,
+  segmentIndex
+) {
+  return `${planId}-${timeframeId}-${timeframeIndex}-` +
+      `${segmentId}-${segmentIndex}`;
 }
 
 export function decodeId(id) {
-  const [planId, timeframeIndex, segmentIndex] = id.split('-');
-  return { planId, timeframeIndex, segmentIndex };
+  const [
+    planId,
+    timeframeId,
+    timeframeIndex,
+    segmentId,
+    segmentIndex,
+  ] = id.split('-');
+  return { planId, timeframeId, timeframeIndex, segmentId, segmentIndex };
 }

@@ -7,7 +7,7 @@ export function fetchSetPending() {
   };
 }
 
-export function fetchLoadAll(city, plans, roads, nodes, permits) {
+export function fetchLoadAll({ city, plans, roads, nodes, permits }) {
   return {
     type: types.FETCH.LOAD_ALL,
     city,
@@ -39,7 +39,7 @@ export function fetchPlanViewData(cityName) {
       nodeIds.concat(roadMap[roadId].nodes), []);
     const nodesResponse = await api.getNodes(nodeIds);
     const nodes = await nodesResponse.json();
-    return dispatch(fetchLoadAll(city, plans, roads, nodes, permits));
+    return dispatch(fetchLoadAll({ city, plans, roads, nodes, permits }));
   };
 }
 
@@ -49,12 +49,12 @@ export function fetchPlanCreateData(cityName) {
     const city = await cityResponse.json();
     const roadsResponse = await api.getAllRoads(cityName);
     const roads = await roadsResponse.json();
-    return dispatch(fetchLoadAll(
+    return dispatch(fetchLoadAll({
       city,
-      (noPlans = []),
+      plans: [],
       roads,
-      (noNodes = []),
-      (noPermits = [])
-    ));
+      nodes: [],
+      permits: [],
+    }));
   };
 }

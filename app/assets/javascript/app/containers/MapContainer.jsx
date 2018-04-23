@@ -24,13 +24,13 @@ function getWorkingSegmentLayersAndMarkers(timeframes, roadCache, nodeCache) {
     const newPkg = timeframe.segments.reduce((pkg, segment, stIndex) => {
       // Fetch the base road for the current segment
       const road = roadCache[segment.road_id];
-      const layerId = `${tfIndex}-${stIndex}`;
+      const layerId = encodeId(0, timeframe.workingId, tfIndex, segment.workingId, stIndex);
       const startYear = timeframe.start
           ? (new Date(timeframe.start)).toLocaleString('en-US', { year: 'numeric'})
           : '{start year}';
       const startMonth = timeframe.start
           ? (new Date(timeframe.start)).toLocaleString('en-US', { month: 'long'})
-          : '{start year}';
+          : '{start month}';
       if (segment.nodes.length) {
         // If the segment is not the whole road, plot the calculated path between
         // the orig and dest nodes
@@ -72,6 +72,7 @@ function getWorkingSegmentLayersAndMarkers(timeframes, roadCache, nodeCache) {
             id: layerId,
             type: 'plan',
             color: '#f00',
+            version: segment.version,
             geometry: getFirstPoint(geometry),
             label: {
               top: startYear,
@@ -94,6 +95,7 @@ function getWorkingSegmentLayersAndMarkers(timeframes, roadCache, nodeCache) {
             id: layerId,
             type: 'plan',
             color: '#f00',
+            version: segment.version,
             geometry: getFirstPoint(road.geojson),
             label: {
               top: startYear,
@@ -115,7 +117,7 @@ function getPlanLayersAndMarkers(plans, roadCache, nodeCache) {
   const layerKits = plans.reduce((plLayers, plan) => {
     return plLayers.concat(plan.timeframes.reduce((tfLayers, timeframe, timeframeIndex) => {
       return tfLayers.concat(timeframe.segments.reduce((stLayers, segment, segmentIndex) => {
-        const layerId = encodeId(plan.id, timeframeIndex, segmentIndex);
+        const layerId = encodeId(plan.id, timeframe.id, timeframeIndex, segment.id, segmentIndex);
         const { geometry, nodes } = getSegmentGeometryAndNodes(segment, roadCache, nodeCache);
         return stLayers.concat([{
           layerId,
@@ -142,6 +144,7 @@ function getPlanLayersAndMarkers(plans, roadCache, nodeCache) {
       id: kit.layerId,
       type: 'plan',
       color: kit.color,
+      version: 1,
       geometry: getFirstPoint(kit.geometry),
       label: {
         top: (new Date(kit.start)).toLocaleString('en-US', { year: 'numeric'}),

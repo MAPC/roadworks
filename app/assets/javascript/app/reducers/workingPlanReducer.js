@@ -47,10 +47,16 @@ const assignNewSegment = (state, action, newSegment) => {
   });
 };
 
-const assignNewTimeframe = (state, action, newTimeframe) => {
+const assignNewTimeframe = (state, action, newTimeframe, incSegVersion) => {
+  const newSegments = incSegVersion
+      ? newTimeframe.segments.map((s) =>
+          Object.assign({}, s, { version: s.version + 1 }))
+      : newTimeframe.segments;
+
   return Object.assign({}, state, {
     timeframes: Object.assign([...state.timeframes], {
-      [action.timeframeIndex]: newTimeframe,
+      [action.timeframeIndex]:
+          Object.assign({}, newTimeframe, { segments: newSegments }),
     }),
     focusedRoad: null,
   });
@@ -60,9 +66,13 @@ function workingPlanReducer(state = {
   name: '',
   plan_type: 'NONE',
   timeframes: [Object.assign({}, blankTimeframe, {
-    segments: [Object.assign({}, blankSegment)],
+    workingId: 0,
+    segments: [Object.assign({}, blankSegment, {
+      workingId: 1,
+    })],
   })],
   focusedRoad: null,
+  nextWorkingId: 2,
 }, action) {
   const currTimeframe = typeof(action.timeframeIndex) !== 'undefined'
       ? state.timeframes[action.timeframeIndex] : null;
@@ -89,10 +99,14 @@ function workingPlanReducer(state = {
       return Object.assign({}, state, {
         timeframes: state.timeframes.concat([
           Object.assign({}, blankTimeframe, {
-            segments: [Object.assign({}, blankSegment)],
+            workingId: state.nextWorkingId,
+            segments: [Object.assign({}, blankSegment, {
+              workingId: state.nextWorkingId + 1,
+            })],
           }),
         ]),
         focusedRoad: null,
+        workingId: state.nextWorkingId + 2,
       });
 
     case types.WORKING_PLAN.TIMEFRAME.REMOVE:
@@ -106,7 +120,7 @@ function workingPlanReducer(state = {
       newTimeframe = Object.assign({}, currTimeframe, {
         start: action.start,
       });
-      return assignNewTimeframe(state, action, newTimeframe);
+      return assignNewTimeframe(state, action, newTimeframe, true);
 
     case types.WORKING_PLAN.TIMEFRAME.END.CHANGE:
       newTimeframe = Object.assign({}, currTimeframe, {
@@ -117,10 +131,14 @@ function workingPlanReducer(state = {
     case types.WORKING_PLAN.TIMEFRAME.SEGMENT.ADD:
       newTimeframe = Object.assign({}, currTimeframe, {
         segments: currTimeframe.segments.concat([
-          Object.assign({}, blankSegment),
+          Object.assign({}, blankSegment, {
+            workingId: state.nextWorkingId,
+          }),
         ]),
       });
-      return assignNewTimeframe(state, action, newTimeframe);
+      return Object.assign({}, assignNewTimeframe(state, action, newTimeframe), {
+        nextWorkingId: state.nextWorkingId + 1,
+      });
 
     case types.WORKING_PLAN.TIMEFRAME.SEGMENT.REMOVE:
       newTimeframe = Object.assign({}, currTimeframe, {

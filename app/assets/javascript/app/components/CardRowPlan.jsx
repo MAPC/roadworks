@@ -13,7 +13,7 @@ class CardRowPlan extends React.Component {
         onClick={this.props.onClick}
       >
         <span>{this.props.title}</span>
-        <a onClick={this.props.onEdit}>Edit</a>
+        {this.props.editable ? (<a onClick={this.props.onEdit}>Edit</a>) : null}
       </li>
     );
   }

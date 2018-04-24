@@ -37,15 +37,19 @@ module Api
         :published,
         :plan_type,
         timeframes_attributes: [
+          :id,
           :start,
           :end,
+          :_destroy,
           segments_attributes: [
+            :id,
             :road_id,
             :is_segment,
             :is_orig_type_address,
             :orig,
             :is_dest_type_address,
             :dest,
+            :_destroy,
             custom_nodes: [
               :id,
               :address,

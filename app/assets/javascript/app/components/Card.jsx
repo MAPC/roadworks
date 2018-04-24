@@ -31,8 +31,10 @@ class Card extends React.Component {
               color={item.color}
               active={item.active}
               onClick={() => this.props.itemOnClick(item.id)}
+              editable={item.editable}
               onEdit={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 return this.props.itemOnEditClick(item.id);
               }}
             />

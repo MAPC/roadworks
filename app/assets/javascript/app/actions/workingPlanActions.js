@@ -99,9 +99,8 @@ export function updateSegmentRoad(timeframeIndex, segmentIndex, roadId) {
     // If there are nodes that the client does not yet have, they must be
     // fetched
     if (neededNodes.length) {
-      const response = await api.getNodes(neededNodes);
-      const result = await response.json();
-      dispatch(updateNodes(result));
+      const nodes = await api.getNodes(neededNodes);
+      dispatch(updateNodes(nodes));
     }
     const nodeCache = getState().node.cache;
     const roadCache = getState().road.cache;
@@ -252,8 +251,8 @@ export function loadExistingPlan(id, url) {
     const neededNodes = ((state) => {
       const nodeCache = state.node.cache;
       const roadCache = state.road.cache;
-      return plan.timeframes.reduce((nodes, tf) =>
-        nodes.concat(tf.segments.reduce((nodes, sg) => (
+      return plan.timeframes.filter((tf) => !tf._destroy).reduce((nodes, tf) =>
+        nodes.concat(tf.segments.filter((tf) => !tf._destroy).reduce((nodes, sg) => (
           roadCache[sg.road_id]
               ? nodes.concat(roadCache[sg.road_id].nodes)
               : nodes
@@ -262,9 +261,8 @@ export function loadExistingPlan(id, url) {
     })(getState());
 
     if (neededNodes.length) {
-      const response = await api.getNodes(neededNodes);
-      const result = await response.json();
-      dispatch(updateNodes(result));
+      const nodes = await api.getNodes(neededNodes);
+      dispatch(updateNodes(nodes));
     }
     const nodeCache = getState().node.cache;
     const roadCache = getState().road.cache;
@@ -302,10 +300,9 @@ export function loadExistingPlan(id, url) {
 export function updatePlan(city) {
   return async (dispatch, getState) => {
     const workingPlan = getState().workingPlan;
-    const response = await api.updatePlan(workingPlan, true, city.toUpperCase());
-    if (response.status == 200) {
-      const result = await response.json();
-      dispatch(updatePlans([result]));
+    const newPlan = await api.updatePlan(workingPlan, true, city.toUpperCase());
+    if (newPlan) {
+      dispatch(updatePlans([newPlan]));
       dispatch(push(`/${city}`));
     }
   };
@@ -314,10 +311,9 @@ export function updatePlan(city) {
 export function createPlan(city) {
   return async (dispatch, getState) => {
     const workingPlan = getState().workingPlan;
-    const response = await api.createPlan(workingPlan, true, city.toUpperCase());
-    if (response.status == 200) {
-      const result = await response.json();
-      dispatch(updatePlans([result]));
+    const newPlan = await api.createPlan(workingPlan, true, city.toUpperCase());
+    if (newPlan) {
+      dispatch(updatePlans([newPlan]));
       dispatch(push(`/${city}`));
     }
   };

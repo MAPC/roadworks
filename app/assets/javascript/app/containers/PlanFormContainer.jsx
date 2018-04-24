@@ -11,7 +11,9 @@ const mapStateToProps = (state, props) => {
   return {
     name: state.workingPlan.name,
     type: state.workingPlan.plan_type,
-    timeframeIndicies: Array.from(state.workingPlan.timeframes.keys()),
+    timeframeIndicies: state.workingPlan.timeframes.reduce((arr, tf, idx) =>
+      tf._destroy ? arr : arr.concat([idx])
+    , []),
   };
 };
 

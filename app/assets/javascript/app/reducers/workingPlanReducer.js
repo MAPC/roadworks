@@ -110,6 +110,14 @@ function workingPlanReducer(state = {
       });
 
     case types.WORKING_PLAN.TIMEFRAME.REMOVE:
+      if (currTimeframe.id) {
+        newTimeframe = Object.assign({}, currTimeframe, {
+          segments: currTimeframe.segments.map((s) =>
+              Object.assign({}, s, { _destroy: true })),
+          _destroy: true,
+        });
+        return assignNewTimeframe(state, action, newTimeframe);
+      }
       return Object.assign({}, state, {
         timeframes: state.timeframes.slice(0, action.timeframeIndex)
             .concat(state.timeframes.slice(action.timeframeIndex + 1)),
@@ -141,6 +149,12 @@ function workingPlanReducer(state = {
       });
 
     case types.WORKING_PLAN.TIMEFRAME.SEGMENT.REMOVE:
+      if (currSegment.id) {
+        newSegment = Object.assign({}, currSegment, {
+          _destroy: true,
+        });
+        return assignNewSegment(state, action, newSegment);
+      }
       newTimeframe = Object.assign({}, currTimeframe, {
         segments: currTimeframe.segments.slice(0, action.segmentIndex)
             .concat(currTimeframe.segments.slice(action.segmentIndex + 1)),

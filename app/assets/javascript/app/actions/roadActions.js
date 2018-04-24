@@ -10,9 +10,7 @@ export function updateRoads(roads) {
 
 export function fetchRoads(city) {
   return async (dispatch, getState) => {
-    const response = await api.getRoads(city);
-    const result = await response.json();
-
-    dispatch(updateRoads(result.data));
+    const roads = await api.getRoads(city);
+    dispatch(updateRoads(roads));
   };
 }

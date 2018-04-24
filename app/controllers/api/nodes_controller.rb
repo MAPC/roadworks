@@ -2,7 +2,6 @@ module Api
   class NodesController < ApiController
     # GET /nodes?id[]=1&id[]=2
     def index
-      binding.pry
       if params[:id]
         nodes = Node.select("id, ST_AsGeoJSON(geometry) as geojson, part_of, neighbors").find(params[:id])
         respond_to do |format|

@@ -20,8 +20,12 @@ import {
 
 function getWorkingSegmentLayersAndMarkers(timeframes, roadCache, nodeCache) {
   // Calculate all of the properly formatted layers for display on the map
-  return timeframes.reduce((pkg, timeframe, tfIndex) => {
-    const newPkg = timeframe.segments.reduce((pkg, segment, stIndex) => {
+  return timeframes
+      .filter((tf) => !tf._destroy)
+      .reduce((pkg, timeframe, tfIndex) => {
+    const newPkg = timeframe.segments
+        .filter((tf) => !tf._destroy)
+        .reduce((pkg, segment, stIndex) => {
       // Fetch the base road for the current segment
       const road = roadCache[segment.road_id];
       const layerId = encodeId(0, timeframe.workingId, tfIndex, segment.workingId, stIndex);
@@ -115,8 +119,10 @@ function getWorkingSegmentLayersAndMarkers(timeframes, roadCache, nodeCache) {
 
 function getPlanLayersAndMarkers(plans, roadCache, nodeCache) {
   const layerKits = plans.reduce((plLayers, plan) => {
-    return plLayers.concat(plan.timeframes.reduce((tfLayers, timeframe, timeframeIndex) => {
-      return tfLayers.concat(timeframe.segments.reduce((stLayers, segment, segmentIndex) => {
+    return plLayers.concat(plan.timeframes
+        .reduce((tfLayers, timeframe, timeframeIndex) => {
+      return tfLayers.concat(timeframe.segments
+          .reduce((stLayers, segment, segmentIndex) => {
         const layerId = encodeId(plan.id, timeframe.id, timeframeIndex, segment.id, segmentIndex);
         const { geometry, nodes } = getSegmentGeometryAndNodes(segment, roadCache, nodeCache);
         return stLayers.concat([{
@@ -177,8 +183,11 @@ const mapStateToProps = (state, props) => {
     const roadCache = state.road.cache;
     const nodeCache = state.node.cache;
     if (resource == 'plan' && action == 'create') {
-      const timeframes = state.workingPlan.timeframes;
-      return getWorkingSegmentLayersAndMarkers(timeframes, roadCache, nodeCache);
+      return getWorkingSegmentLayersAndMarkers(
+        state.workingPlan.timeframes,
+        roadCache,
+        nodeCache
+      );
     } else if (Object.keys(roadCache).length && Object.keys(nodeCache).length) {
       const plans = state.view.hideAllPlans ? [] :
           Object.values(state.plan.cache).reduce((plans, plan) => {

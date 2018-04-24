@@ -10,8 +10,7 @@ export function updateCity(city) {
 
 export function fetchCity(city) {
   return async (dispatch, getState) => {
-    const response = await api.getCity(city);
-    const result = await response.json();
-    return dispatch(updateCity(result));
+    const city = await api.getCity(city);
+    return dispatch(updateCity(city));
   };
 }

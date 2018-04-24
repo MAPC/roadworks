@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Redirect, Switch } from 'react-router-dom';
 
 import MapContainer from '../containers/MapContainer';
 import CardListContainer from '../containers/CardListContainer';
@@ -38,8 +38,17 @@ class Viewer extends React.Component {
           <Route path="/:city/:resource?/:action?" component={MapContainer} />
 
           <div className="left-panel">
-            <Route exact path="/:city" component={CardListContainer} />
-            <Route path="/:city/plan/create" component={PlanCreateContainer} />
+            <Switch>
+              <Route exact path="/:city" component={CardListContainer} />
+              <Route path="/:city/plan/create" render={(props) =>
+                this.props.user.user_id ? (
+                  <PlanCreateContainer {...props} />
+                ) : (
+                  <Redirect to={`/${townLower}`} />
+                )
+              }/>
+              <Redirect to={`/${townLower}`} />
+            </Switch>
           </div>
 
           {showLoginForm ? <LoginFormContainer /> : null}

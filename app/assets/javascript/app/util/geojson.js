@@ -42,9 +42,7 @@ export function generateUniqueOffsets(kits) {
   , {});
 
   // Identify the overlaps between layers using the same node
-  console.log(nodesToLayer);
   const overlaps = Object.values(nodesToLayer).filter((arr) => arr.length > 1);
-  console.log(overlaps)
   const overlapsWith = overlaps.reduce((overlapsWith, overlap) =>
     Object.assign(overlapsWith, overlap.reduce((layerMap, layerId, index) => {
       // A layer can only trigger an overlap with layers of different plans

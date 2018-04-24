@@ -28,6 +28,7 @@ const mapStateToProps = (state) => {
     editable: state.plan.cache[planId].user_id == state.user.user_id,
   }));
   return {
+    loggedIn: !!state.user.user_id,
     hideAllPlans: state.view.hideAllPlans,
     hideAllPermitTypes: state.view.hideAllPermitTypes,
     plans,

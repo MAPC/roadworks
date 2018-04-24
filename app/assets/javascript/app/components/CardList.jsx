@@ -42,18 +42,18 @@ class CardList extends React.Component {
             onClick={this.props.toggleDetails}
           />
         </div>
-        <Link
-          to={`/${this.props.match.params.city}/plan/create`}
-          className="button styled"
-          data-action="toggle-plan-form"
-        >
-          <div>
-            <img src="/assets/add-to-list.svg" />
-            Add Plan to Map
-          </div>
-        </Link>
-
-
+        {this.props.loggedIn ? (
+          <Link
+            to={`/${this.props.match.params.city}/plan/create`}
+            className="button styled"
+            data-action="toggle-plan-form"
+          >
+            <div>
+              <img src="/assets/add-to-list.svg" />
+              Add Plan to Map
+            </div>
+          </Link>
+        ) : null}
       </section>
     );
   }

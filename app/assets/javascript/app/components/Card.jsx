@@ -31,6 +31,10 @@ class Card extends React.Component {
               color={item.color}
               active={item.active}
               onClick={() => this.props.itemOnClick(item.id)}
+              onEdit={(e) => {
+                e.preventDefault();
+                return this.props.itemOnEditClick(item.id);
+              }}
             />
           );
         case enums.CARD_ROW.TYPES.DETAIL:

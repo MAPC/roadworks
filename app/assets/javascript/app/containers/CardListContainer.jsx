@@ -14,6 +14,10 @@ import {
   toggleDetails,
 } from '../actions/viewActions';
 
+import {
+  loadExistingPlan,
+} from '../actions/workingPlanActions';
+
 const mapStateToProps = (state) => {
   const plans = Object.keys(state.plan.cache).map((planId) => ({
     id: planId,
@@ -59,6 +63,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   toggleAllPermitTypes: () => dispatch(toggleAllPermitTypes()),
   togglePermitType: (permitType) => dispatch(togglePermitType(permitType)),
   toggleDetails: () => dispatch(toggleDetails()),
+  onEditPlan: (id) => dispatch(loadExistingPlan(id, `${props.match.params.city}/plan/create`)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CardList);

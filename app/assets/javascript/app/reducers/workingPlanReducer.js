@@ -176,6 +176,10 @@ function workingPlanReducer(state = {
       });
       return assignNewSegment(state, action, newSegment);
 
+    case types.WORKING_PLAN.LOAD_EXISTING_PLAN:
+      return Object.assign({}, state, action.plan, {
+        nextWorkingId: action.nextWorkingId,
+      });
     default:
       return state
   }

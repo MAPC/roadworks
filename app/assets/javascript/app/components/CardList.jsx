@@ -24,6 +24,7 @@ class CardList extends React.Component {
             collapsed={this.props.hideAllPlans}
             onClick={this.props.toggleAllPlans}
             itemOnClick={this.props.togglePlan}
+            itemOnEditClick={this.props.onEditPlan}
           />
           <Card
             title={'Permits by Type'}

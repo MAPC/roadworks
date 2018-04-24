@@ -5,6 +5,7 @@ module Api
     # GET /permits
     # GET /permits.json
     def index
+      binding.pry
       permits = Permit.select('permits.*, ST_AsGeoJSON(geometry) AS geojson')
           .where(city_name: params[:city].upcase.gsub(/-/, " "))
       if permits

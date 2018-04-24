@@ -37,6 +37,7 @@ export default {
     },
   },
   WORKING_PLAN: {
+    LOAD_EXISTING_PLAN: 'WORKING_PLAN_LOAD_EXISTING_PLAN',
     NAME: {
       CHANGE: 'WORKING_PLAN_NAME_CHANGE',
     },

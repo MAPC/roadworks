@@ -56,7 +56,10 @@ class PlanCreate extends AbstractForm {
   }
 
   formDidValidate() {
-    this.props.createPlan();
+    if (this.props.workingPlan.id) {
+      return this.props.updatePlan();
+    }
+    return this.props.createPlan();
   }
 
   componentWillMount() {

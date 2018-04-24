@@ -1,4 +1,4 @@
 class PlanSerializer < ActiveModel::Serializer
-  attributes :id, :name, :plan_type, :city, :published, :color, :timeframes
+  attributes :id, :name, :plan_type, :city, :published, :color, :timeframes, :user_id
   has_many :timeframes
 end

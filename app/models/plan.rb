@@ -14,6 +14,7 @@
 class Plan < ApplicationRecord
   @@valid_plan_types = ['PAVING', 'MORATORIUM']
   has_many :timeframes, inverse_of: :plan
+  belongs_to :user, inverse_of: :plans, optional: false
   validates :name, presence: true, length: { minimum: 1 }
   validates :type, presence: true, inclusion: { in: @@valid_plan_types }
   validates :city, presence: true, length: { minimum: 1 }

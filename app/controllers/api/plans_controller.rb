@@ -1,5 +1,6 @@
 module Api
   class PlansController < ApiController
+    before_action :authenticate_user!, except: [ :index, :show ]
     ALL_COLORS = [
       "#F44336", # Red
       "#3F51B5", # Indigo
@@ -30,6 +31,7 @@ module Api
         timeframe.delete(:segments)
       end
       return params.require(:plan).permit(
+        :id,
         :name,
         :city,
         :published,
@@ -71,8 +73,29 @@ module Api
       permitted_params = permit_plan_params(params)
       next_color = get_next_plan_color(permitted_params[:city])
       permitted_params[:color] = next_color
+      permitted_params[:user_id] = current_user.id
       plan = Plan.create!(permitted_params)
       if plan
+        respond_to do |format|
+          format.json { render json: plan }
+        end
+      else
+        render json: plan.errors.full_messages, status: :bad_request
+      end
+    end
+
+    def update
+      permitted_params = permit_plan_params(params)
+      puts permitted_params
+      plan = Plan.find_by(id: permitted_params[:id])
+      unless plan
+        return render json: {}, status: :bad_request
+      end
+      unless plan[:user_id] == current_user.id
+        return render json: {}, status: :unauthorized
+      end
+      permitted_params[:color] = plan[:color]
+      if plan.update(permitted_params)
         respond_to do |format|
           format.json { render json: plan }
         end

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     resources :cities, only: [:show]
     resources :roads, only: [:index, :show]
     resources :nodes, only: [:index]
-    resources :plans, only: [:index, :create, :show]
+    resources :plans, only: [:index, :create, :show, :update]
     resources :permits, only: [:index, :show]
   end
 

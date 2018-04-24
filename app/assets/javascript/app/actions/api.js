@@ -5,18 +5,19 @@ const getCSRF = () => ({
   token: document.querySelector('meta[name="csrf-token"]').content,
 });
 
-function get(url) {
-  return fetch(url, {
+async function getJSON(url) {
+  const response = await fetch(url, {
     headers: new Headers({
       'Content-Type': 'application/json',
     }),
     credentials: 'same-origin',
     method: 'GET',
   });
+  return await response.json();
 }
 
-function post(url, body) {
-  return fetch(url, {
+async function postJSON(url, body) {
+  const response = fetch(url, {
     headers: new Headers({
       'Content-Type': 'application/json',
     }),
@@ -24,6 +25,19 @@ function post(url, body) {
     method: 'POST',
     body,
   });
+  return await response.json();
+}
+
+async function putJSON(url, body) {
+  const response = await fetch(url, {
+    headers: new Headers({
+      'Content-Type': 'application/json',
+    }),
+    credentials: 'same-origin',
+    method: 'PUT',
+    body,
+  });
+  return await response.json();
 }
 
 export default {
@@ -31,25 +45,34 @@ export default {
     const asString = nodeIds.length
         ? nodeIds.slice(1).reduce((s, id) => s + `&id[]=${id}`, `id[]=${nodeIds[0]}`)
         : '';
-    return get(`/api/nodes?${asString}`);
+    return getJSON(`/api/nodes?${asString}`);
+  },
+  getAllNodes: (city) => {
+    return getJSON(`/api/nodes?city=${city}`);
+  },
+  getNodesByRoads: (roadIds) => {
+    const asString = roadIds.length
+        ? roadIds.slice(1).reduce((s, id) => s + `&road[]=${id}`, `road[]=${roadIds[0]}`)
+        : '';
+    return getJSON(`/api/nodes?${asString}`);
   },
   getCity: (city) => {
-    return get(`/api/cities/${city}`);
+    return getJSON(`/api/cities/${city}`);
   },
   getAllRoads: (city) => {
-    return get(`/api/roads?city=${city}`);
+    return getJSON(`/api/roads?city=${city}`);
   },
   getRoadsById: (roadIds) => {
     const asString = roadIds.length
         ? roadIds.slice(1).reduce((s, id) => s + `&id[]=${id}`, `id[]=${roadIds[0]}`)
         : '';
-    return get(`/api/roads?${asString}`);
+    return getJSON(`/api/roads?${asString}`);
   },
   getPlans: (city) => {
-    return get(`/api/plans?city=${city}`);
+    return getJSON(`/api/plans?city=${city}`);
   },
   getPermits: (city) => {
-    return get(`/api/permits?city=${city}`);
+    return getJSON(`/api/permits?city=${city}`);
   },
   geocodeToLngLat: async (address) => {
     const response = await fetch(`http://pelias.mapc.org/v1/search?text=${address}`, {
@@ -65,7 +88,14 @@ export default {
         : null;
   },
   createPlan: async (plan, published, city) => {
-    return post(`/api/plans`, JSON.stringify({
+    return postJSON(`/api/plans`, JSON.stringify({
+      plan,
+      published,
+      city,
+    }));
+  },
+  updatePlan: async (plan, published, city) => {
+    return putJSON(`/api/plans/${plan.id}`, JSON.stringify({
       plan,
       published,
       city,

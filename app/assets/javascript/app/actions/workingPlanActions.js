@@ -1,3 +1,5 @@
+import { push } from 'react-router-redux';
+
 import api from './api';
 import types from './types';
 import utils from './utils';
@@ -243,6 +245,72 @@ export function updateSegmentEndPoint(
   };
 }
 
+export function loadExistingPlan(id, url) {
+  return async (dispatch, getState) => {
+    const plan = getState().plan.cache[id];
+
+    const neededNodes = ((state) => {
+      const nodeCache = state.node.cache;
+      const roadCache = state.road.cache;
+      return plan.timeframes.reduce((nodes, tf) =>
+        nodes.concat(tf.segments.reduce((nodes, sg) => (
+          roadCache[sg.road_id]
+              ? nodes.concat(roadCache[sg.road_id].nodes)
+              : nodes
+          ), [])
+        ), []).filter((id) => !nodeCache[id]);
+    })(getState());
+
+    if (neededNodes.length) {
+      const response = await api.getNodes(neededNodes);
+      const result = await response.json();
+      dispatch(updateNodes(result));
+    }
+    const nodeCache = getState().node.cache;
+    const roadCache = getState().road.cache;
+    let nextWorkingId = getState().workingPlan.nextWorkingId;
+    const timeframes = plan.timeframes.map((timeframe) => {
+      const segments = timeframe.segments.map((segment) => {
+        const newSegment = Object.assign({}, segment, {
+          workingId: nextWorkingId,
+          version: 0,
+          crossStreetOptions: generateCrossStreetOptions(
+            roadCache[segment.road_id],
+            nodeCache,
+            roadCache
+          ),
+        });
+        nextWorkingId += 1;
+        return newSegment;
+      })
+      const newTimeframe = Object.assign({}, timeframe, {
+        workingId: nextWorkingId,
+        segments,
+      });
+      nextWorkingId += 1;
+      return newTimeframe;
+    });
+    dispatch({
+      type: types.WORKING_PLAN.LOAD_EXISTING_PLAN,
+      plan: Object.assign({}, plan, { timeframes }),
+      nextWorkingId,
+    });
+    return dispatch(push(url));
+  };
+}
+
+export function updatePlan(city) {
+  return async (dispatch, getState) => {
+    const workingPlan = getState().workingPlan;
+    const response = await api.updatePlan(workingPlan, true, city.toUpperCase());
+    if (response.status == 200) {
+      const result = await response.json();
+      dispatch(updatePlans([result]));
+      dispatch(push(`/${city}`));
+    }
+  };
+}
+
 export function createPlan(city) {
   return async (dispatch, getState) => {
     const workingPlan = getState().workingPlan;
@@ -250,6 +318,7 @@ export function createPlan(city) {
     if (response.status == 200) {
       const result = await response.json();
       dispatch(updatePlans([result]));
+      dispatch(push(`/${city}`));
     }
   };
 }

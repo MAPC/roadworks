@@ -21,34 +21,39 @@ export function fetchLoadAll({ city, plans, roads, nodes, permits }) {
 export function fetchPlanViewData(cityName) {
   return async (dispatch, getState) => {
     dispatch(fetchSetPending());
-    const cityResponse = await api.getCity(cityName);
-    const city = await cityResponse.json();
-    const plansResponse = await api.getPlans(cityName);
-    const plans = await plansResponse.json();
-    const roadIds = plans.reduce((pRoadIds, plan) =>
+    const [city, plans] = await Promise.all([
+      api.getCity(cityName),
+      api.getPlans(cityName),
+    ]);
+    const roadIds = Array.from(new Set(plans.reduce((pRoadIds, plan) =>
       pRoadIds.concat(plan.timeframes.reduce((tRoadIds, timeframe) =>
         tRoadIds.concat(timeframe.segments.reduce((sRoadIds, segment) =>
-          sRoadIds.concat([segment.road_id]), [])), [])), []);
-    const permitsResponse = await api.getPermits(cityName);
-    const permits = await permitsResponse.json();
-    const roadsResponse = await api.getAllRoads(cityName);
-    const roads = await roadsResponse.json();
-    const roadMap = roads.reduce((map, road) =>
-        Object.assign(map, { [road.id]: road }), {});
-    const nodeIds = roadIds.reduce((nodeIds, roadId) =>
-      nodeIds.concat(roadMap[roadId].nodes), []);
-    const nodesResponse = await api.getNodes(nodeIds);
-    const nodes = await nodesResponse.json();
-    return dispatch(fetchLoadAll({ city, plans, roads, nodes, permits }));
+          sRoadIds.concat([segment.road_id]), [])), [])), [])));
+    const [permits, roads, nodes] = await Promise.all([
+      api.getPermits(cityName),
+      api.getRoadsById(roadIds),
+      api.getNodesByRoads(roadIds),
+    ]);
+    const adjRoadIds = Array.from(nodes
+        .reduce((ids, node) => new Set([...ids, ...node.part_of]), new Set([])))
+        .filter((id) => !roadIds.includes(id));
+    const adjRoads = await api.getRoadsById(adjRoadIds);
+    return dispatch(fetchLoadAll({
+      city,
+      plans,
+      roads: roads.concat(adjRoads),
+      nodes,
+      permits,
+    }));
   };
 }
 
 export function fetchPlanCreateData(cityName) {
   return async (dispatch, getState) => {
-    const cityResponse = await api.getCity(cityName);
-    const city = await cityResponse.json();
-    const roadsResponse = await api.getAllRoads(cityName);
-    const roads = await roadsResponse.json();
+    const [city, roads] = await Promise.all([
+      api.getCity(cityName),
+      api.getAllRoads(cityName),
+    ]);
     return dispatch(fetchLoadAll({
       city,
       plans: [],

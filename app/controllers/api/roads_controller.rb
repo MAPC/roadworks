@@ -2,6 +2,7 @@ module Api
   class RoadsController < ApiController
     # GET /road?city=ayer
     def index
+      binding.pry
       if params[:city]
         roads = Road
             .select("roads.*, ST_AsGeoJSON(geometry) AS geojson")
@@ -18,6 +19,7 @@ module Api
         end
       end
     end
+
     def show
       roads = Road
           .select("roads.*, ST_AsGeoJSON(geometry) AS geojson")

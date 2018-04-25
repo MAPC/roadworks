@@ -1,8 +1,21 @@
-export function encodeId(planId, timeframeIndex, segmentIndex) {
-  return `${planId}-${timeframeIndex}-${segmentIndex}`;
-}
+const schema = {
+  planId: null,
+  timeframeId: null,
+  timeframeIndex: null,
+  segmentId: null,
+  segmentIndex: null,
+};
 
-export function decodeId(id) {
-  const [planId, timeframeIndex, segmentIndex] = id.split('-');
-  return { planId, timeframeIndex, segmentIndex };
+const DELIM = '-';
+
+export const encodeId = (...args) =>
+    args.slice(0, Object.keys(schema).length).join(DELIM);
+
+export function decodeId(token) {
+  const pieces = token.split(DELIM);
+  return Object.keys(schema)
+      .reduce((map, key, index) => ({
+        ...map,
+        ...{[key]: pieces[index] || null },
+      }), {});
 }

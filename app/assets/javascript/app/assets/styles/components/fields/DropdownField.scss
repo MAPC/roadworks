@@ -6,8 +6,8 @@
 
   &.invalid {
     .Select-control {
-      @extend ._invalid-field; 
-    } 
+      @extend ._invalid-field;
+    }
   }
 
   .Select.is-disabled {
@@ -15,7 +15,7 @@
   }
 
   .Select-placeholder {
-    @extend ._vertical-center; 
+    @extend ._vertical-center;
     top: 45%;
 
     width: 100%;
@@ -31,7 +31,7 @@
   .Select-multi-value-wrapper {
     display: inline-block;
 
-    width: 100%; 
+    width: 100%;
   }
 
   .Select-input { height: auto; }
@@ -39,11 +39,11 @@
   .Select-value {
     padding-right: 10px !important;
 
-    font-size: 12px; 
+    font-size: 12px;
     line-height: inherit;
 
     span {
-      @extend ._vertical-center; 
+      @extend ._vertical-center;
 
       left: 10px;
       overflow: hidden;
@@ -54,7 +54,7 @@
 
   .Select-clear-zone { right: -8px; }
 
-  .Select-arrow { 
+  .Select-arrow {
     @extend ._arrow;
 
     right: -5px;
@@ -65,18 +65,18 @@
 
     color: $color_font-dark;
 
-    background: $color_bg-light; 
+    background: $color_bg-light;
     border-color: $color_bg-medium;
     border-radius: 0;
 
-    input {
+    .Select-input > input {
       padding: 0;
 
-      border: 0; 
+      border: 0;
     }
   }
 
-  .Select-menu-outer { 
+  .Select-menu-outer {
     color: $color_font-dark;
     font-size: 12px;
   }

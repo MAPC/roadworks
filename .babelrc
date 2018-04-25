@@ -21,12 +21,6 @@
       {
         "spec": true
       }
-    ],
-    ["module-resolver", {
-      "root": ["./app"],
-      "alias": {
-        "assets": "./assets"
-      }
-    }]
+    ]
   ]
 }

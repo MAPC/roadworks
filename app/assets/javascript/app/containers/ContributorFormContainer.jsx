@@ -14,6 +14,66 @@ const mapStateToProps = (state, props) => {
       id: '1234567890',
       name: 'Water Department',
       link: 'https://roadworks.mapc.org/login?token=1234567890',
+    },{
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
+    },{
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
+    },{
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
+    },{
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
+    },{
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
+    },{
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
+    },{
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
+    },{
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
+    },{
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
+    },{
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
+    },{
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
+    },{
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
+    },{
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
+    },{
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
+    }, {
+      id: '1234567890',
+      name: 'Water Department',
+      link: 'https://roadworks.mapc.org/login?token=1234567890',
     }],
     newContributorName: 'Eversource',
   };
@@ -21,7 +81,6 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    onContributorNameChange: () => dispatch(contributorNameChange()),
     regenerate: () => dispatch(contributorRegenerateToken()),
     onNewContributorNameChange: () => dispatch(contributorNewNameChange()),
     createNewContributor: () => dispatch(contributorCreateNew()),

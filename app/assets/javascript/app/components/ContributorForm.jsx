@@ -9,13 +9,13 @@ class ContributorForm extends React.Component {
 
   render() {
     const contributorRows = this.props.contributors.map((contrib) => (
-      <li key={contrib.id}>
+      <li key={contrib.id} className="contributor">
         <input
           value={contrib.name}
-          onChange={this.props.onContributorNameChange}
+          readOnly
         />
-        <input value={contrib.link} readOnly/>
-        <button onClick={() => this.props.regenerate(contrib.id)}>
+        <input className="contributor-link" value={contrib.link} readOnly/>
+        <button className="styled primary" onClick={() => this.props.regenerate(contrib.id)}>
           {en.CONTRIBUTOR_FORM.REGENERATE_BUTTON}
         </button>
       </li>
@@ -26,21 +26,23 @@ class ContributorForm extends React.Component {
           <h2 className="form-header">{en.CONTRIBUTOR_FORM.TITLE}</h2>
           <p className="form-description">{en.CONTRIBUTOR_FORM.DESCRIPTION}</p>
           <div className="contributor-list-wrapper">
-            <ul>
-              {contributorRows}
+            <ul className="contributor-list">
+              {contributorRows.length ? contributorRows : (
+                <li className="contributor placeholder">
+                  <p>{en.CONTRIBUTOR_FORM.NO_CONTRIBUTORS_YET}</p>
+                </li>
+              )}
             </ul>
           </div>
           <div className="contributor-add">
-            <div className="field">
-              <label htmlFor="name">Contributor Name</label>
-              <TextField
-                value={this.props.newContributorName}
-                name="name"
-                placeholder="Name of a utility or town department"
-                onChange={this.props.onNewContributorNameChange}
-              />
-            </div>
-            <button onClick={this.props.createNewContributor}>
+            <label htmlFor="name">{en.CONTRIBUTOR_FORM.CONTRIBUTOR_LABEL}</label>
+            <TextField
+              value={this.props.newContributorName}
+              name="name"
+              placeholder="Name of a utility or town department"
+              onChange={this.props.onNewContributorNameChange}
+            />
+            <button className="styled primary" onClick={this.props.createNewContributor}>
               {en.CONTRIBUTOR_FORM.ADD_CONTRIBUTOR}
             </button>
           </div>
@@ -56,7 +58,6 @@ ContributorForm.propTypes = {
     name: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
   })),
-  onContributorNameChange: PropTypes.func.isRequired,
   regenerate: PropTypes.func.isRequired,
   newContributorName: PropTypes.string.isRequired,
   onNewContributorNameChange: PropTypes.func.isRequired,

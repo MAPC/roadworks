@@ -1,8 +1,8 @@
 import types from '../actions/types';
 
 function loginFormReducer(state = {
-  email: null,
-  password: null,
+  email: '',
+  password: '',
 }, action) {
   switch (action.type) {
     case types.LOGIN.FORM.EMAIL.CHANGE:

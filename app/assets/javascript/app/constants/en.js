@@ -14,5 +14,8 @@ export default {
         'password, the contributor will no longer be able to edit their ' +
         'plans on Roadworks using the old link.',
     REGENERATE_BUTTON: 'Regenerate',
+    NO_CONTRIBUTORS_YET: 'No contributors have been created yet.',
+    ADD_CONTRIBUTOR: 'Add Contributor',
+    CONTRIBUTOR_LABEL: 'Contributor name:'
   },
 };

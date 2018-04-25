@@ -13,12 +13,13 @@
 
 class Plan < ApplicationRecord
   @@valid_plan_types = ['PAVING', 'MORATORIUM']
-  has_many :timeframes, inverse_of: :plan
+  has_many :timeframes, inverse_of: :plan, dependent: :destroy
+  belongs_to :user, inverse_of: :plans, optional: false
   validates :name, presence: true, length: { minimum: 1 }
   validates :type, presence: true, inclusion: { in: @@valid_plan_types }
   validates :city, presence: true, length: { minimum: 1 }
   validates :published, presence: true
   alias_attribute :type, :plan_type
-  accepts_nested_attributes_for :timeframes
+  accepts_nested_attributes_for :timeframes, allow_destroy: true
 
 end

@@ -25,9 +25,10 @@ class MonthYearField extends React.Component {
   constructor(props) {
     super(props);
 
+    const valueAsDate = props.value ? new Date(props.value) : null;
     this.state = {
-      month: 'NONE',
-      year: 'NONE',
+      month: valueAsDate ? valueAsDate.getMonth() : 'NONE',
+      year: valueAsDate ? valueAsDate.getFullYear() : 'NONE',
     };
 
     this.monthOptions = monthPool;
@@ -35,6 +36,16 @@ class MonthYearField extends React.Component {
 
     this.onMonthChange = this.onMonthChange.bind(this);
     this.onYearChange = this.onYearChange.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.value != nextProps.value) {
+      const valueAsDate = new Date(nextProps.value);
+      this.setState({
+        month: valueAsDate ? valueAsDate.getMonth() : 'NONE',
+        year: valueAsDate ? valueAsDate.getFullYear() : 'NONE',
+      });
+    }
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -99,7 +110,7 @@ class MonthYearField extends React.Component {
       }
 
       if (selectedMonth && predateMonth > selectedMonth) {
-        startYearMod = 1; 
+        startYearMod = 1;
       }
 
       range -= (predateYear - startYear);

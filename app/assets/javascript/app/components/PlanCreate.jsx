@@ -19,7 +19,7 @@ class PlanCreate extends AbstractForm {
     }
 
     if (Array.isArray(plan.timeframes) && plan.timeframes.length > 0) {
-      plan.timeframes.forEach((timeframe, i) => {
+      plan.timeframes.filter((tf) => !tf._destroy).forEach((timeframe, i) => {
         if (timeframe.start === null) {
           this.markInvalid(`start-date-month-${i}`);
           this.markInvalid(`start-date-year-${i}`);
@@ -30,7 +30,7 @@ class PlanCreate extends AbstractForm {
         }
 
         if (Array.isArray(timeframe.segments) && timeframe.segments.length > 0) {
-          timeframe.segments.forEach((segment, j) => {
+          timeframe.segments.filter((tf) => !tf._destroy).forEach((segment, j) => {
             if (segment.road_id === null)  {
               this.markInvalid(`segment-${i}-${j}`);
             }
@@ -56,7 +56,10 @@ class PlanCreate extends AbstractForm {
   }
 
   formDidValidate() {
-    this.props.createPlan();
+    if (this.props.workingPlan.id) {
+      return this.props.updatePlan();
+    }
+    return this.props.createPlan();
   }
 
   componentWillMount() {
@@ -93,7 +96,7 @@ class PlanCreate extends AbstractForm {
             onClick={this.submit}
           >
             <span className="plus">+</span>
-            Add to Map
+            {this.props.workingPlan.id ? 'Edit plan' : 'Create plan'}
           </button>
         </div>
       </section>

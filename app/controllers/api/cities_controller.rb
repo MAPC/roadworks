@@ -8,8 +8,14 @@ module Api
               "ST_AsGeoJSON(ST_Centroid(geometry)) as centroid, "\
               "ST_AsGeoJSON(ST_Expand(ST_Envelope(geometry), 0.1, 0.05)) as bounds")
           .where(name: params[:id].upcase.gsub(/-/, " ")).first
-      respond_to do |format|
-        format.json { render json: city }
+      if city
+        respond_to do |format|
+          format.json { render json: city }
+        end
+      else
+        respond_to do |format|
+          format.json { render json: nil, status: :bad_request }
+        end
       end
     end
   end

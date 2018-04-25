@@ -10,8 +10,7 @@ export function updatePlans(plans) {
 
 export function fetchPlans(city) {
   return async (dispatch, getState) => {
-    const response = await api.getPlans(city);
-    const result = await response.json();
-    return dispatch(updatePlans(result));
+    const plans = await api.getPlans(city);
+    return dispatch(updatePlans(plans));
   };
 }

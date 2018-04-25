@@ -1,3 +1,5 @@
+import { push } from 'react-router-redux';
+
 import api from './api';
 import types from './types';
 import utils from './utils';
@@ -97,9 +99,8 @@ export function updateSegmentRoad(timeframeIndex, segmentIndex, roadId) {
     // If there are nodes that the client does not yet have, they must be
     // fetched
     if (neededNodes.length) {
-      const response = await api.getNodes(neededNodes);
-      const result = await response.json();
-      dispatch(updateNodes(result));
+      const nodes = await api.getNodes(neededNodes);
+      dispatch(updateNodes(nodes));
     }
     const nodeCache = getState().node.cache;
     const roadCache = getState().road.cache;
@@ -243,13 +244,77 @@ export function updateSegmentEndPoint(
   };
 }
 
+export function loadExistingPlan(id, url) {
+  return async (dispatch, getState) => {
+    const plan = getState().plan.cache[id];
+
+    const neededNodes = ((state) => {
+      const nodeCache = state.node.cache;
+      const roadCache = state.road.cache;
+      return plan.timeframes.filter((tf) => !tf._destroy).reduce((nodes, tf) =>
+        nodes.concat(tf.segments.filter((tf) => !tf._destroy).reduce((nodes, sg) => (
+          roadCache[sg.road_id]
+              ? nodes.concat(roadCache[sg.road_id].nodes)
+              : nodes
+          ), [])
+        ), []).filter((id) => !nodeCache[id]);
+    })(getState());
+
+    if (neededNodes.length) {
+      const nodes = await api.getNodes(neededNodes);
+      dispatch(updateNodes(nodes));
+    }
+    const nodeCache = getState().node.cache;
+    const roadCache = getState().road.cache;
+    let nextWorkingId = getState().workingPlan.nextWorkingId;
+    const timeframes = plan.timeframes.map((timeframe) => {
+      const segments = timeframe.segments.map((segment) => {
+        const newSegment = Object.assign({}, segment, {
+          workingId: nextWorkingId,
+          version: 0,
+          crossStreetOptions: generateCrossStreetOptions(
+            roadCache[segment.road_id],
+            nodeCache,
+            roadCache
+          ),
+        });
+        nextWorkingId += 1;
+        return newSegment;
+      })
+      const newTimeframe = Object.assign({}, timeframe, {
+        workingId: nextWorkingId,
+        segments,
+      });
+      nextWorkingId += 1;
+      return newTimeframe;
+    });
+    dispatch({
+      type: types.WORKING_PLAN.LOAD_EXISTING_PLAN,
+      plan: Object.assign({}, plan, { timeframes }),
+      nextWorkingId,
+    });
+    return dispatch(push(url));
+  };
+}
+
+export function updatePlan(city) {
+  return async (dispatch, getState) => {
+    const workingPlan = getState().workingPlan;
+    const newPlan = await api.updatePlan(workingPlan, true, city.toUpperCase());
+    if (newPlan) {
+      dispatch(updatePlans([newPlan]));
+      dispatch(push(`/${city}`));
+    }
+  };
+}
+
 export function createPlan(city) {
   return async (dispatch, getState) => {
     const workingPlan = getState().workingPlan;
-    const response = await api.createPlan(workingPlan, true, city.toUpperCase());
-    if (response.status == 200) {
-      const result = await response.json();
-      dispatch(updatePlans([result]));
+    const newPlan = await api.createPlan(workingPlan, true, city.toUpperCase());
+    if (newPlan) {
+      dispatch(updatePlans([newPlan]));
+      dispatch(push(`/${city}`));
     }
   };
 }

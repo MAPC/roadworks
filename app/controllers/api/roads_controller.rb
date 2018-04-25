@@ -16,8 +16,13 @@ module Api
         respond_to do |format|
           format.json { render json: roads }
         end
+      else
+        respond_to do |format|
+          format.json { render json: [], status: :bad_request }
+        end
       end
     end
+
     def show
       roads = Road
           .select("roads.*, ST_AsGeoJSON(geometry) AS geojson")

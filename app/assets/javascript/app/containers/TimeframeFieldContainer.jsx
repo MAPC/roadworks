@@ -14,7 +14,9 @@ const mapStateToProps = (state, props) => {
   return {
     start: timeframe.start,
     end: timeframe.end,
-    segmentIndicies: Array.from(timeframe.segments.keys()),
+    segmentIndicies: timeframe.segments.reduce((arr, sg, idx) =>
+      sg._destroy ? arr : arr.concat([idx])
+    , []),
   };
 };
 

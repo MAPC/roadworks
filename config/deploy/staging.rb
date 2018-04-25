@@ -34,6 +34,7 @@ server "prep.mapc.org", user: "roadworks", roles: %w{app db web}
 set :branch, 'dev'
 set :passenger_restart_command, 'passenger-config restart-app'
 set :rvm_custom_path, '/usr/share/rvm'
+set :rvm_ruby_version, '2.4.2'
 
 
 

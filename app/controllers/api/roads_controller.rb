@@ -16,6 +16,10 @@ module Api
         respond_to do |format|
           format.json { render json: roads }
         end
+      else
+        respond_to do |format|
+          format.json { render json: [], status: :bad_request }
+        end
       end
     end
 

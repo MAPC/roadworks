@@ -128,7 +128,9 @@ module Api
           format.json { render json: plans }
         end
       else
-        render json: plans.errors.full_messages, status: :bad_request
+        respond_to do |format|
+          format.json { render json: [], status: :bad_request }
+        end
       end
     end
   end

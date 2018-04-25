@@ -12,7 +12,9 @@ module Api
           format.json { render json: permits }
         end
       else
-        render json: permits.errors.full_messages, status: :bad_request
+        respond_to do |format|
+          format.json { render json: [], status: :bad_request }
+        end
       end
     end
 

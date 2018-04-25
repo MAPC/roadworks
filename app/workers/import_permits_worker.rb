@@ -3,7 +3,6 @@ require 'openssl'
 require 'digest'
 require 'date'
 require 'json'
-require 'pry-byebug'
 
 class ImportPermitsWorker
   include Sidekiq::Worker

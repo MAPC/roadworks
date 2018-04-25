@@ -6,14 +6,15 @@ import MapContainer from '../containers/MapContainer';
 import CardListContainer from '../containers/CardListContainer';
 import LoginFormContainer from '../containers/LoginFormContainer';
 import PlanCreateContainer from '../containers/PlanCreateContainer';
+import ContributorFormContainer from '../containers/ContributorFormContainer';
 
 import capitalize from '../util/capitalize';
 
 class Viewer extends React.Component {
 
   render() {
-    const showLoginLink = `${this.props.location.pathname}#login`;
-    const showLoginForm = this.props.location.hash === '#login';
+    const contributorFormHash = `${this.props.location.pathname}#contributors`;
+    const loginHash = `${this.props.location.pathname}#login`;
     const townLower = this.props.match.params.city.toLowerCase();
     const townCapitalized = capitalize(this.props.match.params.city);
 
@@ -27,10 +28,12 @@ class Viewer extends React.Component {
 
           <nav>
             <a href="">FAQ</a>
-
+            {this.props.user.email ?  (
+              <Link to={contributorFormHash}>Manage Contributors</Link>
+            ) : null}
             {this.props.user.email !== null
               ? <button onClick={this.props.logout}>Logout {this.props.user.email}</button>
-              : <Link to={showLoginLink}>Municipal Login</Link>
+              : <Link to={loginHash}>Municipal Login</Link>
             }
           </nav>
         </header>
@@ -50,8 +53,17 @@ class Viewer extends React.Component {
               <Redirect to={`/${townLower}`} />
             </Switch>
           </div>
-
-          {showLoginForm ? <LoginFormContainer /> : null}
+          <Route path="/:city" render={(props) => {
+            const hash = props.location.hash;
+            switch (hash) {
+              case '#login':
+                return <LoginFormContainer />;
+              case '#contributors':
+                return <ContributorFormContainer />;
+              default:
+                return null;
+            }
+          }}/>
         </div>
       </section>
     );

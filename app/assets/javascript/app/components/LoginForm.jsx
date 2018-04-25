@@ -15,7 +15,7 @@ class LoginForm extends AbstractForm {
     }
 
     if (
-      password === null 
+      password === null
       || password.length < 6
     ) {
       this.markInvalid('password');
@@ -32,46 +32,48 @@ class LoginForm extends AbstractForm {
       this.props.redirect(this.props.redirectTo);
     }
   }
-  
 
   render() {
     return (
-      <section className="component LoginForm" data-form={this.formId}>
+      <form className="component LoginForm" data-form={this.formId} onSubmit={this.submit}>
         <div className="form-box">
           <h2>
             Municipal Login
-
             <Link to={window.location.pathname}>X Close</Link>
           </h2>
 
           <div className="fields">
             <div className="field">
               <label htmlFor="email">Email</label>
-              <TextField 
-                value={this.props.loginForm.email} 
-                name="email" 
-                placeholder="Enter email ..." 
-                onChange={this.props.onEmailChange} 
-                debounce={500}
+              <TextField
+                value={this.props.loginForm.email}
+                name="email"
+                placeholder="Enter email ..."
+                onChange={this.props.onEmailChange}
               />
             </div>
 
             <div className="field">
               <label htmlFor="password">Password</label>
-              <TextField 
+              <TextField
                 value={this.props.loginForm.password}
-                type="password" 
-                name="password" 
-                placeholder="Enter password ..." 
-                onChange={this.props.onPasswordChange} 
-                debounce={500}
+                type="password"
+                name="password"
+                placeholder="Enter password ..."
+                onChange={this.props.onPasswordChange}
               />
             </div>
           </div>
 
-          <button className="styled primary" data-action="submit" onClick={this.submit}>Login</button>
+          <button
+            className="styled primary"
+            data-action="submit"
+            type="submit"
+          >
+            Login
+          </button>
         </div>
-      </section>
+      </form>
     );
   }
 

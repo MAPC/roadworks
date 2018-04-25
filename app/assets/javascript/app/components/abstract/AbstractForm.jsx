@@ -53,7 +53,8 @@ class AbstractForm extends React.Component {
     }
   }
 
-  submit() {
+  submit(e) {
+    e.preventDefault();
     this.hasSubmitted = true;
     this.triggerValidate(this.props);
     if (this.valid) {

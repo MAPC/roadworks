@@ -29,11 +29,23 @@
     border: 1px solid $color_brand-secondary;
     background: $color_bg-light;
     z-index: 10;
-    h2.form-header {
+    .form-header {
       background: $color_brand-secondary;
-      margin: 0;
       padding: ($global_pad / 2) $global_pad;
-      color: $color_bg-light;
+      h2 {
+        margin: 0;
+        color: $color_bg-light;
+      }
+      a {
+        @extend ._vertical-center;
+        left: inherit;
+        right: $global_pad / 2;
+
+        margin: auto;
+
+        color: $color_brand-secondary--dark;
+        font-size: 14px;
+      }
     }
     p.form-description {
       margin: 0;

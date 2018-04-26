@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
 import cityReducer from './cityReducer';
+import contributorFormReducer from './contributorFormReducer';
 import fetchReducer from './fetchReducer';
 import nodeReducer from './nodeReducer';
 import permitReducer from './permitReducer';
@@ -15,6 +16,7 @@ import workingPlanReducer from './workingPlanReducer';
 
 const rootReducer = combineReducers({
   city: cityReducer,
+  contributorForm: contributorFormReducer,
   fetch: fetchReducer,
   node: nodeReducer,
   permit: permitReducer,

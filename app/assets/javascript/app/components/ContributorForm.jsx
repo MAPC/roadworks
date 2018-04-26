@@ -1,11 +1,16 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import TextField from './fields/TextField';
 
 import en from '../constants/en';
 
 class ContributorForm extends React.Component {
+
+  componentWillMount() {
+    this.props.fetchContributors();
+  }
 
   render() {
     const contributorRows = this.props.contributors.map((contrib) => (
@@ -23,7 +28,10 @@ class ContributorForm extends React.Component {
     return (
       <div className="component ContributorForm">
         <form className="form-box">
-          <h2 className="form-header">{en.CONTRIBUTOR_FORM.TITLE}</h2>
+          <div className="form-header">
+            <h2>{en.CONTRIBUTOR_FORM.TITLE}</h2>
+            <Link to={this.props.location.pathname}>X Close</Link>
+          </div>
           <p className="form-description">{en.CONTRIBUTOR_FORM.DESCRIPTION}</p>
           <div className="contributor-list-wrapper">
             <ul className="contributor-list">
@@ -42,7 +50,11 @@ class ContributorForm extends React.Component {
               placeholder="Name of a utility or town department"
               onChange={this.props.onNewContributorNameChange}
             />
-            <button className="styled primary" onClick={this.props.createNewContributor}>
+            <button
+              className="styled primary"
+              onClick={this.props.createNewContributor}
+              disabled={this.props.isPending}
+            >
               {en.CONTRIBUTOR_FORM.ADD_CONTRIBUTOR}
             </button>
           </div>
@@ -54,7 +66,7 @@ class ContributorForm extends React.Component {
 
 ContributorForm.propTypes = {
   contributors: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
   })),

@@ -5,9 +5,9 @@ function loginFormReducer(state = {
   password: '',
 }, action) {
   switch (action.type) {
-    case types.LOGIN.FORM.EMAIL.CHANGE:
+    case types.LOGIN_FORM.EMAIL.CHANGE:
       return Object.assign({}, state, { email: action.email });
-    case types.LOGIN.FORM.PASSWORD.CHANGE:
+    case types.LOGIN_FORM.PASSWORD.CHANGE:
       return Object.assign({}, state, { password: action.password });
     default:
       return state;

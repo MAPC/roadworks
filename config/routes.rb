@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { sessions: 'sessions' }, path_prefix: 'api'
+  devise_for :users, path_prefix: 'api', path: 'auth', controllers: { sessions: 'sessions' }, path_names: { sign_in: 'login', sign_out: 'logout' }
 
   namespace :api do
     resources :cities, only: [:show]
@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :nodes, only: [:index]
     resources :plans, only: [:index, :create, :show, :update]
     resources :permits, only: [:index, :show]
+    resources :users, only: [:index, :create, :update]
   end
 
   # Let React Router take care of everything not API related

@@ -8,8 +8,13 @@ namespace :import do
   desc "Import fake users"
   task fake_users: :environment do
     User.create([
-      { email: 'utility@seed.org', password: 'password', role: :utility },
-      { email: 'city@seed.org',    password: 'password', role: :city },
+      {
+        email: 'city@seed.org',
+        password: 'password',
+        role: :city,
+        name: 'City',
+        city_name: 'WESTBOROUGH',
+      },
     ])
   end
 end

@@ -6,14 +6,14 @@ import { push } from 'react-router-redux';
 
 export function onEmailChange(email) {
   return {
-    type: types.LOGIN.FORM.EMAIL.CHANGE,
+    type: types.LOGIN_FORM.EMAIL.CHANGE,
     email
   };
 }
 
 export function onPasswordChange(password) {
   return {
-    type: types.LOGIN.FORM.PASSWORD.CHANGE, 
+    type: types.LOGIN_FORM.PASSWORD.CHANGE,
     password
   };
 }

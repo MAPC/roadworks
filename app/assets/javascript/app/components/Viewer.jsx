@@ -28,11 +28,11 @@ class Viewer extends React.Component {
 
           <nav>
             <a href="">FAQ</a>
-            {this.props.user.email ?  (
-              <Link to={contributorFormHash}>Manage Contributors</Link>
-            ) : null}
-            {this.props.user.email !== null
-              ? <button onClick={this.props.logout}>Logout {this.props.user.email}</button>
+            {this.props.loggedIn
+              ? [
+                <Link key="contributors" to={contributorFormHash}>Manage Contributors</Link>,
+                <button key="logout" onClick={this.props.logout}>Logout {this.props.user.name}</button>,
+              ]
               : <Link to={loginHash}>Municipal Login</Link>
             }
           </nav>
@@ -44,7 +44,7 @@ class Viewer extends React.Component {
             <Switch>
               <Route exact path="/:city" component={CardListContainer} />
               <Route path="/:city/plan/create" render={(props) =>
-                this.props.user.user_id ? (
+                this.props.user.id ? (
                   <PlanCreateContainer {...props} />
                 ) : (
                   <Redirect to={`/${townLower}`} />
@@ -57,9 +57,9 @@ class Viewer extends React.Component {
             const hash = props.location.hash;
             switch (hash) {
               case '#login':
-                return <LoginFormContainer />;
+                return <LoginFormContainer {...props} />;
               case '#contributors':
-                return <ContributorFormContainer />;
+                return <ContributorFormContainer {...props} />;
               default:
                 return null;
             }

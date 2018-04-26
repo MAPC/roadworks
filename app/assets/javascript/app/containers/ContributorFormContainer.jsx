@@ -2,87 +2,41 @@ import { connect } from 'react-redux';
 import ContributorForm from '../components/ContributorForm';
 
 import {
-  contributorNameChange,
+  newContributorNameChange,
   contributorRegenerateToken,
   contributorNewNameChange,
   contributorCreateNew,
-} from '../actions/contributorActions';
+} from '../actions/contributorFormActions';
+
+import {
+  fetchContributors,
+} from '../actions/fetchActions';
+
+import capitalize from '../util/capitalize';
 
 const mapStateToProps = (state, props) => {
+  const cityName = props.match.params.city.toUpperCase().replace(/-/g, ' ');
   return {
-    contributors: [{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    },{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    },{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    },{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    },{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    },{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    },{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    },{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    },{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    },{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    },{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    },{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    },{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    },{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    },{
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    }, {
-      id: '1234567890',
-      name: 'Water Department',
-      link: 'https://roadworks.mapc.org/login?token=1234567890',
-    }],
-    newContributorName: 'Eversource',
+    contributors: Object.values(state.user.cache).reduce((arr, user) => {
+      const link = `${window.location.origin}/${props.match.params.city}?token=${user.token}`;
+      return user.city_name == cityName && user.role == 'utility'
+          ? arr.concat([{
+              id: user.id,
+              name: user.name,
+              link,
+            }])
+          : arr;
+    }, []),
+    newContributorName: state.contributorForm.newContributorName,
+    isPending: state.contributorForm.isPending,
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
+    fetchContributors: () => dispatch(fetchContributors()),
     regenerate: () => dispatch(contributorRegenerateToken()),
-    onNewContributorNameChange: () => dispatch(contributorNewNameChange()),
+    onNewContributorNameChange: (name) => dispatch(newContributorNameChange(name)),
     createNewContributor: () => dispatch(contributorCreateNew()),
   };
 };

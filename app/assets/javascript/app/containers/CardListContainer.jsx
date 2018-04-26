@@ -25,10 +25,10 @@ const mapStateToProps = (state) => {
     title: state.plan.cache[planId].name,
     active: !state.view.hiddenPlans[planId],
     color: state.plan.cache[planId].color,
-    editable: state.plan.cache[planId].user_id == state.user.user_id,
+    editable: state.plan.cache[planId].user_id == state.user.id,
   }));
   return {
-    loggedIn: !!state.user.user_id,
+    loggedIn: !!state.user.id,
     hideAllPlans: state.view.hideAllPlans,
     hideAllPermitTypes: state.view.hideAllPermitTypes,
     plans,

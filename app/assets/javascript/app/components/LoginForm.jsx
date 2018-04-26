@@ -28,7 +28,7 @@ class LoginForm extends AbstractForm {
   }
 
   componentDidMount() {
-    if (this.props.user.email !== null) {
+    if (this.props.loggedIn) {
       this.props.redirect(this.props.redirectTo);
     }
   }

@@ -10,9 +10,10 @@ export default {
         'generating a new link for a particular contributor (which will ' +
         'invalidate the old link).',
     REGENERATE_WARNING: 'Be careful! Generating a new editable link will ' +
-        'invalidate the old link for this contributor. Like resetting a ' +
-        'password, the contributor will no longer be able to edit their ' +
-        'plans on Roadworks using the old link.',
+        'invalidate the old link for this contributor. This contributor will ' +
+        'no longer be able to edit their plans on Roadworks using the old ' +
+        'link.',
+    UNLOCK_CONTRIBUTOR: 'Unlock',
     REGENERATE_BUTTON: 'Regenerate',
     NO_CONTRIBUTORS_YET: 'No contributors have been created yet.',
     ADD_CONTRIBUTOR: 'Add Contributor',

@@ -7,3 +7,10 @@ export function updateUsers(users) {
     users,
   };
 }
+
+export function setAuthenticatedUser(id) {
+  return {
+    type: types.USER.SET_AUTHENTICATED_USER,
+    id,
+  }
+}

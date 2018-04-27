@@ -63,17 +63,23 @@
       padding: ($global_pad / 2) 0;
     }
     li.contributor {
-      display: flex;
       padding: ($global_pad / 2) $global_pad;
-      &.placeholder p {
-        margin: 0;
-        padding: ($global_pad / 2) 0;
+      .contributor-details {
+        display: flex;
+        &.placeholder p {
+          margin: 0;
+          padding: ($global_pad / 2) 0;
+        }
+        input.contributor-link {
+          flex: 1;
+        }
+        & > *:not(:last-child) {
+          margin-right: $global_pad / 2;
+        }
       }
-      input.contributor-link {
-        flex: 1;
-      }
-      & > *:not(:last-child) {
-        margin-right: $global_pad / 2;
+      p.contributor-warning {
+        color: $state_negative;
+        margin: 8px 0 0 0;
       }
     }
     .contributor-add {

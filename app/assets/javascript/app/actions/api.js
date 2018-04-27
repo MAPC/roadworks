@@ -83,6 +83,9 @@ export default {
       user: { name },
     }));
   },
+  updateContributor: (id) => {
+    return putJSON(`/api/users/${id}`, JSON.stringify({}));
+  },
   geocodeToLngLat: async (address) => {
     const response = await fetch(`http://pelias.mapc.org/v1/search?text=${address}`, {
       headers: new Headers({

@@ -6,6 +6,7 @@ import {
   contributorRegenerateToken,
   contributorNewNameChange,
   contributorCreateNew,
+  contributorUnlock,
 } from '../actions/contributorFormActions';
 
 import {
@@ -24,6 +25,7 @@ const mapStateToProps = (state, props) => {
               id: user.id,
               name: user.name,
               link,
+              unlocked: state.contributorForm.unlockedContributor == user.id,
             }])
           : arr;
     }, []),
@@ -35,7 +37,8 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchContributors: () => dispatch(fetchContributors()),
-    regenerate: () => dispatch(contributorRegenerateToken()),
+    regenerate: (id) => dispatch(contributorRegenerateToken(id)),
+    unlock: (id) => dispatch(contributorUnlock(id)),
     onNewContributorNameChange: (name) => dispatch(newContributorNameChange(name)),
     createNewContributor: () => dispatch(contributorCreateNew()),
   };

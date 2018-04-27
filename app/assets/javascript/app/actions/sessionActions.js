@@ -3,6 +3,10 @@ import types from './types';
 import Cookies from 'js-cookie';
 import { push } from 'react-router-redux';
 
+import {
+  updateUsers,
+  setAuthenticatedUser,
+} from './userActions';
 
 export function onEmailChange(email) {
   return {
@@ -23,10 +27,8 @@ export function login(email, password) {
     const user = await api.login(email, password);
 
     if (user) {
-      dispatch({
-        type: types.USER.UPDATE,
-        user,
-      });
+      dispatch(updateUsers([user]));
+      dispatch(setAuthenticatedUser(user.id));
       dispatch(push(getState().router.location.pathname));
     }
   };

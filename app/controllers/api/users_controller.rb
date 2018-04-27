@@ -33,6 +33,15 @@ module Api
     end
 
     def update
+      user = User.find(params[:id])
+      if !user || user.created_by != current_user.id
+        return render json: {}, status: :unauthorized
+      end
+      user[:token] = SecureRandom.hex(16)
+      user.save
+      respond_to do |format|
+        format.json { render json: user }
+      end
     end
   end
 end

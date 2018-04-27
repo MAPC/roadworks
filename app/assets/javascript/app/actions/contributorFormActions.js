@@ -10,8 +10,15 @@ export function newContributorNameChange(newContributorName) {
   };
 }
 
-export function contributorRegenerateToken() {
-
+export function contributorRegenerateToken(id) {
+  return async (dispatch, getState) => {
+    dispatch(contributorFormSetPending(true));
+    const updatedUser = await api.updateContributor(id);
+    if (updatedUser) {
+      dispatch(updateUsers([updatedUser]));
+    }
+    return dispatch(contributorFormSetPending(false));
+  };
 }
 
 export function contributorFormSetPending(isPending) {
@@ -20,9 +27,17 @@ export function contributorFormSetPending(isPending) {
     isPending,
   };
 }
+
 export function contributorFormReset() {
   return {
     type: types.CONTRIBUTOR_FORM.RESET,
+  };
+}
+
+export function contributorUnlock(id) {
+  return {
+    type: types.CONTRIBUTOR_FORM.SET_UNLOCKED_CONTRIBUTOR,
+    id,
   };
 }
 

@@ -15,14 +15,30 @@ class ContributorForm extends React.Component {
   render() {
     const contributorRows = this.props.contributors.map((contrib) => (
       <li key={contrib.id} className="contributor">
-        <input
-          value={contrib.name}
-          readOnly
-        />
-        <input className="contributor-link" value={contrib.link} readOnly/>
-        <button className="styled primary" onClick={() => this.props.regenerate(contrib.id)}>
-          {en.CONTRIBUTOR_FORM.REGENERATE_BUTTON}
-        </button>
+        <div className="contributor-details">
+          <input
+            value={contrib.name}
+            readOnly
+          />
+          <input className="contributor-link" value={contrib.link} readOnly/>
+          <button
+            className="styled primary"
+            onClick={() => this.props.regenerate(contrib.id)}
+            disabled={!contrib.unlocked}
+          >
+            {en.CONTRIBUTOR_FORM.REGENERATE_BUTTON}
+          </button>
+          <button
+            className="styled primary"
+            onClick={() => this.props.unlock(contrib.id)}
+            disabled={contrib.unlocked}
+          >
+            {en.CONTRIBUTOR_FORM.UNLOCK_CONTRIBUTOR}
+          </button>
+        </div>
+        <div>
+          {contrib.unlocked ? (<p className="contributor-warning">{en.CONTRIBUTOR_FORM.REGENERATE_WARNING}</p>) : null}
+        </div>
       </li>
     ))
     return (

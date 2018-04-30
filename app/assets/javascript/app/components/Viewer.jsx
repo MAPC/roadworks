@@ -13,6 +13,9 @@ import capitalize from '../util/capitalize';
 class Viewer extends React.Component {
 
   render() {
+    const adminOfThisCity = this.props.loggedIn &&
+        this.props.match.params.city.toUpperCase().replace(/-/g, ' ') ==
+        this.props.user.city_name;
     const contributorFormHash = `${this.props.location.pathname}#contributors`;
     const loginHash = `${this.props.location.pathname}#login`;
     const townLower = this.props.match.params.city.toLowerCase();
@@ -28,7 +31,7 @@ class Viewer extends React.Component {
 
           <nav>
             <a href="">FAQ</a>
-            {this.props.loggedIn
+            {adminOfThisCity
               ? [
                 <Link key="contributors" to={contributorFormHash}>Manage Contributors</Link>,
                 <button key="logout" onClick={this.props.logout}>Logout {this.props.user.name}</button>,

@@ -14,6 +14,9 @@ class CardList extends React.Component {
   }
 
   render() {
+    const adminOfThisCity = this.props.loggedIn &&
+        this.props.match.params.city.toUpperCase().replace(/-/g, ' ') ==
+        this.props.user.city_name;
     return (
       <section className="component CardList">
         <div className={'plan-cards'}>
@@ -42,7 +45,7 @@ class CardList extends React.Component {
             onClick={this.props.toggleDetails}
           />
         </div>
-        {this.props.loggedIn ? (
+        {adminOfThisCity ? (
           <Link
             to={`/${this.props.match.params.city}/plan/create`}
             className="button styled"

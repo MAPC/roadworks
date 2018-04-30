@@ -23,14 +23,20 @@ class ContributorForm extends React.Component {
           <input className="contributor-link" value={contrib.link} readOnly/>
           <button
             className="styled primary"
-            onClick={() => this.props.regenerate(contrib.id)}
+            onClick={(e) => {
+              e.preventDefault();
+              this.props.regenerate(contrib.id);
+            }}
             disabled={!contrib.unlocked}
           >
             {en.CONTRIBUTOR_FORM.REGENERATE_BUTTON}
           </button>
           <button
             className="styled primary"
-            onClick={() => this.props.unlock(contrib.id)}
+            onClick={(e) => {
+              e.preventDefault();
+              this.props.unlock(contrib.id);
+            }}
             disabled={contrib.unlocked}
           >
             {en.CONTRIBUTOR_FORM.UNLOCK_CONTRIBUTOR}

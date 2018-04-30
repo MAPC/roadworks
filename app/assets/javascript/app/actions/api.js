@@ -17,7 +17,7 @@ async function getJSON(url) {
 }
 
 async function postJSON(url, body) {
-  const response = fetch(url, {
+  const response = await fetch(url, {
     headers: new Headers({
       'Content-Type': 'application/json',
     }),

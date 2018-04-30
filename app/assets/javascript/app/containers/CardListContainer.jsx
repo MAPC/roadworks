@@ -29,6 +29,7 @@ const mapStateToProps = (state) => {
   }));
   return {
     loggedIn: !!state.user.id,
+    user: state.user.cache[state.user.id],
     hideAllPlans: state.view.hideAllPlans,
     hideAllPermitTypes: state.view.hideAllPermitTypes,
     plans,

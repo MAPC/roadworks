@@ -26,6 +26,17 @@ class Map extends React.Component {
     this.fitBounds = this.fitBounds.bind(this);
     this.setMaxBounds = this.setMaxBounds.bind(this);
     this.redrawLayers = this.redrawLayers.bind(this);
+    this.geomToZoneKey = this.geomToZoneKey.bind(this);
+    this.findFirstCombination = this.findFirstCombination.bind(this);
+  }
+
+  geomToZoneKey(geom) {
+    if (!geom) { return null; }
+    const roundedLng = geom.coordinates[0]
+        .toFixed(constants.MAP.LABELS.COLLISION_TOLERANCE);
+    const roundedLat = geom.coordinates[1]
+        .toFixed(constants.MAP.LABELS.COLLISION_TOLERANCE);
+    return `${roundedLng},${roundedLat}`;
   }
 
   componentDidMount() {
@@ -37,7 +48,7 @@ class Map extends React.Component {
       maxBounds: constants.MAP.MAX_BOUNDS,
       zoom: 12,
       minZoom: 8,
-      maxZoom: 16,
+      maxZoom: 18,
     });
 
     this.map.addControl(this.control, 'top-right');
@@ -82,9 +93,13 @@ class Map extends React.Component {
         Object.assign(map, { [l.id]: l }), {});
 
     const layersToBeAdded = Object.keys(layerMap).filter((id) =>
-        (!prevLayerMap[id] || layerMap[id].version != prevLayerMap[id].version));
+        (!prevLayerMap[id] ||
+        layerMap[id].version != prevLayerMap[id].version) ||
+        (layerMap[id].options && prevLayerMap[id].options && layerMap[id].options.offset != prevLayerMap[id].options.offset));
     const layersToBeRemoved = Object.keys(prevLayerMap).filter((id) =>
-        (!layerMap[id] || layerMap[id].version != prevLayerMap[id].version));
+        (!layerMap[id] ||
+        layerMap[id].version != prevLayerMap[id].version) ||
+        (layerMap[id].options && prevLayerMap[id].options && layerMap[id].options.offset != prevLayerMap[id].options.offset));
 
     layersToBeRemoved.forEach((id) => {
       this.map.removeLayer(id);
@@ -106,11 +121,91 @@ class Map extends React.Component {
     });
   }
 
-  redrawMarkers(markers, prevMarkers) {
+  findFirstCombination(path, arr, test) {
+    const [first, ...rest] = arr;
+    let combo = null;
+    first.some((option) => {
+      const newPath = path.concat([option]);
+      if (rest.length) {
+        const found = this.findFirstCombination(newPath, rest, test);
+        if (found) {
+          combo = found;
+          return true;
+        }
+        return false;
+      }
+      if (test(newPath)) {
+        combo = newPath;
+        return true;
+      }
+      return false;
+    });
+    return combo;
+  }
+
+  preventCollisions(markerMap) {
+    const zoneMap = Object.values(markerMap).reduce((map, marker) => {
+      const zoneKey = this.geomToZoneKey(marker.geometry);
+      const markersForThisKey = map[zoneKey]
+          ? map[zoneKey].concat([marker.id])
+          : [marker.id];
+      return Object.assign({}, map, { [zoneKey]: markersForThisKey });
+    }, {});
+
+    const conflictSets = Object.values(zoneMap)
+        .filter((markerIds) => markerIds.length > 1);
+
+    const amendedMarkers = conflictSets.reduce((map, markerIds) => {
+      const optionsMap = markerIds.reduce((optMap, id) => {
+        const marker = markerMap[id];
+        const options = marker.alternates && marker.alternates.length
+            ? marker.alternates.filter((geom) => !zoneMap[this.geomToZoneKey(geom)])
+            : [marker.geometry];
+        return Object.assign(optMap, { [id]: options });
+      }, {});
+      const combo = this.findFirstCombination([], Object.values(optionsMap), (points) => {
+        const keyMap = {};
+        return points.every((geom) => {
+          const key = this.geomToZoneKey(geom);
+          if (keyMap[key]) { return false; }
+          keyMap[key] = true;
+          return true;
+        });
+      });
+      const partialAmendment = combo
+        ? markerIds.reduce((amendMap, id, index) => {
+            const newMarker = Object.assign({}, markerMap[id], {
+              geometry: combo[index],
+              _redraw: true,
+            });
+            return Object.assign({}, amendMap, { [id]: newMarker });
+          }, {})
+        : markerIds.reduce((amendMap, id, index) => {
+            const newMarker = Object.assign({}, markerMap[id], {
+              geometry: Object.assign({}, markerMap[id].geometry, {
+                coordinates: [
+                  markerMap[id].geometry.coordinates[0] + 10 ** -constants.MAP.LABELS.COLLISION_TOLERANCE,
+                  markerMap[id].geometry.coordinates[1] + 10 ** -constants.MAP.LABELS.COLLISION_TOLERANCE,
+                ],
+              }),
+              _redraw: true,
+            });
+            return Object.assign({}, amendMap, { [id]: newMarker });
+          }, {});
+      return Object.assign({}, map, partialAmendment);
+    }, {});
+
+    return Object.assign({}, markerMap, amendedMarkers);
+  }
+
+  redrawMarkers(unresolvedMarkers, prevMarkers) {
+    const unresolvedMarkerMap = unresolvedMarkers.reduce((map, m) =>
+        Object.assign(map, { [m.id]: m }), {});
+    const markerMap = this.preventCollisions(unresolvedMarkerMap);
+    const markers = Object.values(markerMap);
     const prevMarkerMap = prevMarkers.reduce((map, m) =>
         Object.assign(map, { [m.id]: m }), {});
-    const markerMap = markers.reduce((map, m) =>
-        Object.assign(map, { [m.id]: m }), {});
+
     // const prevMarkerIds = prevMarkers.map((m) => m.id);
     // const markerIds = markers.map((m) => m.id);
     const markersToBeAdded = markers.filter((m) => (

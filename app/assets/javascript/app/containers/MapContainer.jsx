@@ -7,7 +7,7 @@ import constants from './../constants/constants';
 import enums from './../constants/enums';
 
 import {
-  getFirstPoint,
+  getMarkerGeometryAndAlternates,
   generateUniqueOffsets,
   getSegmentGeometryAndNodes,
   createGeometryFromNodes,
@@ -17,6 +17,8 @@ import {
 import {
   encodeId,
 } from '../util/id';
+
+import capitalize from '../util/capitalize';
 
 function getWorkingSegmentLayersAndMarkers(timeframes, roadCache, nodeCache) {
   // Calculate all of the properly formatted layers for display on the map
@@ -29,12 +31,20 @@ function getWorkingSegmentLayersAndMarkers(timeframes, roadCache, nodeCache) {
       // Fetch the base road for the current segment
       const road = roadCache[segment.road_id];
       const layerId = encodeId(0, timeframe.workingId, tfIndex, segment.workingId, stIndex);
-      const startYear = timeframe.start
-          ? (new Date(timeframe.start)).toLocaleString('en-US', { year: 'numeric'})
-          : '{start year}';
-      const startMonth = timeframe.start
-          ? (new Date(timeframe.start)).toLocaleString('en-US', { month: 'long'})
-          : '{start month}';
+      const startDate = timeframe.start
+          ? (new Date(timeframe.start)).toLocaleString(
+              'en-US',
+              constants.MAP.LABELS.LOCALESTRING_OPTIONS
+            )
+          : '[start date]';
+      const endDate = timeframe.end
+          ? (new Date(timeframe.end)).toLocaleString(
+              'en-US',
+              constants.MAP.LABELS.LOCALESTRING_OPTIONS
+            )
+          : '[end date]';
+      const bottom = `${startDate} - ${endDate}`;
+      const top = road ? capitalize(road.name) : 'Road Name';
       if (segment.nodes.length) {
         // If the segment is not the whole road, plot the calculated path between
         // the orig and dest nodes
@@ -42,6 +52,8 @@ function getWorkingSegmentLayersAndMarkers(timeframes, roadCache, nodeCache) {
         const geometry = createGeometryFromNodes(segment.nodes, mergedNodeCache);
         const firstPoint = geometry.coordinates[0];
         const lastPoint = geometry.coordinates[geometry.coordinates.length - 1];
+        const { markerGeometry, alternateMarkerGeometries } =
+            getMarkerGeometryAndAlternates(segment.nodes.map((id) => mergedNodeCache[id]));
         return {
           segmentLayers: pkg.segmentLayers.concat([{
             id: layerId,
@@ -77,15 +89,19 @@ function getWorkingSegmentLayersAndMarkers(timeframes, roadCache, nodeCache) {
             type: 'plan',
             color: '#f00',
             version: segment.version,
-            geometry: getFirstPoint(geometry),
+            geometry: markerGeometry,
+            alternateGeometries: alternateMarkerGeometries,
             label: {
-              top: startYear,
-              bottom: startMonth,
+              top,
+              bottom,
+              start: timeframe.start,
             },
           }]),
         };
       } else if (road && road.nodes.length) {
         // Plot the whole road, if no partial path has been calculated
+        const { markerGeometry, alternateMarkerGeometries } =
+            getMarkerGeometryAndAlternates(road.nodes.map((id) => nodeCache[id]));
         return {
           segmentLayers: pkg.segmentLayers.concat([{
             id: layerId,
@@ -100,10 +116,12 @@ function getWorkingSegmentLayersAndMarkers(timeframes, roadCache, nodeCache) {
             type: 'plan',
             color: '#f00',
             version: segment.version,
-            geometry: getFirstPoint(road.geojson),
+            geometry: markerGeometry,
+            alternateGeometries: alternateMarkerGeometries,
             label: {
-              top: startYear,
-              bottom: startMonth,
+              top,
+              bottom,
+              start: timeframe.start,
             },
           }]),
         };
@@ -125,12 +143,17 @@ function getPlanLayersAndMarkers(plans, roadCache, nodeCache) {
           .reduce((stLayers, segment, segmentIndex) => {
         const layerId = encodeId(plan.id, timeframe.id, timeframeIndex, segment.id, segmentIndex);
         const { geometry, nodes } = getSegmentGeometryAndNodes(segment, roadCache, nodeCache);
+
         return stLayers.concat([{
           layerId,
           color: plan.color,
           geometry,
           nodes,
+          roadName: roadCache[segment.road_id]
+              ? roadCache[segment.road_id].name
+              : '',
           start: timeframe.start,
+          end: timeframe.end,
         }]);
       }, []));
     }, []));
@@ -146,17 +169,27 @@ function getPlanLayersAndMarkers(plans, roadCache, nodeCache) {
       options: { offset: (offsetMap[kit.layerId] || 0) },
       geometry: kit.geometry,
     })),
-    segmentMarkers: layerKits.map((kit) => ({
-      id: kit.layerId,
-      type: 'plan',
-      color: kit.color,
-      version: 1,
-      geometry: getFirstPoint(kit.geometry),
-      label: {
-        top: (new Date(kit.start)).toLocaleString('en-US', { year: 'numeric'}),
-        bottom: (new Date(kit.start)).toLocaleString('en-US', { month: 'long'}),
-      },
-    })),
+    segmentMarkers: layerKits.map((kit) => {
+      const startDate = (new Date(kit.start))
+          .toLocaleString('en-US', constants.MAP.LABELS.LOCALESTRING_OPTIONS);
+      const endDate = (new Date(kit.end))
+          .toLocaleString('en-US', constants.MAP.LABELS.LOCALESTRING_OPTIONS);
+      const { markerGeometry, alternateMarkerGeometries } =
+          getMarkerGeometryAndAlternates(kit.nodes.map((id) => nodeCache[id]));
+      return {
+        id: kit.layerId,
+        type: 'plan',
+        color: kit.color,
+        version: 1,
+        geometry: markerGeometry,
+        alternates: alternateMarkerGeometries,
+        label: {
+          top: capitalize(kit.roadName),
+          bottom: `${startDate} - ${endDate}`,
+          start: kit.start,
+        },
+      };
+    }),
   };
 }
 
@@ -207,11 +240,13 @@ const mapStateToProps = (state, props) => {
             !state.view.hiddenPermitTypes[permit.permit_type] &&
             permit.geojson) {
           const start = permit.start_date
-              ? (new Date(permit.start_date)).toLocaleString('en-US', { month: 'short', day: 'numeric' })
-              : '{start}';
+              ? (new Date(permit.start_date))
+                  .toLocaleString('en-US', constants.MAP.LABELS.LOCALESTRING_OPTIONS)
+              : '[start date]';
           const end = permit.end_date
-              ? (new Date(permit.end_date)).toLocaleString('en-US', { month: 'short', day: 'numeric' })
-              : '{end}';
+              ? (new Date(permit.end_date))
+                  .toLocaleString('en-US', constants.MAP.LABELS.LOCALESTRING_OPTIONS)
+              : '[end date]';
           return permits.concat([{
             id: permit.id.toString(),
             type: 'permit',

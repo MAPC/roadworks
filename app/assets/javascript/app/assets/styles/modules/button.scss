@@ -7,7 +7,7 @@ button, .button {
     line-height: 16px;
     text-align: center;
 
-    background: $color_brand-secondary;    
+    background: $color_brand-secondary;
     border: 0;
     transition: background .15s;
 
@@ -16,20 +16,21 @@ button, .button {
     &.light {
       color: $color_font-dark;
 
-      background: $color_bg-medium; 
+      background: $color_bg-medium;
 
       &:hover { background: $color_bg-medium--active; }
     }
 
     &.primary {
-      background: $color_brand-primary; 
+      background: $color_brand-primary;
 
       &:hover { background: $color_brand-primary--dark; }
+      &:disabled { background: $color_bg-medium; }
     }
 
     img {
       top: 2px;
-      display: inline-block; 
+      display: inline-block;
 
       max-height: 14px;
       width: 14px;
@@ -45,6 +46,6 @@ button, .button {
     background: none;
     border: none;
 
-    text-decoration: underline; 
+    text-decoration: underline;
   }
 }

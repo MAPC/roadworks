@@ -7,7 +7,10 @@ import { logout } from '../actions/sessionActions';
 import { fetchPlans } from '../actions/planActions';
 import { fetchNodes } from '../actions/nodeActions';
 
-const mapStateToProps = (state, props) => state;
+const mapStateToProps = (state, props) => ({
+  loggedIn: !!state.user.id,
+  user: state.user.cache[state.user.id],
+});
 
 const mapDispatchToProps = (dispatch, props) => {
   return {

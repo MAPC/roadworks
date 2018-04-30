@@ -1,6 +1,10 @@
 import api from './api';
 import types from './types';
 
+import {
+  updateUsers,
+} from './userActions';
+
 export function fetchSetPending() {
   return {
     type: types.FETCH.SET_PENDING,
@@ -69,5 +73,14 @@ export function fetchPlanCreateData(cityName) {
       nodes: [],
       permits: [],
     }));
+  };
+}
+
+export function fetchContributors() {
+  return async (dispatch, getState) => {
+    const users = await api.getContributors();
+    if (users && users.length) {
+      return dispatch(updateUsers(users));
+    }
   };
 }

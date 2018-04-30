@@ -1,19 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Redirect, Switch } from 'react-router-dom';
 
 import MapContainer from '../containers/MapContainer';
 import CardListContainer from '../containers/CardListContainer';
 import LoginFormContainer from '../containers/LoginFormContainer';
 import PlanCreateContainer from '../containers/PlanCreateContainer';
+import ContributorFormContainer from '../containers/ContributorFormContainer';
 
 import capitalize from '../util/capitalize';
 
 class Viewer extends React.Component {
 
   render() {
-    const showLoginLink = `${this.props.location.pathname}#login`;
-    const showLoginForm = this.props.location.hash === '#login';
+    const adminOfThisCity = this.props.loggedIn &&
+        this.props.match.params.city.toUpperCase().replace(/-/g, ' ') ==
+        this.props.user.city_name;
+    const contributorFormHash = `${this.props.location.pathname}#contributors`;
+    const loginHash = `${this.props.location.pathname}#login`;
     const townLower = this.props.match.params.city.toLowerCase();
     const townCapitalized = capitalize(this.props.match.params.city);
 
@@ -27,22 +31,43 @@ class Viewer extends React.Component {
 
           <nav>
             <a href="">FAQ</a>
-
-            {this.props.user.email !== null
-              ? <button onClick={this.props.logout}>Logout {this.props.user.email}</button>
-              : <Link to={showLoginLink}>Municipal Login</Link>
-            }
+            {adminOfThisCity ? (
+              <Link key="contributors" to={contributorFormHash}>Manage Contributors</Link>
+            ) : null}
+            {this.props.loggedIn ? (
+              <button key="logout" onClick={this.props.logout}>Logout {this.props.user.name}</button>
+            ) : (
+              <Link to={loginHash}>Municipal Login</Link>
+            )}
           </nav>
         </header>
         <div className="page-wrapper">
           <Route path="/:city/:resource?/:action?" component={MapContainer} />
 
           <div className="left-panel">
-            <Route exact path="/:city" component={CardListContainer} />
-            <Route path="/:city/plan/create" component={PlanCreateContainer} />
+            <Switch>
+              <Route exact path="/:city" component={CardListContainer} />
+              <Route path="/:city/plan/create" render={(props) =>
+                this.props.user.id ? (
+                  <PlanCreateContainer {...props} />
+                ) : (
+                  <Redirect to={`/${townLower}`} />
+                )
+              }/>
+              <Redirect to={`/${townLower}`} />
+            </Switch>
           </div>
-
-          {showLoginForm ? <LoginFormContainer /> : null}
+          <Route path="/:city" render={(props) => {
+            const hash = props.location.hash;
+            switch (hash) {
+              case '#login':
+                return <LoginFormContainer {...props} />;
+              case '#contributors':
+                return <ContributorFormContainer {...props} />;
+              default:
+                return null;
+            }
+          }}/>
         </div>
       </section>
     );

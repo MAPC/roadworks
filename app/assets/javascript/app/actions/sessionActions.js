@@ -3,17 +3,21 @@ import types from './types';
 import Cookies from 'js-cookie';
 import { push } from 'react-router-redux';
 
+import {
+  updateUsers,
+  setAuthenticatedUser,
+} from './userActions';
 
 export function onEmailChange(email) {
   return {
-    type: types.LOGIN.FORM.EMAIL.CHANGE,
+    type: types.LOGIN_FORM.EMAIL.CHANGE,
     email
   };
 }
 
 export function onPasswordChange(password) {
   return {
-    type: types.LOGIN.FORM.PASSWORD.CHANGE, 
+    type: types.LOGIN_FORM.PASSWORD.CHANGE,
     password
   };
 }
@@ -23,10 +27,8 @@ export function login(email, password) {
     const user = await api.login(email, password);
 
     if (user) {
-      dispatch({
-        type: types.USER.UPDATE,
-        user,
-      });
+      dispatch(updateUsers([user]));
+      dispatch(setAuthenticatedUser(user.id));
       dispatch(push(getState().router.location.pathname));
     }
   };

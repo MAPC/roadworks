@@ -9,9 +9,11 @@
     <% if signed_in? %>
       <script>
         window.currentUser = {
-          user_id: <%= current_user.id %>,
+          id: <%= current_user.id %>,
           email: "<%= current_user.email %>",
           role: "<%= current_user.role %>",
+          city_name: "<%= current_user.city_name %>",
+          name: "<%= current_user.name %>",
         };
       </script>
     <% end %>

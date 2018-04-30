@@ -17,7 +17,7 @@ async function getJSON(url) {
 }
 
 async function postJSON(url, body) {
-  const response = fetch(url, {
+  const response = await fetch(url, {
     headers: new Headers({
       'Content-Type': 'application/json',
     }),
@@ -74,6 +74,17 @@ export default {
   getPermits: (city) => {
     return getJSON(`/api/permits?city=${city}`);
   },
+  getContributors: () => {
+    return getJSON(`/api/users`);
+  },
+  createContributor: (name) => {
+    return postJSON(`/api/users`, JSON.stringify({
+      user: { name },
+    }));
+  },
+  updateContributor: (id) => {
+    return putJSON(`/api/users/${id}`, JSON.stringify({}));
+  },
   geocodeToLngLat: async (address) => {
     const response = await fetch(`http://pelias.mapc.org/v1/search?text=${address}`, {
       headers: new Headers({
@@ -104,7 +115,7 @@ export default {
   login: async (email, password) => {
     const csrf = getCSRF();
 
-    return fetch('/api/users/sign_in', {
+    return fetch('/api/auth/login', {
       headers: new Headers({
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -118,7 +129,7 @@ export default {
     }).then(res => res.statusText === "Created" ? res.json() : null);
   },
   logout: async () => {
-    return fetch('/api/users/sign_out', {
+    return fetch('/api/auth/logout', {
       credentials: 'same-origin',
       method: 'DELETE'
     });

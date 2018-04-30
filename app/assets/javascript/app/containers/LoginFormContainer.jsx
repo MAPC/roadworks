@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import LoginForm from '../components/LoginForm';
 
-import { 
+import {
   onEmailChange,
   onPasswordChange,
   login,
@@ -10,8 +10,9 @@ import {
 
 
 const mapStateToProps = state => ({
-  loginForm: state.loginForm, 
-  user: state.user, 
+  loggedIn: !!state.user.id,
+  loginForm: state.loginForm,
+  user: state.user,
   redirectTo: state.router.location.pathname,
 });
 

@@ -128,22 +128,21 @@ class Map extends React.Component {
       const newPath = path.concat([option]);
       if (rest.length) {
         const found = this.findFirstCombination(newPath, rest, test);
-        if (found) {
-          combo = found;
-          return true;
-        }
-        return false;
+        combo = found;
+        return !!found;
       }
-      if (test(newPath)) {
-        combo = newPath;
-        return true;
-      }
-      return false;
+      const isValidCombo = test(newPath);
+      combo = isValidCombo ? newPath : null;
+      return !!isValidCombo;
     });
     return combo;
   }
 
   preventCollisions(markerMap) {
+    // By truncating the lat and lng of the markers in geomToZoneKey to create a
+    // unique key, we can limit the number of labels in a single square "zone".
+    // If two labels appear within the same one thousandth by one thousandth lat
+    // and lng square, we move the label to an alternate point.
     const zoneMap = Object.values(markerMap).reduce((map, marker) => {
       const zoneKey = this.geomToZoneKey(marker.geometry);
       const markersForThisKey = map[zoneKey]
@@ -152,9 +151,12 @@ class Map extends React.Component {
       return Object.assign({}, map, { [zoneKey]: markersForThisKey });
     }, {});
 
+    // Pull out all of the markers that conflict.
     const conflictSets = Object.values(zoneMap)
         .filter((markerIds) => markerIds.length > 1);
 
+    // Amend the markers that conflict, either by selecting the next alternate
+    // or shifting the point arbitrarily if no alternates are available.
     const amendedMarkers = conflictSets.reduce((map, markerIds) => {
       const optionsMap = markerIds.reduce((optMap, id) => {
         const marker = markerMap[id];
@@ -184,8 +186,10 @@ class Map extends React.Component {
             const newMarker = Object.assign({}, markerMap[id], {
               geometry: Object.assign({}, markerMap[id].geometry, {
                 coordinates: [
-                  markerMap[id].geometry.coordinates[0] + 10 ** -constants.MAP.LABELS.COLLISION_TOLERANCE,
-                  markerMap[id].geometry.coordinates[1] + 10 ** -constants.MAP.LABELS.COLLISION_TOLERANCE,
+                  markerMap[id].geometry.coordinates[0] +
+                      10 ** -constants.MAP.LABELS.COLLISION_TOLERANCE,
+                  markerMap[id].geometry.coordinates[1] +
+                      10 ** -constants.MAP.LABELS.COLLISION_TOLERANCE,
                 ],
               }),
               _redraw: true,

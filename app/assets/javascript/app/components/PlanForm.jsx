@@ -15,6 +15,11 @@ class PlanForm extends React.Component {
     const planTypeOptions = [
       { label: 'Paving', value: 'PAVING'},
       { label: 'Moratorium', value: 'MORATORIUM'},
+      { label: 'Water', value: 'WATER'},
+      { label: 'Sewer', value: 'SEWER'},
+      { label: 'Electrical', value: 'ELECTRICAL'},
+      { label: 'Communications', value: 'COMMUNICATIONS'},
+      { label: 'Gas', value: 'GAS'},
     ];
     const planTypePlaceholder = '-- Select Plan Type --';
     return (

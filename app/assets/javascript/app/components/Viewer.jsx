@@ -25,7 +25,7 @@ class Viewer extends React.Component {
       <section className="component Viewer">
         <header>
           <div className="title">
-            <img src={`assets/${townLower}-seal.png`} alt={`Town of ${townCapitalized} Seal`} />
+            <img src={`/assets/${townLower}-seal.png`} alt={`Town of ${townCapitalized} Seal`} />
             <h1>Town of {townCapitalized}</h1>
           </div>
 

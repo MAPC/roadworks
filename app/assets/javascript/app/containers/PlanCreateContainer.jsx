@@ -10,6 +10,7 @@ import {
 } from '../actions/fetchActions';
 
 const mapStateToProps = (state) => ({
+  isPending: state.workingPlan.isPending,
   workingPlan: state.workingPlan,
 });
 

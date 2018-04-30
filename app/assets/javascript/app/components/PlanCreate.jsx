@@ -94,6 +94,7 @@ class PlanCreate extends AbstractForm {
             className="styled primary"
             data-action="add-to-map"
             onClick={this.submit}
+            disabled={this.props.isPending}
           >
             <span className="plus">+</span>
             {this.props.workingPlan.id ? 'Edit plan' : 'Create plan'}

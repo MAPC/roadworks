@@ -62,7 +62,7 @@ const assignNewTimeframe = (state, action, newTimeframe, incSegVersion) => {
   });
 };
 
-function workingPlanReducer(state = {
+const initialState = {
   name: '',
   plan_type: 'NONE',
   timeframes: [Object.assign({}, blankTimeframe, {
@@ -73,7 +73,10 @@ function workingPlanReducer(state = {
   })],
   focusedRoad: null,
   nextWorkingId: 2,
-}, action) {
+  isPending: false,
+};
+
+function workingPlanReducer(state = Object.assign({}, initialState), action) {
   const currTimeframe = typeof(action.timeframeIndex) !== 'undefined'
       ? state.timeframes[action.timeframeIndex] : null;
   const currSegment = typeof(action.segmentIndex) !== 'undefined'
@@ -194,6 +197,15 @@ function workingPlanReducer(state = {
       return Object.assign({}, state, action.plan, {
         nextWorkingId: action.nextWorkingId,
       });
+
+    case types.WORKING_PLAN.SET_PENDING:
+      return Object.assign({}, state, {
+        isPending: action.isPending,
+      });
+
+    case types.WORKING_PLAN.RESET:
+      return Object.assign({}, initialState);
+
     default:
       return state
   }

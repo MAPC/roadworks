@@ -308,14 +308,30 @@ export function updatePlan(city) {
   };
 }
 
+export function workingPlanSetPending(isPending) {
+  return {
+    type: types.WORKING_PLAN.SET_PENDING,
+    isPending,
+  };
+}
+
+export function workingPlanReset() {
+  return {
+    type: types.WORKING_PLAN.RESET,
+  };
+}
+
 export function createPlan(city) {
   return async (dispatch, getState) => {
+    dispatch(workingPlanSetPending(true));
     const workingPlan = getState().workingPlan;
     const newPlan = await api.createPlan(workingPlan, true, city.toUpperCase());
     if (newPlan) {
       dispatch(updatePlans([newPlan]));
       dispatch(push(`/${city}`));
+      dispatch(workingPlanReset());
     }
+    return dispatch(workingPlanSetPending(false));
   };
 }
 

@@ -25,7 +25,6 @@ async function postJSON(url, body) {
     method: 'POST',
     body,
   });
-  console.log(response)
   return await response.json();
 }
 

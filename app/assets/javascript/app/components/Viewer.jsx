@@ -31,13 +31,14 @@ class Viewer extends React.Component {
 
           <nav>
             <a href="">FAQ</a>
-            {adminOfThisCity
-              ? [
-                <Link key="contributors" to={contributorFormHash}>Manage Contributors</Link>,
-                <button key="logout" onClick={this.props.logout}>Logout {this.props.user.name}</button>,
-              ]
-              : <Link to={loginHash}>Municipal Login</Link>
-            }
+            {adminOfThisCity ? (
+              <Link key="contributors" to={contributorFormHash}>Manage Contributors</Link>
+            ) : null}
+            {this.props.loggedIn ? (
+              <button key="logout" onClick={this.props.logout}>Logout {this.props.user.name}</button>
+            ) : (
+              <Link to={loginHash}>Municipal Login</Link>
+            )}
           </nav>
         </header>
         <div className="page-wrapper">

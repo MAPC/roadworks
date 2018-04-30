@@ -8,6 +8,7 @@ import {
 } from './nodeActions';
 import {
   updatePlans,
+  removePlan,
 } from './planActions';
 import {
   partialNodeCacheForRoad,
@@ -335,5 +336,16 @@ export function createPlan(city) {
   };
 }
 
-
+export function deletePlan(city, id) {
+  return async (dispatch, getState) => {
+    dispatch(workingPlanSetPending(true));
+    const deletedPlan = await api.deletePlan(id);
+    if (deletedPlan) {
+      dispatch(removePlan(id));
+      dispatch(push(`/${city}`));
+      dispatch(workingPlanReset());
+    }
+    return dispatch(workingPlanSetPending(false));
+  };
+}
 

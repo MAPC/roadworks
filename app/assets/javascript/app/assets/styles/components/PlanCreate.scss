@@ -17,13 +17,6 @@
       left: ($elem_Card-width - $bar_width)/ 2;
     }
 
-    &:after {
-      @include bars($color_brand-primary, $bar_width);
-
-      bottom: -$global_pad * 2;
-      right: ($elem_Card-width / 4) - $bar_width;
-    }
-
     h3 {
       margin: 0;
       padding: ($global_pad / 2.5) $global_pad;
@@ -36,14 +29,22 @@
       border-bottom: 5px solid $color_brand-secondary;
     }
 
-    *[data-action="add-to-map"] {
+    button.hanging {
+      position: relative;
       float: right;
-      z-index: 4;
+      margin-left: $global_pad;
 
       width: $elem_Card-width / 2;
       margin-top: $global_pad;
 
       box-shadow: $global_shadow;
+
+      &:before {
+        @include bars($color_brand-primary, $bar_width);
+        z-index: -1;
+        top: -$global_pad * 2;
+        left: ($elem_Card-width / 4) - $bar_width;
+      }
 
       .plus {
         display: inline-block;

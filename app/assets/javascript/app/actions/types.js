@@ -14,6 +14,7 @@ export default {
   },
   PLAN: {
     BATCH_UPDATE: 'PLAN_BATCH_UPDATE',
+    REMOVE: 'PLAN_REMOVE',
   },
   VIEW: {
     TOGGLE_ALL_PLANS: 'VIEW_TOGGLE_ALL_PLANS',

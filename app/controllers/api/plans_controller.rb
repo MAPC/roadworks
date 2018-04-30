@@ -90,7 +90,6 @@ module Api
 
     def update
       permitted_params = permit_plan_params(params)
-      puts permitted_params
       plan = Plan.find_by(id: permitted_params[:id])
       unless plan
         return render json: {}, status: :bad_request
@@ -105,6 +104,20 @@ module Api
         end
       else
         render json: plan.errors.full_messages, status: :bad_request
+      end
+    end
+
+    def destroy
+      plan = Plan.find_by(id: params[:id])
+      unless plan
+        return render json: {}, status: :bad_request
+      end
+      unless plan[:user_id] == current_user.id
+        return render json: {}, status: :unauthorized
+      end
+      plan.destroy
+      respond_to do |format|
+        format.json { render json: plan }
       end
     end
 

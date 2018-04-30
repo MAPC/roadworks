@@ -12,6 +12,13 @@ function planReducer(state = {
       action.plans.forEach(plan => cachePartial[plan.id] = plan);
       newCache = Object.assign({}, state.cache, cachePartial);
       return Object.assign({}, state, { cache: newCache });
+    case types.PLAN.REMOVE:
+      cachePartial = Object.values(state.cache).reduce((cache, plan) =>
+        plan.id == action.id
+            ? cache
+            : Object.assign({}, cache, { [plan.id]: plan })
+      , {});
+      return Object.assign({}, state, { cache: cachePartial });
     default:
       return state
   }

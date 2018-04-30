@@ -4,6 +4,7 @@ import PlanCreate from '../components/PlanCreate';
 import {
   createPlan,
   updatePlan,
+  deletePlan,
 } from '../actions/workingPlanActions';
 import {
   fetchPlanCreateData,
@@ -15,6 +16,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
+  deletePlan: (id) => dispatch(deletePlan(props.match.params.city, id)),
   createPlan: () => dispatch(createPlan(props.match.params.city)),
   updatePlan: () => dispatch(updatePlan(props.match.params.city)),
   fetchData: () => dispatch(fetchPlanCreateData(props.match.params.city)),

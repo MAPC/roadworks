@@ -27,16 +27,34 @@ class Map extends React.Component {
     this.setMaxBounds = this.setMaxBounds.bind(this);
     this.redrawLayers = this.redrawLayers.bind(this);
     this.geomToZoneKey = this.geomToZoneKey.bind(this);
-    this.findFirstCombination = this.findFirstCombination.bind(this);
+    this.geomToCollisionKeys = this.geomToCollisionKeys.bind(this);
+    this.findFirstBestCombination = this.findFirstBestCombination.bind(this);
   }
 
   geomToZoneKey(geom) {
     if (!geom) { return null; }
-    const roundedLng = geom.coordinates[0]
-        .toFixed(constants.MAP.LABELS.COLLISION_TOLERANCE);
-    const roundedLat = geom.coordinates[1]
-        .toFixed(constants.MAP.LABELS.COLLISION_TOLERANCE);
+    const inv = 1.0 / constants.MAP.LABELS.COLLISION_ROUNDING;
+    const roundedLng = Math.round(geom.coordinates[0] * inv) / inv;
+    const roundedLat = Math.round(geom.coordinates[1] * inv) / inv;
     return `${roundedLng},${roundedLat}`;
+  }
+
+  geomToCollisionKeys(geom) {
+    const r = constants.MAP.LABELS.COLLISION_ROUNDING;
+    const inv = 1.0 / r;
+    const roundedLng = Math.round(geom.coordinates[0] * inv) / inv;
+    const roundedLat = Math.round(geom.coordinates[1] * inv) / inv;
+    return [
+      `${roundedLng},${roundedLat}`,
+      `${roundedLng + r},${roundedLat}`,
+      `${roundedLng - r},${roundedLat}`,
+      `${roundedLng},${roundedLat + r}`,
+      `${roundedLng},${roundedLat - r}`,
+      `${roundedLng + r},${roundedLat + r}`,
+      `${roundedLng - r},${roundedLat - r}`,
+      `${roundedLng - r},${roundedLat + r}`,
+      `${roundedLng + r},${roundedLat - r}`,
+    ];
   }
 
   componentDidMount() {
@@ -121,21 +139,26 @@ class Map extends React.Component {
     });
   }
 
-  findFirstCombination(path, arr, test) {
+  findFirstBestCombination(path, arr, test) {
     const [first, ...rest] = arr;
-    let combo = null;
+    let bestSolution = null;
     first.some((option) => {
       const newPath = path.concat([option]);
-      if (rest.length) {
-        const found = this.findFirstCombination(newPath, rest, test);
-        combo = found;
-        return !!found;
+      const isValidSolution = test(newPath);
+      if (isValidSolution) {
+        bestSolution = newPath;
+        if (rest.length) {
+          const found = this.findFirstBestCombination(newPath, rest, test);
+          if (found) {
+            bestSolution = found;
+            return bestSolution.length == arr.length;
+          }
+          return false;
+        }
       }
-      const isValidCombo = test(newPath);
-      combo = isValidCombo ? newPath : null;
-      return !!isValidCombo;
+      return false;
     });
-    return combo;
+    return bestSolution;
   }
 
   preventCollisions(markerMap) {
@@ -143,17 +166,21 @@ class Map extends React.Component {
     // unique key, we can limit the number of labels in a single square "zone".
     // If two labels appear within the same one thousandth by one thousandth lat
     // and lng square, we move the label to an alternate point.
-    const zoneMap = Object.values(markerMap).reduce((map, marker) => {
-      const zoneKey = this.geomToZoneKey(marker.geometry);
-      const markersForThisKey = map[zoneKey]
-          ? map[zoneKey].concat([marker.id])
-          : [marker.id];
-      return Object.assign({}, map, { [zoneKey]: markersForThisKey });
-    }, {});
+    const zoneMap = {};
+    Object.values(markerMap).forEach((marker) => {
+      const collisionKeys = this.geomToCollisionKeys(marker.geometry);
+      collisionKeys.forEach((key) => {
+        zoneMap[key] = zoneMap[key]
+            ? zoneMap[key].concat([marker.id])
+            : [marker.id];
+      });
+    });
 
     // Pull out all of the markers that conflict.
-    const conflictSets = Object.values(zoneMap)
-        .filter((markerIds) => markerIds.length > 1);
+    const conflictSets = Object.values(Object.values(zoneMap)
+        .filter((markerIds) => markerIds.length > 1)
+        .reduce((map, ids) => Object.assign({}, map, { [ids.sort().toString()]: ids }), {}));
+    console.log(conflictSets);
 
     // Amend the markers that conflict, either by selecting the next alternate
     // or shifting the point arbitrarily if no alternates are available.
@@ -165,7 +192,7 @@ class Map extends React.Component {
             : [marker.geometry];
         return Object.assign(optMap, { [id]: options });
       }, {});
-      const combo = this.findFirstCombination([], Object.values(optionsMap), (points) => {
+      const combo = this.findFirstBestCombination([], Object.values(optionsMap), (points) => {
         const keyMap = {};
         return points.every((geom) => {
           const key = this.geomToZoneKey(geom);
@@ -174,10 +201,18 @@ class Map extends React.Component {
           return true;
         });
       });
+      console.log(combo)
       const partialAmendment = combo
         ? markerIds.reduce((amendMap, id, index) => {
             const newMarker = Object.assign({}, markerMap[id], {
-              geometry: combo[index],
+              geometry: combo[index] || Object.assign({}, markerMap[id].geometry, {
+                coordinates: [
+                  markerMap[id].geometry.coordinates[0] +
+                      (index - combo.length) * constants.MAP.LABELS.COLLISION_OFFSET,
+                  markerMap[id].geometry.coordinates[1] +
+                      (index - combo.length) * constants.MAP.LABELS.COLLISION_OFFSET,
+                ],
+              }),
               _redraw: true,
             });
             return Object.assign({}, amendMap, { [id]: newMarker });
@@ -187,9 +222,9 @@ class Map extends React.Component {
               geometry: Object.assign({}, markerMap[id].geometry, {
                 coordinates: [
                   markerMap[id].geometry.coordinates[0] +
-                      10 ** -constants.MAP.LABELS.COLLISION_TOLERANCE,
+                      index * constants.MAP.LABELS.COLLISION_OFFSET,
                   markerMap[id].geometry.coordinates[1] +
-                      10 ** -constants.MAP.LABELS.COLLISION_TOLERANCE,
+                      index * constants.MAP.LABELS.COLLISION_OFFSET,
                 ],
               }),
               _redraw: true,

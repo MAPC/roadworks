@@ -9,8 +9,9 @@ export default {
         HALF: 1,
       },
       LOCALESTRING_OPTIONS: { month: 'short', year: 'numeric' },
-      // Map labels cannot be within one thousandth lat or lng of another label
-      COLLISION_TOLERANCE: 3,
+      // Map labels cannot be within 0.0005 lat or lng of another label
+      COLLISION_ROUNDING: 0.0005,
+      COLLISION_OFFSET: 0.0001,
     },
   },
 };

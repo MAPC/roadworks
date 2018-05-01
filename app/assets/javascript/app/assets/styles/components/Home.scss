@@ -1,0 +1,28 @@
+.component.Home {
+  @extend ._vertical-center;
+  @extend ._clear;
+  top: 30%;
+  max-width: 600px;
+  margin: $global_pad auto;
+  border: 1px solid $color_brand-secondary;
+  background: $color_bg-light;
+  z-index: 10;
+  .header {
+    background: $color_brand-secondary;
+    padding: ($global_pad / 2) $global_pad;
+    h2 {
+      margin: 0;
+      color: $color_bg-light;
+    }
+  }
+  ul {
+    margin: 0;
+    padding: $global_pad;
+    li:not(:last-child) {
+      margin-bottom: $global_pad;
+    }
+    a {
+      @extend ._link;
+    }
+  }
+}

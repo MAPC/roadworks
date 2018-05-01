@@ -18,15 +18,18 @@ import {
   loadExistingPlan,
 } from '../actions/workingPlanActions';
 
-const mapStateToProps = (state) => {
-  const plans = Object.keys(state.plan.cache).map((planId) => ({
-    id: planId,
-    type: enums.CARD_ROW.TYPES.PLAN,
-    title: state.plan.cache[planId].name,
-    active: !state.view.hiddenPlans[planId],
-    color: state.plan.cache[planId].color,
-    editable: state.plan.cache[planId].user_id == state.user.id,
-  }));
+const mapStateToProps = (state, props) => {
+  const cityName = props.match.params.city.toUpperCase().replace(/-/g, ' ');
+  const plans = Object.values(state.plan.cache)
+    .filter((plan) => plan.city == cityName)
+    .map((plan) => ({
+      id: plan.id,
+      type: enums.CARD_ROW.TYPES.PLAN,
+      title: plan.name,
+      active: !state.view.hiddenPlans[plan.id],
+      color: plan.color,
+      editable: plan.user_id == state.user.id,
+    }));
   return {
     loggedIn: !!state.user.id,
     user: state.user.cache[state.user.id],

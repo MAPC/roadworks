@@ -9,5 +9,5 @@
 if Rails.env.development? || Rails.env.test? || Rails.env.staging?
   sh "pg_restore -Fc -O -a -t nodes -t roads -t raw_segments -t cities -d #{Rails.configuration.database_configuration[Rails.env]['database']} lib/seeds/roadworks.dump" || true
 else
-  sh "pg_restore -Fc -O -a -t nodes -t roads -t raw_segments -t cities -h #{Rails.configuration.database_configuration[Rails.env]['host']} -U #{Rails.configuration.database_configuration[Rails.env]['username']} -w -d #{Rails.configuration.database_configuration[Rails.env]['database']} lib/seeds/roadworks.dump" || true
+  sh "pg_restore -Fc -O -a -t nodes -t roads -t cities -h #{Rails.configuration.database_configuration[Rails.env]['host']} -p 5433 -U #{Rails.configuration.database_configuration[Rails.env]['username']} -w -d #{Rails.configuration.database_configuration[Rails.env]['database']} lib/seeds/roadworks.dump" || true
 end

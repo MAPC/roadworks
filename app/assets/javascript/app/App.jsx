@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Route } from 'react-router'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import { ConnectedRouter } from 'react-router-redux';
 import { history, store } from './store/appStore';
 import ViewerContainer from './containers/ViewerContainer';
@@ -16,7 +16,7 @@ export default (props) => {
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <Route path="/:city" component={ViewerContainer} />
+        <Route path="/:city?" component={ViewerContainer}/>
       </ConnectedRouter>
     </Provider>
   );

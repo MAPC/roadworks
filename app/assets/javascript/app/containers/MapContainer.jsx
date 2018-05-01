@@ -194,12 +194,14 @@ function getPlanLayersAndMarkers(plans, roadCache, nodeCache) {
 }
 
 const mapStateToProps = (state, props) => {
-  const cityName = props.match.params.city.toUpperCase().replace('-', ' ');
   const { resource, action } = props.match.params;
+  const cityName = props.match.params.city
+      ? props.match.params.city.toUpperCase().replace('-', ' ')
+      : null;
   const city = state.city.cache[cityName];
 
   const activeCoordinates = ((state, city, resource, action) => {
-    if (resource == 'plan' && action == 'create') {
+    if (city && resource == 'plan' && action == 'create') {
       const focusedRoad = state.road.cache[state.workingPlan.focusedRoad];
       if (focusedRoad) {
         return focusedRoad.nodes
@@ -276,11 +278,23 @@ const mapStateToProps = (state, props) => {
     version: 1,
     color: '#000',
     geometry: city.mask,
-  }] : [];
+  }] : [{
+    id: 'city-mask',
+    type: 'fill',
+    version: 0,
+    color: '#000',
+    geometry: constants.MAP.MAX_BOUNDS_AS_MULTIPOLYGON,
+  }];
 
   const fitBounds = activeCoordinates ? activeCoordinates.reduce(
     (bounds, coord) => bounds.extend(coord),
     new mapboxgl.LngLatBounds(activeCoordinates[0], activeCoordinates[0])
+  ) : null;
+
+  const cityCoords = city ? flatten(city.bounds.coordinates, 1) : [];
+  const maxBounds = city ? cityCoords.reduce(
+    (bounds, coord) => bounds.extend(coord),
+    new mapboxgl.LngLatBounds(cityCoords[0], cityCoords[0])
   ) : null;
 
   return {
@@ -288,7 +302,7 @@ const mapStateToProps = (state, props) => {
     markers: permitMarkers.concat(segmentMarkers),
     fitBounds,
     centroid: city ? city.centroid.coordinates : constants.MAP.DEFAULT_CENTROID,
-    bounds: city ? flatten(city.bounds.coordinates, 1) : [],
+    maxBounds,
   };
 };
 

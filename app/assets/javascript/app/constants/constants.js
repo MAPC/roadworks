@@ -2,6 +2,10 @@ export default {
   MAPBOX_PUBLIC_API_KEY: 'pk.eyJ1IjoiaWhpbGwiLCJhIjoiY2plZzUwMTRzMW45NjJxb2R2Z2thOWF1YiJ9.szIAeMS4c9YTgNsJeG36gg',
   MAP: {
     MAX_BOUNDS: [[-74.5, 41], [-69, 43]],
+    MAX_BOUNDS_AS_MULTIPOLYGON: {
+      type: 'MultiPolygon',
+      coordinates: [[[[-74.5, 41], [-74.5, 43], [-69, 43], [-69, 41], [-74.5, 41]]]],
+    },
     DEFAULT_CENTROID: [-71.0589, 42.3601],
     LABELS: {
       HOURGLASS_YEARS: {
@@ -14,4 +18,10 @@ export default {
       COLLISION_OFFSET: 0.0001,
     },
   },
+  ENABLED_CITIES: [
+    'AYER',
+    'MILTON',
+    'NORTH READING',
+    'WESTBOROUGH',
+  ],
 };

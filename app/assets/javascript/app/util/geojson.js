@@ -8,17 +8,13 @@ export function flatten(arr, depth) {
   }, []);
 };
 
-export function getFirstPoint(geometry) {
-  const coordinates = ((geometry) => {
-    if (geometry.type == 'MultiLineString') {
-      return geometry.coordinates[0][0];
-    }
-    return geometry.coordinates[0];
-  })(geometry);
-  return {
-    type: 'Point',
-    coordinates,
-  };
+export function getMarkerGeometryAndAlternates(nodes) {
+  const midpoint = Math.floor(nodes.length / 2);
+  const markerGeometry = nodes[midpoint].geojson;
+  const others = nodes.slice(0, midpoint)
+      .concat(nodes.slice(midpoint + 1, nodes.length));
+  const alternateMarkerGeometries = others.map((node) => node.geojson);
+  return { markerGeometry, alternateMarkerGeometries };
 };
 
 // Use the GeoJSON in the nodes geometries to assemble a LineString

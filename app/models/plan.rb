@@ -12,7 +12,15 @@
 #
 
 class Plan < ApplicationRecord
-  @@valid_plan_types = ['PAVING', 'MORATORIUM']
+  @@valid_plan_types = [
+    'PAVING',
+    'MORATORIUM',
+    'SEWER',
+    'WATER',
+    'ELECTRICAL',
+    'COMMUNICATIONS',
+    'GAS'
+  ]
   has_many :timeframes, inverse_of: :plan, dependent: :destroy
   belongs_to :user, inverse_of: :plans, optional: false
   validates :name, presence: true, length: { minimum: 1 }

@@ -85,7 +85,8 @@ class Map extends React.Component {
     this.map.remove();
   }
 
-  fitBounds(mapboxBounds) {
+  fitBounds(mapboxBounds, maxBounds) {
+    this.setMaxBounds(null);
     this.map.fitBounds(mapboxBounds, {
       padding: {
         top: 64,
@@ -94,13 +95,14 @@ class Map extends React.Component {
         bottom: 64,
       }
     });
+    const setMaxBounds = () => {
+      this.setMaxBounds(maxBounds);
+      this.map.off('moveend', setMaxBounds);
+    };
+    this.map.on('moveend', setMaxBounds);
   }
 
-  setMaxBounds(coordinates) {
-    const newBounds = coordinates.reduce(
-      (bounds, coord) => bounds.extend(coord),
-      new mapboxgl.LngLatBounds(coordinates[0], coordinates[0])
-    );
+  setMaxBounds(newBounds) {
     this.map.setMaxBounds(newBounds);
   }
 
@@ -295,11 +297,7 @@ class Map extends React.Component {
     if ((nextProps.fitBounds && !this.props.fitBounds) ||
         (nextProps.fitBounds &&
         nextProps.fitBounds.toString() != this.props.fitBounds.toString())) {
-      this.fitBounds(nextProps.fitBounds);
-    }
-    if (nextProps.bounds.length &&
-        nextProps.bounds != this.props.bounds) {
-      this.setMaxBounds(nextProps.bounds);
+      this.fitBounds(nextProps.fitBounds, nextProps.maxBounds);
     }
     if (this.state.loaded) {
       this.redrawLayers(nextProps.layers, this.props.layers);

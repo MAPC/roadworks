@@ -6,7 +6,7 @@ module Api
           .select("id, name, city_code, ST_AsGeoJSON(geometry) AS geojson, "\
               "ST_AsGeoJSON(ST_Difference(#{bounds}, geometry)) AS mask, "\
               "ST_AsGeoJSON(ST_Centroid(geometry)) AS centroid, "\
-              "ST_AsGeoJSON(ST_Expand(ST_Envelope(geometry), 0.1, 0.05)) AS bounds")
+              "ST_AsGeoJSON(ST_Expand(ST_Envelope(geometry), 0.2, 0.1)) AS bounds")
           .where(name: params[:id].upcase.gsub(/-/, " ")).first
       if city
         respond_to do |format|

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import Viewer from '../components/Viewer';
+import Header from '../components/Header';
 
 import { logout } from '../actions/sessionActions';
 
@@ -9,7 +9,9 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = (dispatch, props) => {
-  return {};
+  return {
+    logout: () => dispatch(logout()),
+  };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Viewer);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

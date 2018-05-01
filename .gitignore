@@ -35,3 +35,6 @@ yarn-error.log
 
 # Ignore encrypted secrets key file.
 config/secrets.yml.key
+
+# Ignore setup rake tasks that include real passwords
+lib/tasks/setup.rake

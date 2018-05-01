@@ -326,7 +326,11 @@ export function createPlan(city) {
   return async (dispatch, getState) => {
     dispatch(workingPlanSetPending(true));
     const workingPlan = getState().workingPlan;
-    const newPlan = await api.createPlan(workingPlan, true, city.toUpperCase());
+    const newPlan = await api.createPlan(
+      workingPlan,
+      true,
+      city.toUpperCase().replace(/-/g, ' ')
+    );
     if (newPlan) {
       dispatch(updatePlans([newPlan]));
       dispatch(push(`/${city}`));

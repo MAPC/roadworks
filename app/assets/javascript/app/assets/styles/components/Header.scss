@@ -1,0 +1,61 @@
+.component.Header {
+  @extend ._clear;
+
+  $border_height: 5px;
+
+  z-index: 2;
+
+  height: $elem_header-height;
+  padding: 3px $global_pad;
+
+  background: $color_brand-primary;
+  border-bottom: $border_height solid $color_brand-secondary;
+  box-shadow: $global_shadow;
+
+  .title {
+    display: inline-block;
+
+    height: 100%;
+
+    h1 {
+      display: inline-block;
+      top: -1px;
+
+      margin: 0;
+      margin-left: 10px;
+
+      color: $color_font-light;
+      font-size: 26px;
+      text-align: left;
+
+      vertical-align: top;
+    }
+
+    img {
+      height: 100%;
+      width: auto;
+    }
+  }
+
+  nav {
+    $font_size: 14px;
+
+    float: right;
+
+    padding-top: ($elem_header-height - $font_size) / 6;
+
+    a, button {
+      display: inline-block;
+
+      color: $color_font-light;
+      font-size: $font_size;
+
+      & + a, & + button { margin-left: $font_size * 2; }
+    }
+
+    button {
+      background: none;
+      border: none;
+    }
+  }
+}

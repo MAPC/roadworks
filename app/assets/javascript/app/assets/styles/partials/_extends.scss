@@ -3,7 +3,7 @@
     content: '';
     display: block;
     height: 0;
-    clear: both; 
+    clear: both;
   }
 }
 
@@ -34,6 +34,15 @@
 ._invalid-field {
   color: $color_font-negative;
 
-  border-color: $color_font-negative; 
+  border-color: $color_font-negative;
   background-color: $color_bg-negative;
+}
+
+._link {
+  color: $color_brand-primary;
+  border-bottom: 1px dotted $color_brand-primary;
+  &:hover {
+    color: $color_brand-primary--dark;
+    border-bottom: 1px dotted $color_brand-primary--dark;
+  }
 }

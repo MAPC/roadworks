@@ -11,5 +11,6 @@ Rails.application.routes.draw do
   end
 
   # Let React Router take care of everything not API related
+  root to: 'application#index'
   get '*path', to: 'application#index'
 end

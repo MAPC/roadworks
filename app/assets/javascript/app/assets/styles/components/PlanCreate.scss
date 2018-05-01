@@ -1,0 +1,84 @@
+.component.PlanCreate {
+  .form-block {
+    @extend .abstract.Form;
+    $bar_width: ($global_pad / 2) + 2;
+
+    z-index: 0;
+
+    width: ($elem_Card-width * 2) + $global_pad;
+    margin: $global_pad 0;
+
+    box-shadow: $global_shadow;
+
+    &:before {
+      @include bars($color_brand-secondary, $bar_width);
+
+      top: -$global_pad * 2;
+      left: ($elem_Card-width - $bar_width)/ 2;
+    }
+
+    h3 {
+      margin: 0;
+      padding: ($global_pad / 2.5) $global_pad;
+
+      color: $color_font-light;
+      font-weight: 400;
+      font-size: 16px;
+
+      background: $color_brand-primary;
+      border-bottom: 5px solid $color_brand-secondary;
+    }
+
+    button.hanging {
+      position: relative;
+      float: right;
+      margin-left: $global_pad;
+
+      width: $elem_Card-width / 2;
+      margin-top: $global_pad;
+
+      box-shadow: $global_shadow;
+
+      &:before {
+        @include bars($color_brand-primary, $bar_width);
+        z-index: -1;
+        top: -$global_pad * 2;
+        left: ($elem_Card-width / 4) - $bar_width;
+      }
+
+      .plus {
+        display: inline-block;
+
+        margin-right: 8px;
+
+        font-size: 22px;
+        line-height: 14px;
+      }
+    }
+
+    .error-message {
+      @extend ._invalid-field;
+      float: left;
+
+      max-width: 50%;
+      padding: 7px 14px;
+      margin-top: $global_pad;
+
+      font-size: 12px;
+
+      border: 1px solid;
+    }
+  }
+
+  span.x {
+    display: inline-block;
+    top: 1px;
+
+    color: $color_font-light;
+    line-height: 14px;
+    font-size: 20px;
+    font-weight: 600;
+
+    transform: rotate(45deg);
+  }
+}

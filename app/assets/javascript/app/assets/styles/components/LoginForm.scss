@@ -1,0 +1,83 @@
+.component.LoginForm {
+  @extend .abstract.Form;
+  position: fixed;
+  z-index: 5;
+
+  height: 100%;
+  width: 100%;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+
+    height: 100%;
+    width: 100%;
+
+    background: $color_bg-medium;
+    opacity: .5;
+  }
+
+  .form-box {
+    @extend ._vertical-center;
+    @extend ._clear;
+
+    top: 30%;
+    z-index: 10;
+
+    width: 300px;
+    margin: 0 auto;
+
+    background: $color_bg-light; 
+    border: 1px solid $color_brand-secondary;
+
+    h2 {
+      margin: 0; 
+      padding: $global_pad / 2;
+
+      color: $color_bg-light;
+
+      background: $color_brand-secondary;
+
+      a {
+        @extend ._vertical-center;
+        left: inherit;
+        right: $global_pad / 2;
+
+        margin: auto;
+
+        color: $color_brand-secondary--dark;
+        font-size: 14px;
+      }
+    }
+
+    .fields {
+      margin: 0 auto;
+      padding: $global_pad ($global_pad * 2); 
+    }
+
+    .field {
+      & + .field { margin-top: $global_pad / 2; } 
+    }
+
+    input { 
+      width: 100%; 
+
+      font-size: 14px;
+    }
+
+    label {
+      display: block; 
+
+      margin-bottom: $global_pad / 4;
+    }
+
+    button[data-action="submit"] {
+      float: right;
+
+      margin: $global_pad;
+    }
+  }
+}

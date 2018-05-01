@@ -1,0 +1,30 @@
+.component.Tags {
+  top: -1px;
+  float: right;
+  display: inline-block;
+
+  .tag {
+    display: inline-block;
+
+    padding: 2px 4px;
+
+    color: $color_font-light;
+    font-size: 9px;
+
+    background: $color_bg-dark;
+    border-radius: 3px;
+
+    img {
+      display: inline-block;
+      top: 1px;
+
+      height: 9px;
+      width: auto;
+      margin-right: 4px;
+    }
+
+    & + .tag { margin-left: 4px; }
+
+    &.light { background: $color_brand-primary; }
+  } 
+}

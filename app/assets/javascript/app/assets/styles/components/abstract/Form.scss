@@ -1,0 +1,16 @@
+.abstract.Form {
+
+  input {
+    padding: 4px 0;
+    text-indent: 8px;
+
+    font-size: 12px;
+
+    border: 1px solid $color_bg-medium;
+  }
+
+  .invalid {
+    @extend ._invalid-field;
+  }
+
+}

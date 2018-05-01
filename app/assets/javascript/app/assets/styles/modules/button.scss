@@ -1,0 +1,51 @@
+button, .button {
+  &.styled {
+    padding: 6px 12px;
+
+    color: $color_font-light;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+
+    background: $color_brand-secondary;
+    border: 0;
+    transition: background .15s;
+
+    &:hover { transition: background .15s; }
+
+    &.light {
+      color: $color_font-dark;
+
+      background: $color_bg-medium;
+
+      &:hover { background: $color_bg-medium--active; }
+    }
+
+    &.primary {
+      background: $color_brand-primary;
+
+      &:hover { background: $color_brand-primary--dark; }
+      &:disabled { background: $color_bg-medium; }
+    }
+
+    img {
+      top: 2px;
+      display: inline-block;
+
+      max-height: 14px;
+      width: 14px;
+      margin-right: 7px;
+    }
+  }
+
+  &.minor {
+    color: $color_font-medium;
+    font-weight: 300;
+    font-size: 12px;
+
+    background: none;
+    border: none;
+
+    text-decoration: underline;
+  }
+}

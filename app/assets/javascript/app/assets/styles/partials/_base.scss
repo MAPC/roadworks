@@ -1,0 +1,17 @@
+body {
+  color: $color_font-dark;
+  font-family: $font_family-primary;
+}
+
+input { outline: none; }
+
+h1 { font-size: 26px; }
+h2 { font-size: 14px; }
+h3 { font-size: 14px; }
+p {
+  font-size: 14px;
+  font-weight: 300;
+}
+ol { padding: 0; }
+
+.absolute-center { @extend ._vertical-center; }

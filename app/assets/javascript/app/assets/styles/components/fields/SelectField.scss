@@ -1,0 +1,36 @@
+.component.SelectField {
+  display: inline-block;
+
+  &:after {
+    @extend ._vertical-center;
+    @extend ._arrow;
+
+    right: $elem_arrow-size;
+    left: inherit;
+    content: '';
+    z-index: 3;
+  }
+
+  select {
+    display: inline-block;
+
+    padding: 4px 8px;
+
+    font-size: 12px;
+    font-weight: 100;
+
+    appearance: none;
+    background: $color_bg-light; 
+    border: 1px solid $color_bg-medium;
+    border-radius: 0;
+    outline: none;
+    transition: border-color .15s;
+    padding-right: $elem_arrow-size * 4;
+
+    &:active {
+      border-color: $color_bg-dark; 
+      transition: border-color .15s;
+    }
+  }
+
+}

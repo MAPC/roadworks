@@ -1,0 +1,86 @@
+.component.ToggleField {
+  $height: 20px;
+  $width: 86px;
+
+  display: inline-block;
+
+  height: $height + 2px;
+  width: $width;
+
+  font-size: 10px;
+  text-align: center;
+
+  border: 1px solid $color_brand-primary;
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+
+  &.active {
+    .labels {
+      transform: translateX(0%);
+      transition: transform .2s;
+
+      &:after {
+        transform: translateX(-#{($height / 2)}); 
+      }
+    } 
+  }
+
+  &.secondary {
+    border-color: $color_brand-secondary; 
+
+    .labels:after { background: $color_brand-secondary--dark; }
+    .label:first-of-type { background: $color_brand-secondary; }
+    .label:last-of-type { color: $color_brand-secondary; }
+  }
+
+  .labels {
+    display: flex;
+    width: $width * 2;
+
+    text-align: center;
+
+    transform: translateX(-50%);
+    transition: transform .2s;
+
+    &:after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      content: '';
+      display: block;
+
+      width: $height;
+      height: $height;
+      margin: 0 auto;
+      transform: translateX(#{($height / 2) - 1});
+
+      background: $color_brand-primary--dark;
+      border-radius: 50%;
+    }
+  }
+
+  .label {
+    padding: 3px 6px;
+    width: 50%;
+    height: $height;
+
+    &:first-of-type {
+      padding-right: $height;
+
+      color: $color_font-light;
+
+      background: $color_brand-primary;
+    }
+
+    &:last-of-type {
+      padding-left: $height;
+      padding-right: 8px;
+
+      color: $color_brand-primary;
+      text-align: right; 
+    }
+  }
+
+}

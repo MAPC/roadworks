@@ -1,0 +1,40 @@
+.component.SegmentField {
+
+  .x { 
+    position: absolute; 
+    right: 0;
+  }
+
+  .road-selector {
+    .ToggleField {
+      top: -2px;
+
+      margin-left: $global_pad; 
+    }
+  }
+
+  .endpoints {
+    margin: ($global_pad / 2) auto $global_pad;
+    padding-left: $global_pad;
+
+    border-left: 7px solid $color_bg-medium; 
+  }
+
+  .endpoint {
+    display: flex;
+
+    .ToggleField { margin-right: 7px; } 
+    .TextField { height: 26px; }
+  }
+
+  .endpoint-delim {
+    top: -2px;
+
+    margin: 5px auto 3px;
+    margin-left: 94px;
+
+    color: $color_font-medium;
+    font-size: 10px; 
+  }
+
+}

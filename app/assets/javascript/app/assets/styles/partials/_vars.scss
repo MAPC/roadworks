@@ -1,0 +1,32 @@
+$state_negative: #db2323;
+
+$color_brand-primary: #63AEA9;
+$color_brand-primary--dark: #488985;
+$color_brand-secondary: #F5A87C;
+$color_brand-secondary--dark: #DB7F49;
+$color_brand-secondary--active: mix(black, $color_brand-secondary, 5);
+
+$color_bg-light: #FFFFFF;
+$color_bg-medium: mix(#C9C9C9, #EBEBEB, 50);
+$color_bg-medium--active: mix(black, $color_bg-medium, 10);
+$color_bg-dark: #818184;
+$color_bg-negative: mix($color_bg-light, $state_negative, 90);
+
+$color_font-light: #FFFFFF;
+$color_font-medium: #C9C9C9;
+$color_font-medium--active: mix(black, $color_font-medium, 12);
+$color_font-dark: #413E56;
+$color_font-negative: $state_negative;
+
+
+$font_family-primary: 'europa', Helvetica, sans-serif;
+
+$elem_arrow-size: 6px;
+$elem_Card-width: 270px;
+$elem_CardList-trans--dur: .15s;
+$elem_diamond-trans: transform $elem_CardList-trans--dur, border-color $elem_CardList-trans--dur;
+$elem_header-height: 50px;
+$elem_diamond-size: 5px;
+
+$global_pad: 14px;
+$global_shadow: 1px 1px 4px rgba($color_bg-medium, 1);

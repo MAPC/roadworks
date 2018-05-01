@@ -1,0 +1,32 @@
+.component.CardList {
+
+  & > * {
+    &:not(.plan-cards),
+    &.plan-cards > .Card {
+      width: $elem_Card-width;
+
+      background: $color_bg-light;
+      border: 1px solid $color_brand-secondary;
+      box-shadow: $global_shadow;
+    }
+
+    & + * { margin-top: $global_pad; }
+  }
+
+  .plan-cards {
+    max-height: 85vh;
+
+    overflow: hidden;
+    transition: height .15s;
+
+    &.inactive {
+      height: 0vh;
+      display: none;
+
+      transition: height .15s;
+    }
+
+    & > .Card + .Card { margin-top: $global_pad; }
+  }
+
+}

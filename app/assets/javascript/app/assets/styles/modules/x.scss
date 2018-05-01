@@ -1,0 +1,20 @@
+.x {
+  top: -6px;
+
+  padding: 0;
+
+  color: $color_font-medium;
+  font-size: 26px;
+
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transform: rotate(45deg);
+  transition: color .15s;
+
+  &:hover {
+    color: $color_font-medium--active; 
+
+    transition: color .15s;
+  }
+}

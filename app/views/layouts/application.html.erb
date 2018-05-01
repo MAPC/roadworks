@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Roadworks</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag 'https://use.typekit.net/nrw2ooo.css' %>
+
+    <% if signed_in? %>
+      <script>
+        window.currentUser = {
+          id: <%= current_user.id %>,
+          email: "<%= current_user.email %>",
+          role: "<%= current_user.role %>",
+          city_name: "<%= current_user.city_name %>",
+          name: "<%= current_user.name %>",
+        };
+      </script>
+    <% end %>
+
+    <%= stylesheet_pack_tag 'application' %>
+    <%= javascript_pack_tag 'application' %>
+  </head>
+
+  <body>
+    <%= yield %>
+
+  </body>
+</html>

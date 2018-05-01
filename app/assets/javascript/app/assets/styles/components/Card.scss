@@ -1,0 +1,52 @@
+.component.Card {
+  border: 1px solid $color_brand-secondary;
+  background: $color_bg-light;
+  overflow: hidden;
+
+  &.collapsed { max-height: 29px; }
+
+  .card-header {
+    padding: 4px $global_pad;
+
+    background: $color_brand-secondary;
+
+    h3 {
+      margin: 0;
+
+      color: $color_font-light;
+      font-weight: 100;
+    }
+
+    button {
+      @extend ._vertical-center;
+
+      $circle: 15px;
+
+      right: $global_pad / 2;
+      left: inherit;
+
+      height: $circle;
+      width: $circle;
+
+      color: $color_brand-secondary;
+      text-align: center;
+
+      background: $color_bg-light;
+      border-radius: 50%;
+      border: 0;
+
+      span.absolute-center { top: 38%; }
+    }
+  }
+
+  .card-items {
+    margin: 0;
+    & > li.placeholder {
+      $pad_h: $global_pad + 2;
+      padding: 5px 4px 5px $pad_h;
+      font-size: 14px;
+      font-weight: 300;
+    }
+  }
+
+}

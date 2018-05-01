@@ -1,0 +1,12 @@
+span.diamond {
+  @extend ._vertical-center;
+  display: block;
+
+  width: 0;
+  height: 0;
+
+  border: $elem_diamond-size solid;
+  transform: rotate(45deg) translateY(-50%);
+  transform-origin: 50% 0 0;
+  transition: $elem_diamond-trans;
+}

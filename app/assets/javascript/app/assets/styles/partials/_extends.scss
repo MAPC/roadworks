@@ -1,0 +1,39 @@
+._clear {
+  &:after {
+    content: '';
+    display: block;
+    height: 0;
+    clear: both; 
+  }
+}
+
+._vertical-center {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+}
+
+._spinner {
+  animation: spinning;
+  animation-duration: 1.2s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+._arrow {
+  width: 0;
+  height: 0;
+
+  border-top: $elem_arrow-size solid $color_brand-primary;
+  border-left: ($elem_arrow-size * .8) solid transparent !important;
+  border-right: ($elem_arrow-size * .8) solid transparent !important;
+}
+
+._invalid-field {
+  color: $color_font-negative;
+
+  border-color: $color_font-negative; 
+  background-color: $color_bg-negative;
+}

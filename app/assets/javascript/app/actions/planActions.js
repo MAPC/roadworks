@@ -8,6 +8,13 @@ export function updatePlans(plans) {
   };
 }
 
+export function removePlan(id) {
+  return {
+    type: types.PLAN.REMOVE,
+    id,
+  };
+}
+
 export function fetchPlans(city) {
   return async (dispatch, getState) => {
     const plans = await api.getPlans(city);

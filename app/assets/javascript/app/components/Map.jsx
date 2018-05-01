@@ -180,7 +180,6 @@ class Map extends React.Component {
     const conflictSets = Object.values(Object.values(zoneMap)
         .filter((markerIds) => markerIds.length > 1)
         .reduce((map, ids) => Object.assign({}, map, { [ids.sort().toString()]: ids }), {}));
-    console.log(conflictSets);
 
     // Amend the markers that conflict, either by selecting the next alternate
     // or shifting the point arbitrarily if no alternates are available.
@@ -201,7 +200,6 @@ class Map extends React.Component {
           return true;
         });
       });
-      console.log(combo)
       const partialAmendment = combo
         ? markerIds.reduce((amendMap, id, index) => {
             const newMarker = Object.assign({}, markerMap[id], {

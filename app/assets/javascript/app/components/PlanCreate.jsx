@@ -70,9 +70,12 @@ class PlanCreate extends AbstractForm {
     const errorMessage = (this.state.errorMessage !== null)
         ? <div className="error-message">{this.state.errorMessage}</div>
         : null;
-
+    const twoHangingButtons = this.props.workingPlan.id ? ' two-buttons' : '';
     return (
-      <section className="component PlanCreate" data-form={this.formId}>
+      <section
+        className={`component PlanCreate${twoHangingButtons}`}
+        data-form={this.formId}
+      >
         <Link
           to={`/${this.props.match.params.city}`}
           className="button styled"
@@ -91,13 +94,29 @@ class PlanCreate extends AbstractForm {
           {errorMessage}
 
           <button
-            className="styled primary"
+            className="styled primary hanging"
             data-action="add-to-map"
             onClick={this.submit}
+            disabled={this.props.isPending}
           >
             <span className="plus">+</span>
             {this.props.workingPlan.id ? 'Edit plan' : 'Create plan'}
           </button>
+
+          {this.props.workingPlan.id ? (
+            <button
+              className="styled primary hanging"
+              data-action="remove-from-map"
+              onClick={(e) => {
+                e.preventDefault();
+                this.props.deletePlan(this.props.workingPlan.id);
+              }}
+              disabled={this.props.isPending}
+            >
+              <span className="plus">-</span>
+              {'Delete plan'}
+            </button>
+          ) : null}
         </div>
       </section>
     );

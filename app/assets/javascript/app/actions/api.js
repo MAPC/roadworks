@@ -40,6 +40,17 @@ async function putJSON(url, body) {
   return await response.json();
 }
 
+async function deleteJSON(url) {
+  const response = await fetch(url, {
+    headers: new Headers({
+      'Content-Type': 'application/json',
+    }),
+    credentials: 'same-origin',
+    method: 'DELETE',
+  });
+  return await response.json();
+}
+
 export default {
   getNodes: (nodeIds) => {
     const asString = nodeIds.length
@@ -111,6 +122,9 @@ export default {
       published,
       city,
     }));
+  },
+  deletePlan: async (planId) => {
+    return deleteJSON(`/api/plans/${planId}`);
   },
   login: async (email, password) => {
     const csrf = getCSRF();

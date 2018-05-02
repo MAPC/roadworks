@@ -1,3 +1,51 @@
+function degreesToRadians(degrees) {
+  return degrees * (Math.PI / 180);
+}
+
+function sqr(x) { return x * x }
+function dist2(v, w) { return sqr(v.x - w.x) + sqr(v.y - w.y) }
+function distToSegmentSquared(p, v, w) {
+  const l2 = dist2(v, w);
+  if (l2 == 0) return dist2(p, v);
+  let t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
+  t = Math.max(0, Math.min(1, t));
+  return dist2(p, { x: v.x + t * (w.x - v.x),
+                    y: v.y + t * (w.y - v.y) });
+}
+
+// Distance in km between two points on Earth using the Haversine formula
+export function distanceBetweenLocations(location1, location2) {
+  // Radius of the earth in km
+  var R = 6371;
+  const [lng1, lat1] = location1;
+  const [lng2, lat2] = location2;
+  const degreesLat = degreesToRadians(lat2-lat1);
+  const degreesLon = degreesToRadians(lng2-lng1);
+  const a = Math.sin(degreesLat / 2) * Math.sin(degreesLat / 2) +
+      Math.cos(degreesToRadians(lat1)) * Math.cos(degreesToRadians(lat2)) *
+      Math.sin(degreesLon / 2) * Math.sin(degreesLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+export function distanceToLine(p, v, w) {
+  return Math.sqrt(distToSegmentSquared(p, v, w));
+}
+
+export function closestPointOnSegment(A, B, P) {
+  const AP = [P[0] - A[0], P[1] - A[1]];
+  const AB = [B[0] - A[0], B[1] - A[1]];
+  const ab2 = AB[0] ** 2 + AB[1] ** 2;
+  const ap_ab = AP[0] * AB[0] + AP[1] * AB[1];
+  let t = ap_ab / ab2;
+  if (t < 0) {
+    t = 0;
+  } else if (t > 1) {
+    t = 1;
+  }
+  return [A[0] + AB[0] * t, A[1] + AB[1] * t];
+}
+
 export function getCrossStreetName(node, roadId, roadMap) {
   const roads = node.part_of.filter(id => id != roadId);
   if (roads.length == 1) {
@@ -44,7 +92,7 @@ export function generateCrossStreetOptions(road, nodeMap, roadMap) {
 };
 
 export function createCustomNode(partialNodeCache, location, address) {
-  const distance = (node) => utils.distanceBetweenLocations(
+  const distance = (node) => distanceBetweenLocations(
     location,
     node.geojson.coordinates
   );
@@ -63,8 +111,8 @@ export function createCustomNode(partialNodeCache, location, address) {
     // If neighbor is on this road
     if (partialNodeCache[id]) {
       const lineVertex2 = partialNodeCache[id].geojson.coordinates;
-      const newPoint = utils.closestPointOnSegment(lineVertex1,lineVertex2, location);
-      if (!nodeId2 || utils.distanceBetweenLocations(location, newPoint) < utils.distanceBetweenLocations(location, snappedLocation)) {
+      const newPoint = closestPointOnSegment(lineVertex1,lineVertex2, location);
+      if (!nodeId2 || distanceBetweenLocations(location, newPoint) < distanceBetweenLocations(location, snappedLocation)) {
         snappedLocation = newPoint;
         nodeId2 = id;
       }
@@ -97,11 +145,12 @@ export function path(nodeMap, visited, origIds, destIds) {
       }
       return false;
     });
-    if (origIds.length > 1 &&
+
+    if (origIds.length > 1 && finalPath &&
         origIds.every((id) => finalPath.slice(0, finalPath.length).includes(id))) {
       finalPath = finalPath.slice(origIds.length - 1);
     }
-    if (destIds.length > 1 &&
+    if (destIds.length > 1 && finalPath &&
         destIds.every((id) => finalPath.slice(0, finalPath.length).includes(id))) {
       finalPath = finalPath.slice(0, finalPath.length - (destIds.length - 1));
     }

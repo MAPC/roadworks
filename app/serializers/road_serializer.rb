@@ -1,3 +1,3 @@
 class RoadSerializer < ActiveModel::Serializer
-  attributes :id, :name, :nodes, :cross_streets, :geojson
+  attributes :id, :name, :nodes, :city_name, :cross_streets, :geojson
 end

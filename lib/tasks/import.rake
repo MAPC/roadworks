@@ -9,6 +9,10 @@ namespace :import do
     ImportPermitsWorker.perform_async('CO18061000062765563', 'WESTBOROUGH', 'TRENCH')
     ImportPermitsWorker.perform_async('CO18061000062863842', 'MILTON', 'GENERAL')
     ImportPermitsWorker.perform_async('CO18061000062877675', 'MILTON', 'DRIVEWAY_ENTRANCE')
+    unless Rails.env.production?
+      # Test pipeline
+      ImportPermitsWorker.perform_async('CO18061000062979697', 'MILTON', 'GENERAL')
+    end
   end
 
   desc "Import fake users"

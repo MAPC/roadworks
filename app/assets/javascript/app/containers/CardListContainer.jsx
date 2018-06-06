@@ -36,7 +36,22 @@ const mapStateToProps = (state, props) => {
     hideAllPlans: state.view.hideAllPlans,
     hideAllPermitTypes: state.view.hideAllPermitTypes,
     plans,
-    permitTypes: [
+    permitTypes: (cityName == 'MILTON' ? [
+      {
+        id: 'GENERAL',
+        type: enums.CARD_ROW.TYPES.PERMIT_TYPE,
+        title: 'General',
+        active: !state.view.hiddenPermitTypes['GENERAL'],
+        color: enums.PERMIT_TYPE_COLORS['GENERAL'],
+      },
+      {
+        id: 'DRIVEWAY_ENTRANCE',
+        type: enums.CARD_ROW.TYPES.PERMIT_TYPE,
+        title: 'Driveway Entrance',
+        active: !state.view.hiddenPermitTypes['DRIVEWAY_ENTRANCE'],
+        color: enums.PERMIT_TYPE_COLORS['DRIVEWAY_ENTRANCE'],
+      },
+    ] : [
       {
         id: 'ROAD_OPENING',
         type: enums.CARD_ROW.TYPES.PERMIT_TYPE,
@@ -51,7 +66,7 @@ const mapStateToProps = (state, props) => {
         active: !state.view.hiddenPermitTypes['TRENCH'],
         color: enums.PERMIT_TYPE_COLORS['TRENCH'],
       },
-    ],
+    ]),
     hideDetails: state.view.hideDetails,
     details: state.view.details.rows.map((row, index) => ({
       id: index,

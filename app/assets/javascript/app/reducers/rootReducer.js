@@ -5,6 +5,7 @@ import cityReducer from './cityReducer';
 import contributorFormReducer from './contributorFormReducer';
 import fetchReducer from './fetchReducer';
 import nodeReducer from './nodeReducer';
+import mapReducer from './mapReducer';
 import permitReducer from './permitReducer';
 import planReducer from './planReducer';
 import roadReducer from './roadReducer';
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   node: nodeReducer,
   permit: permitReducer,
   plan: planReducer,
+  map: mapReducer,
   road: roadReducer,
   user: userReducer,
   segment: segmentReducer,

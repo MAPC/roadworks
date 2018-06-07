@@ -3,6 +3,11 @@ import mapboxgl from 'mapbox-gl';
 
 import Map from '../components/Map';
 
+import {
+  showMarkers,
+  hideMarkers,
+} from './../actions/mapActions';
+
 import constants from './../constants/constants';
 import enums from './../constants/enums';
 
@@ -303,10 +308,13 @@ const mapStateToProps = (state, props) => {
     fitBounds,
     centroid: city ? city.centroid.coordinates : constants.MAP.DEFAULT_CENTROID,
     maxBounds,
+    markersHidden: state.map.hideMarkers,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
+  showMarkers: () => dispatch(showMarkers()),
+  hideMarkers: () => dispatch(hideMarkers()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Map);

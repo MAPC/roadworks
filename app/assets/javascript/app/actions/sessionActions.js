@@ -40,7 +40,13 @@ export function logout() {
 
     // Reload if we have logged out to obtain fresh CSRF tokens.
     if (res.ok) {
-      Cookies.remove('_my_app_session', { path: '/', domain: window.location.hostname });
+      Cookies.remove((window.location.hostname == 'roadworks.mapc.org'
+          ? '_my_app_session'
+          : (window.location.hostname == 'staging.roadworks.mapc.org'
+              ? '_my_app_session_staging'
+              : '_my_app_session_development'
+          )
+      ), { path: '/', domain: window.location.hostname });
       window.location.reload();
     }
   };

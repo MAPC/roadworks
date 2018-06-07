@@ -76,15 +76,15 @@ class PlanCreate extends AbstractForm {
         className={`component PlanCreate${twoHangingButtons}`}
         data-form={this.formId}
       >
-        <Link
-          to={`/${this.props.match.params.city}`}
+        <button
           className="button styled"
           data-action="toggle-plan-form"
+          onClick={this.props.cancel}
         >
           <div>
             <span className="x">+</span> Cancel
           </div>
-        </Link>
+        </button>
 
         <div className="form-block">
           <h3>Add Plan to Map</h3>

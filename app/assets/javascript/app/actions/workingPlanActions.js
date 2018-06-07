@@ -2,7 +2,6 @@ import { push } from 'react-router-redux';
 
 import api from './api';
 import types from './types';
-import utils from './utils';
 import {
   updateNodes,
 } from './nodeActions';
@@ -180,6 +179,7 @@ export function updateSegmentEndPoint(
     const state = getState();
     const segment = state.workingPlan.timeframes[timeframeIndex]
         .segments[segmentIndex];
+
     const partialNodeCache = partialNodeCacheForRoad(
       state.road.cache[segment.road_id],
       state.node.cache
@@ -226,6 +226,13 @@ export function updateSegmentEndPoint(
         start,
         end
       );
+      // TODO: All nodes should be able to path, but due to data inconsistencies
+      // there are a handful of edge cases in each town where that isn't
+      // possible. Further data cleaning will fix this, but we don't have the
+      // budget to do that right now.
+      if (!nodePath) {
+        return (segment.is_orig_type_address ? [newEndpoints.orig] : []);
+      }
       return (segment.is_orig_type_address ? [newEndpoints.orig] : [])
           .concat(nodePath)
           .concat(segment.is_dest_type_address ? [newEndpoints.dest] : []);
@@ -326,7 +333,11 @@ export function createPlan(city) {
   return async (dispatch, getState) => {
     dispatch(workingPlanSetPending(true));
     const workingPlan = getState().workingPlan;
-    const newPlan = await api.createPlan(workingPlan, true, city.toUpperCase());
+    const newPlan = await api.createPlan(
+      workingPlan,
+      true,
+      city.toUpperCase().replace(/-/g, ' ')
+    );
     if (newPlan) {
       dispatch(updatePlans([newPlan]));
       dispatch(push(`/${city}`));

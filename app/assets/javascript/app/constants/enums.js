@@ -4,8 +4,10 @@ export default {
     ADDRESS: 'ADDRESS',
   },
   PERMIT_TYPE_COLORS: {
-    STREET_OPENING: '#45CEEF',
+    ROAD_OPENING: '#45CEEF',
     TRENCH: '#F26262',
+    GENERAL: '#45CEEF',
+    DRIVEWAY_ENTRANCE: '#F26262',
   },
   CARD_ROW: {
     TYPES: {

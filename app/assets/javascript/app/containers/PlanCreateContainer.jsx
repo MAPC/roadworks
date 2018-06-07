@@ -5,6 +5,7 @@ import {
   createPlan,
   updatePlan,
   deletePlan,
+  cancelPlanForm,
 } from '../actions/workingPlanActions';
 import {
   fetchPlanCreateData,
@@ -19,6 +20,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   deletePlan: (id) => dispatch(deletePlan(props.match.params.city, id)),
   createPlan: () => dispatch(createPlan(props.match.params.city)),
   updatePlan: () => dispatch(updatePlan(props.match.params.city)),
+  cancel: () => dispatch(cancelPlanForm(props.match.params.city)),
   fetchData: () => dispatch(fetchPlanCreateData(props.match.params.city)),
 });
 

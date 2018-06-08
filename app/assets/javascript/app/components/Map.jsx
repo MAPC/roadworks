@@ -78,7 +78,15 @@ class Map extends React.Component {
         this.fitBounds(this.props.fitBounds);
       }
       this.setState({ loaded: true });
-    })
+    });
+    this.map.on('zoomend', () => {
+      const zoom = this.map.getZoom();
+      if (zoom < constants.MAP.MARKER_MAX_ZOOM && !this.props.markersHidden) {
+        this.props.hideMarkers();
+      } else if (zoom > constants.MAP.MARKER_MAX_ZOOM && this.props.markersHidden) {
+        this.props.showMarkers();
+      }
+    });
   }
 
   componentWillUnmount() {

@@ -2,6 +2,14 @@
   $min_height: 45px;
   $border: 2px solid $color_bg-dark;
 
+  opacity: 1;
+  transition: opacity 0.4s;
+  &.hidden {
+    cursor: default;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
   @extend ._vertical-center;
   position: absolute;
 

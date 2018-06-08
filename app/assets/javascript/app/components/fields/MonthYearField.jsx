@@ -27,8 +27,8 @@ class MonthYearField extends React.Component {
 
     const valueAsDate = props.value ? new Date(props.value) : null;
     this.state = {
-      month: valueAsDate ? valueAsDate.getMonth() : 'NONE',
-      year: valueAsDate ? valueAsDate.getFullYear() : 'NONE',
+      month: valueAsDate ? valueAsDate.getUTCMonth() : 'NONE',
+      year: valueAsDate ? valueAsDate.getUTCFullYear() : 'NONE',
     };
 
     this.monthOptions = monthPool;
@@ -42,8 +42,8 @@ class MonthYearField extends React.Component {
     if (this.props.value != nextProps.value) {
       const valueAsDate = new Date(nextProps.value);
       this.setState({
-        month: valueAsDate ? valueAsDate.getMonth() : 'NONE',
-        year: valueAsDate ? valueAsDate.getFullYear() : 'NONE',
+        month: valueAsDate ? valueAsDate.getUTCMonth() : 'NONE',
+        year: valueAsDate ? valueAsDate.getUTCFullYear() : 'NONE',
       });
     }
   }
@@ -53,7 +53,7 @@ class MonthYearField extends React.Component {
 
     if (selectedYear) {
       if (nextProps.predate) {
-        const predateYear = (new Date(nextProps.predate)).getFullYear();
+        const predateYear = (new Date(nextProps.predate)).getUTCFullYear();
 
         if (predateYear > selectedYear) {
           this.setState({ year: predateYear });
@@ -61,7 +61,7 @@ class MonthYearField extends React.Component {
       }
 
       if (nextProps.postdate) {
-        const postdateYear = (new Date(nextProps.postdate)).getFullYear();
+        const postdateYear = (new Date(nextProps.postdate)).getUTCFullYear();
 
         if (postdateYear < selectedYear) {
           this.setState({ year: postdateYear });
@@ -75,7 +75,7 @@ class MonthYearField extends React.Component {
       month: month,
     }, () => {
       if (this.state.year != 'NONE') {
-        this.props.onChange(new Date(this.state.year, month).toISOString());
+        this.props.onChange(new Date(this.state.year, month).toISOString().slice(0, 10));
       }
     });
   }
@@ -85,7 +85,7 @@ class MonthYearField extends React.Component {
       year: year,
     }, () => {
       if (this.state.month != 'NONE') {
-        this.props.onChange(new Date(year, this.state.month).toISOString());
+        this.props.onChange(new Date(year, this.state.month).toISOString().slice(0, 10));
       }
     });
   }
@@ -96,14 +96,14 @@ class MonthYearField extends React.Component {
 
     let startMonth = 0;
     let endMonth = monthPool.length;
-    let startYear = this.props.startYear || (new Date()).getFullYear();
+    let startYear = this.props.startYear || (new Date()).getUTCFullYear();
     let range = this.props.range || 25;
     let startYearMod = 0;
 
     if (this.props.predate) {
       const predate = new Date(this.props.predate);
-      const predateYear = predate.getFullYear()
-      const predateMonth = predate.getMonth();
+      const predateYear = predate.getUTCFullYear()
+      const predateMonth = predate.getUTCMonth();
 
       if (selectedYear && predateYear === selectedYear) {
         startMonth = predateMonth;
@@ -119,11 +119,11 @@ class MonthYearField extends React.Component {
 
     if (this.props.postdate) {
       const postdate = new Date(this.props.postdate);
-      const postdateYear = postdate.getFullYear();
-      const postdateMonth = postdate.getMonth();
+      const postdateYear = postdate.getUTCFullYear();
+      const postdateMonth = postdate.getUTCMonth();
 
       if (selectedYear && postdateYear === selectedYear) {
-        endMonth = postdate.getMonth() + 1;
+        endMonth = postdate.getUTCMonth() + 1;
       }
 
       if (selectedMonth && postdateMonth < selectedMonth) {

@@ -1,6 +1,7 @@
 export default {
   MAPBOX_PUBLIC_API_KEY: 'pk.eyJ1IjoiaWhpbGwiLCJhIjoiY2plZzUwMTRzMW45NjJxb2R2Z2thOWF1YiJ9.szIAeMS4c9YTgNsJeG36gg',
   MAP: {
+    MARKER_MAX_ZOOM: 13,
     MAX_BOUNDS: [[-74.5, 41], [-69, 43]],
     MAX_BOUNDS_AS_MULTIPOLYGON: {
       type: 'MultiPolygon',
@@ -12,7 +13,7 @@ export default {
         FULL: 3,
         HALF: 1,
       },
-      LOCALESTRING_OPTIONS: { month: 'short', year: 'numeric' },
+      LOCALESTRING_OPTIONS: { month: 'short', year: 'numeric', timeZone: 'UTC' },
       // Map labels cannot be within 0.0005 lat or lng of another label
       COLLISION_ROUNDING: 0.0005,
       COLLISION_OFFSET: 0.0001,

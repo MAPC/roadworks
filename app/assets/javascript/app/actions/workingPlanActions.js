@@ -312,6 +312,7 @@ export function updatePlan(city) {
     if (newPlan) {
       dispatch(updatePlans([newPlan]));
       dispatch(push(`/${city}`));
+      dispatch(workingPlanReset());
     }
   };
 }
@@ -345,6 +346,13 @@ export function createPlan(city) {
     }
     return dispatch(workingPlanSetPending(false));
   };
+}
+
+export function cancelPlanForm(city) {
+  return (dispatch) => {
+    dispatch(push(`/${city}`));
+    dispatch(workingPlanReset());
+  }
 }
 
 export function deletePlan(city, id) {

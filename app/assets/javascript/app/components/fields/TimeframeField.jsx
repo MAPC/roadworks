@@ -17,11 +17,11 @@ class TimeframeField extends React.Component {
 
     const startDateDisplay = this.props.start
         ? new Date(this.props.start)
-            .toLocaleString('en-us', { month: "long", year: 'numeric' })
+            .toLocaleString('en-us', { month: "long", year: 'numeric', timeZone: 'UTC' })
         : 'Unknown Date';
     const endDateDisplay = this.props.end
         ? new Date(this.props.end)
-            .toLocaleString('en-us', { month: "long", year: 'numeric' })
+            .toLocaleString('en-us', { month: "long", year: 'numeric', timeZone: 'UTC' })
         : 'Unknown Date';
 
     return (

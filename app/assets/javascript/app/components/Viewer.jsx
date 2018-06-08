@@ -44,7 +44,7 @@ class Viewer extends React.Component {
                   <Switch>
                     <Route exact path="/:city" component={CardListContainer} />
                     <Route path="/:city/plan/create" render={(props) =>
-                      this.props.user.id ? (
+                      (this.props.user && this.props.user.id) ? (
                         <PlanCreateContainer {...props} />
                       ) : (
                         <Redirect to={redirect} />

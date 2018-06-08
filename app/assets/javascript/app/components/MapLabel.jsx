@@ -40,8 +40,15 @@ class MapLabel extends React.Component {
       );
     });
 
+    const classNames = this.props.markersHidden
+        ? "component MapLabel hidden"
+        : "component MapLabel";
+
     return (
-      <div className="component MapLabel" onClick={this.props.onClick}>
+      <div
+        className={classNames}
+        onClick={this.props.markersHidden ? null : this.props.onClick}
+      >
         <div className={`icon-wrapper ${this.props.type}`}>{icon}</div>
 
         <ul className="label-items">

@@ -6,6 +6,7 @@ import {
 } from '../actions/viewActions';
 
 const mapStateToProps = (state) => ({
+  markersHidden: state.map.hideMarkers,
 });
 
 const mapDispatchToProps = (dispatch, props) => ({

@@ -13,7 +13,7 @@ export default {
         FULL: 3,
         HALF: 1,
       },
-      LOCALESTRING_OPTIONS: { month: 'short', year: 'numeric' },
+      LOCALESTRING_OPTIONS: { month: 'short', year: 'numeric', timeZone: 'UTC' },
       // Map labels cannot be within 0.0005 lat or lng of another label
       COLLISION_ROUNDING: 0.0005,
       COLLISION_OFFSET: 0.0001,

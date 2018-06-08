@@ -78,6 +78,7 @@ module Api
       next_color = get_next_plan_color(permitted_params[:city])
       permitted_params[:color] = next_color
       permitted_params[:user_id] = current_user.id
+      puts permitted_params
       plan = Plan.create!(permitted_params)
       if plan
         respond_to do |format|

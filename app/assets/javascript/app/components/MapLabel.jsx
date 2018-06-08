@@ -10,7 +10,7 @@ class MapLabel extends React.Component {
       if (this.props.type === 'plan') {
         let hourglassType = 'empty';
         const dataYear = parseInt(this.props.items[0].top);
-        const currentYear = parseInt((new Date()).getFullYear());
+        const currentYear = parseInt((new Date()).getUTCFullYear());
         const diff = Math.abs(dataYear - currentYear);
 
         if (diff >= constants.MAP.LABELS.HOURGLASS_YEARS.FULL) {

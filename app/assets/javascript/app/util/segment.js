@@ -59,7 +59,7 @@ export function getCrossStreetName(node, roadId, roadMap) {
     // If there are many cross streets for a particular node, string them
     // together to display to the user
     const label = roads.slice(1).reduce(
-      (acc, id) => `${acc} and ${roadMap[id].name || 'UNNAMED ROAD'}`,
+      (acc, id) => `${acc} and ${roadMap[id] ? roadMap[id].name : 'UNNAMED ROAD'}`,
     (roadMap[roads[0]].name || 'UNNAMED ROAD'));
     return label;
   } else if (node.neighbors.length == 1) {

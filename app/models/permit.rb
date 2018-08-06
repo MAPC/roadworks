@@ -6,6 +6,7 @@ class Permit < ApplicationRecord
   before_save :geocode
 
   def geocode
+    return unless self.address
     geographic_factory = RGeo::Geographic.spherical_factory(:srid => 4326)
     response = Faraday.get('http://pelias.mapc.org/v1/search?text=' + self.address)
     result = JSON.parse(response.body)

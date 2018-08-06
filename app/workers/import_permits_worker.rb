@@ -9,8 +9,8 @@ class ImportPermitsWorker
 
   @@batch_size = 2
 
-  def perform(form_id, city_name, permit_type)
-    permits, columns = form_pipeline(form_id: form_id)
+  def perform(seamless_creds, form_id, city_name, permit_type)
+    permits, columns = form_pipeline(seamless_creds: seamless_creds, form_id: form_id)
     permits.each do |permit|
       Permit.find_or_create_by(application_id: permit['application_id']) do |new_permit|
         new_permit.permit_type = permit_type
@@ -34,9 +34,9 @@ class ImportPermitsWorker
     end
   end
 
-  def form_pipeline(form_id:)
+  def form_pipeline(seamless_creds:, form_id:)
     timestamp = DateTime.now.strftime('%s').to_s
-    pipeline_signature = OpenSSL::HMAC.hexdigest('sha256', Rails.application.secrets.seamless_api_secret, "GET+/form/#{form_id}/pipeline+#{timestamp}")
+    pipeline_signature = OpenSSL::HMAC.hexdigest('sha256', seamless_creds['api_secret'], "GET+/form/#{form_id}/pipeline+#{timestamp}")
     conn = Faraday.new(url: 'https://mapc.seamlessdocs.com', ssl: { verify: false })
     offset = 0
     fetched = 0
@@ -46,7 +46,7 @@ class ImportPermitsWorker
       response = conn.get do |req|
         req.url "/api/form/#{form_id}/pipeline"
         req.headers['Date'] = timestamp
-        req.headers['Authorization'] = "api_key=#{Rails.application.secrets.seamless_api_key} signature=#{pipeline_signature}"
+        req.headers['Authorization'] = "api_key=#{seamless_creds['api_key']} signature=#{pipeline_signature}"
         req.params['limit'] = @@batch_size
         req.params['offset'] = offset
       end
@@ -64,11 +64,11 @@ class ImportPermitsWorker
               permit['application_data'][col_details['column_id']]
         end
         unless Permit.find_by(application_id: permit['application_id'])
-          status_signature = OpenSSL::HMAC.hexdigest('sha256', Rails.application.secrets.seamless_api_secret, "GET+/application/#{permit['application_id']}/status+#{timestamp}")
+          status_signature = OpenSSL::HMAC.hexdigest('sha256', seamless_creds['api_secret'], "GET+/application/#{permit['application_id']}/status+#{timestamp}")
           response = conn.get do |req|
             req.url "/api/application/#{permit['application_id']}/status"
             req.headers['Date'] = timestamp
-            req.headers['Authorization'] = "api_key=#{Rails.application.secrets.seamless_api_key} signature=#{status_signature}"
+            req.headers['Authorization'] = "api_key=#{seamless_creds['api_key']} signature=#{status_signature}"
           end
           status = JSON.parse(response.body)
           if !status['error'] && status['total_signers'] == status['signatures']

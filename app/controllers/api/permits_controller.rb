@@ -6,7 +6,7 @@ module Api
     # GET /permits.json
     def index
       permits = Permit.select('id, permit_type, applicant_name, start_date, end_date, address, application_data, city_name, ST_AsGeoJSON(geometry) AS geojson')
-          .where(city_name: params[:city].upcase.gsub(/-/, " "))
+          .where("city_name = ? AND geometry IS NOT NULL AND address IS NOT NULL", params[:city].upcase.gsub(/-/, " "))
       if permits
         respond_to do |format|
           format.json { render json: permits }

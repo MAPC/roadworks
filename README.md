@@ -13,7 +13,11 @@ From the State of Massachusetts Efficiency and Regionalization Grant Program pro
 
 ## Setup and Installation
 
+### Redis
+
 You will need to setup Sidekiq on your server for running background jobs. To do this on an Ubuntu server you should first install redis with `sudo apt-get install redis-server`.
+
+### Sidekiq Service
 
 Put the following file into `/lib/systemd/system/sidekiq-roadworks.service`:
 
@@ -67,9 +71,19 @@ SyslogIdentifier=roadworks
 [Install]
 WantedBy=multi-user.target
 ```
-Then to enable this run: `sudo systemctl enable sidekiq-roadworks`
+Then to enable this run: `sudo systemctl enable sidekiq-roadworks` and `sudo systemctl start sidekiq-roadworks` if using Ubuntu 14.04 or `sudo service sidekiq-roadworks start` if using Ubuntu 16.04.
 
 In development you will need to run sidekiq with `bundle exec sidekiq`.
+
+### Cron Job
+
+To run the permit importer cron job, run `crontab -e` as the `roadworks` user and add:
+
+```
+1  2  *  *  *  cd /var/www/roadworks/current && RAILS_ENV=production /home/roadworks/.rvm/wrappers/default/bundle exec rake import:permits
+```
+
+Be sure to update the `RAILS_ENV` depending on where the cron job will be executed.
 
 ## Testing
 

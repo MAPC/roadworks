@@ -17,6 +17,17 @@
         };
       </script>
     <% end %>
+    <% if Rails.env.production? %>
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-5547782-38"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-5547782-38');
+      </script>
+    <% end %>
 
     <%= stylesheet_pack_tag 'application' %>
     <%= javascript_pack_tag 'application' %>
